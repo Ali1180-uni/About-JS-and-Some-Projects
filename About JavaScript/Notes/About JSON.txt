@@ -1,0 +1,135 @@
+Ok JSON is a format which is same like the JAVASCRIPT Objects bcz
+it is abrivated as the javascript object notation
+
+Example:
+{
+  "fact": "Many cats love having their forehead gently stroked.",
+  "length": 52
+}
+
+this is the JSON format of an API key : https://catfact.ninja/fact
+
+ok their key is always a string and written in double qoutes and also its value is not been ever 
+is undefined 
+
+Example of wrong format :
+{
+  fact: "Many cats love having their forehead gently stroked.", // "fact" (correct)
+  "length": undefined // it is never been undefined ever having some value ....
+}
+
+except these changes all format of JSON is same as JAVASCRIPT Objects
+
+
+JSON data is always a string and it is always comes in the code as a string in qoutes
+
+Example:
+let response = '// JSON Data or Object';
+let response = " {"fact": "Many cats love having their forehead gently stroked.","length": 52} ";
+
+now we cannot access it in javascriptas an object we must convrt it in a JS object format so we use
+
+let data = JSON.parse(response); to convrt the data into JS object format
+
+
+and now access it as <-----data.fact-----> in the code....
+
+OK there is one more function which convrt the JAVASCRIPT object into the JSON format
+
+Example:
+let object = {
+    name: "Ali",
+    age: 10
+};
+
+this is the object now we can convrt it in JSON format with the help of this function
+
+let convrt = JSON.stringifiy(object);
+
+this can convert the data into JSON form which is the requirment of our server
+
+We use HoppScotch for API requests
+GET
+POST
+DELETE   //the data
+
+ok if we want to add the specific data in the api requests
+
+https://catfact.ninja
+Additional info is Fact se we can add it as /fact = https://catfact.ninja/fact
+
+if we want to search specifically on google
+
+https://www.google.com/search?q=mango
+
+q -> is the specific value which is set when we search something 
+
+There are 3 types of API response format..
+first use (Accept) this is the header which get about the whole info of usage .
+1. text/html
+2. application/JSON
+3. text plain 
+
+these are used to get data from api according to specific format
+
+FETCH the API--------->
+// Step 1 first gave url to fetch and it gives you a promise So we use 
+// then(res) & catch(err) on it for errors and then we use __res__ of then and
+// res.json() it and it also gave us a promise and also the data of the api now we use it in then & catch
+// for data we gave the argument in --then(data)-- and make changes with it
+
+let url = "https://catfact.ninja/fact";
+
+let fetch1 = fetch(url); //it return always a promise we also use then and catch with it but iam using seperatly
+
+fetch1.then((res) => {
+    console.log(res);
+    res.json().then((data) => {
+        console.log(data.fact);
+    });
+}).catch((err) => {
+    console.log(err);
+});
+
+
+             Steps
+             1. Fetch = fetch(url);
+             2. Convert it ---------> fetch(url).then((res)=>{return res.json();});
+             3. show its data bcz res.json() also give promise
+             eg: 
+             let url = "https://catfact.ninja/fact";
+             
+             fetch(url).then((res) => {
+                 return res.json();
+             }).then((data) => { // now this second then is the then of res.json which show data
+                 console.log("data is ", data.fact); //.fact is just the data in this api which might be different in others
+                 return fetch(url);
+             }).then((res) => {
+                 return res.json();
+             }).then((data2) => {
+                 console.log("data 2 ", data2.fact);
+             }).catch((err) => {
+                 console.log("Error is ", err);
+             });
+             
+
+-------------------This is just a practice code without chaining----------------------
+
+                         Code with Clear identification
+
+let url = "https://catfact.ninja/fact";
+
+let fetch1 = fetch(url); //it return always a promise we also use then and catch with it but iam using seperatly
+
+fetch1.then((res) => {
+    console.log(res);
+    return res.json(); //converting the response to json
+}).then((data) => {
+    console.log(data);
+    let fact = data.fact; //extracting the fact from the data
+    let p = document.createElement("p"); //creating a paragraph element
+    p.innerText = fact; //setting the text of the paragraph to the fact
+    document.body.appendChild(p); //appending the paragraph to the body of the document
+}).catch((err) => {
+    console.log(err);
+});
