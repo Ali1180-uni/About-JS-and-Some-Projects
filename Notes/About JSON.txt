@@ -155,3 +155,19 @@ async function getAPI(){
 
     console.log("After data");
 }
+
+Axious CDN link :<script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+
+this is how we use the axios 
+
+let url = "https://catfact.ninja/fact";
+
+async function getAPI(){
+    try{
+        let res = await axios.get(url);          //if we use axios no need of res.json() it directly gave us the format
+        console.log("The response is: " , res.data.fact); // first we always use the res.data to print the data according to it
+    }
+    catch(err){
+        console.log("Error is : ", err);
+    }
+}
