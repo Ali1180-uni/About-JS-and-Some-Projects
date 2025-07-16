@@ -1,0 +1,28 @@
+div{
+    margin: auto;
+    background-color: orange;
+    border: 5px solid brown;
+    border-radius: 15px;
+    box-shadow: 2px 2px 100px black;
+    height: 500px;
+
+}
+h1{
+    text-align: center;
+}
+button{
+    background-color: aliceblue;
+    margin-left: 43%;
+    margin-bottom: 50px;
+    font-size: large;
+    font-family: sans-serif;
+    border-radius: 15px;
+    border: 2px solid lightpink;
+    transition: ease-in 0.5s;
+    cursor: pointer;
+}
+button:hover{
+    background-color: chocolate;
+    box-shadow: 2px 2px 8px black;
+    transform: scale(1.02);
+}
