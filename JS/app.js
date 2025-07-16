@@ -1,14 +1,19 @@
 let url = "https://catfact.ninja/fact";
 
-fetch(url).then((res) => {
-    return res.json();
-}).then((data) => { // now this second then is the then of res.json which show data
-    console.log("data is ", data.fact); //.fact is just the data in this api which might be different in others
-    return fetch(url);
-}).then((res) => {
-    return res.json();
-}).then((data2) => {
-    console.log("data 2 ", data2.fact);
-}).catch((err) => {
-    console.log("Error is ", err);
-});
+async function getAPI(){
+    try{
+    let res = await fetch(url); // await always use with promises and used in async function
+    let data = await res.json(); // using await always in this call otherwise it stopped
+    console.log("Data is : ", data);
+
+    let res1 = await fetch(url); 
+    let data1 = await res1.json();
+    console.log("Data is : ", data1);
+
+    }catch(err){
+        console.log("Error ", err);
+        console.log("Data not shown");
+    }
+
+    console.log("After data");
+}
