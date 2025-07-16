@@ -1,0 +1,252 @@
+Here is the Call Stack as i study Last in first out 
+Here we use the Breakpoints and also used for the Debugging System and also vey imp topic
+
+function one(){
+    return 1;
+}
+function two(){
+    return one() + one();
+}
+function three(){
+   let ans = return two() + one();
+   console.log(ans);
+}
+
+javascript is a Single thredend language its mean it run only one function at a time and this is known as Asynchronous
+But JS also run the many task at same time like the waitings SetTimeout() and it is perform by Browser
+Which is multi-Thredend(C++ , JAVA) run many tasks as same time.
+
+Asynchronous Problems
+
+1. CallBack Hell : --> Nesting of CallBacks
+
+let h1= document.querySelector("h1");
+function ChangeSize(size,delay,callback){
+    setTimeout(()=>{
+        h1.style.fontSize = size;
+        if(callback) callback(); // This lines check If callback is passed or not
+    },delay);
+}
+
+ChangeSize("small",1000,()=>{
+    ChangeSize("20px",1000,()=>{
+        ChangeSize("50px",1000,()=>{
+            ChangeSize("100px",1000);
+        });
+    });
+});
+
+
+function savetoDB(data,sucess,failure){
+    let internetSpeed = Math.floor(Math.random() * 10) + 1;
+    if(internetSpeed>4){
+        sucess();
+    }
+    else{
+        failure();
+    }
+}
+
+savetoDB("Hello",()=>{
+    console.log("saved 1");
+    savetoDB("World",()=>{
+        console.log("saved 2"); 
+        savetoDB("Structure",()=>{
+        console.log("saved 3"); 
+    },()=>{
+        console.log("Weak connection 3! Failed to Save");
+    });
+    },()=>{
+        console.log("Weak connection 2! Failed to Save");
+    });
+},()=>{
+    console.log("Weak connection 1! Failed to Save");
+});
+
+//This is called nesting and then this is called the CallBack nesting.
+//CallBack Nesting is known as the CallBack Hell it is cover by the Promises and Async & Await
+
+// Asynchronous is defined as somethong is depend on other thing
+
+Promises are the solution which having 3 states
+1. Fulfilled  (resolve)
+2. pending
+3. rejected
+
+it is like an object which is used to overcome th callback hell it gave the 2 values and promise to gave the values
+Syntax: 
+
+function savetoDB(data){
+    let internetSpeed = Math.floor(Math.random() * 10) + 1;
+    return new Promise((resolve,reject)=>{
+        if(internetSpeed>4){
+            resolve("Data is Saved");
+        }
+        else{
+            reject("Weak connection");
+        }
+    });
+}
+savetoDB("hi Ali");
+
+Now .then() & .Catch() are two methods of the Promises whuch are used to show the condition without error and in compact way
+
+let request = savetoDB("hi Ali");
+request.then(()=>{
+    console.log("Promise is Resolved");
+})
+.catch(()=>{
+    console.log("Promise is Rejected");
+});
+
+Also written as : without using variables
+savetoDB("hi Ali")
+.then(()=>{
+    console.log("Promise is Resolved");
+})
+.catch(()=>{
+    console.log("Promise is Rejected");
+});
+
+Also Replacing Callback Hell with Promises
+
+-------------->This<--------------
+
+savetoDB("hi Ali")
+.then(()=>{
+    console.log("Promise 1 is Resolved");
+    return savetoDB("Ali only");// for nesting next data to save as in CallBack Hell
+})
+.then(()=>{
+    console.log("Promise 2 is Resolved");
+    return savetoDB("Not Ali");// for 3rd data to store
+})
+.then(()=>{
+    console.log("Promise 3 is Resolved");
+})
+.catch(()=>{
+    console.log("Promise is Rejected"); // every condition have only one catch value which is checked by it
+});
+
+Just gave the Argument in the Arrow Function of then to display the result or Error which are the lines written in the reject and resolve in the promise
+savetoDB("hi Ali")
+.then((result)=>{
+    console.log("Promise 1 is Resolved " + result);
+    return savetoDB("Ali only");// for nesting next data to save as in CallBack Hell
+})
+.then((result)=>{
+    console.log("Promise 2 is Resolved " + result);
+    return savetoDB("Not Ali");// for 3rd data to store
+})
+.then((result)=>{
+    console.log("Promise 3 is Resolved " + result);
+})
+.catch((error)=>{
+    console.log("Promise is Rejected " + error); // every condition have only one catch value which is checked by it
+});
+
+
+Now changing colour with the help of promises is:
+
+More Efficent Code is : 
+
+let h1 = document.querySelector("h1");
+
+function ChangeColor(color,delay){
+    return new Promise((resolve)=>{
+        setTimeout(()=>{
+            h1.style.color = color;
+            resolve("Color is " + color);
+        },delay);
+    });
+}
+
+ChangeColor("red",1000)
+.then(()=>{
+    return ChangeColor("green",1000);
+})
+.then(()=>{
+    return ChangeColor("orange",1000);
+})
+.then(()=>{
+    return ChangeColor("purple",1000);
+})
+.then(()=>{
+    return ChangeColor("lime",1000);
+});
+
+// We also create the Async Function which always return the Promise
+// we also use the .try() & .catch() methods with it
+
+//Syntax
+async function AysFun() {
+    // throw "404 not Found"; // it is used to show the error
+    return "ALi";
+}
+
+AysFun()
+.then((resolve)=>{
+    console.log("The Return is : ", resolve);
+})
+.catch((reject)=>{
+    console.log("The Error is : ", reject);
+});
+
+we also create an arrow function and make it Async
+
+let name = async ()=>{
+    return "Ali";
+}
+name();
+
+We have one more function which is used only in the Async functions 
+Await Function which waits for the promise to done and when the promiseis resolve it start to execute next Function
+Syntax:
+let h1 = document.querySelector("h1");
+function changecolor(color,delay){
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            h1.style.color = color;
+            resolve(`Color is ${color}`);
+        },delay);
+    });
+}
+
+async function Run() {
+    await changecolor("Red",1000);
+    await changecolor("lime",1000);
+    await changecolor("orange",1000);
+    await changecolor("green",1000);
+    changecolor("pink",1000);
+}
+
+By using try and catch we handle the rejections in the code bcz if promise is rejected then what we do..
+let h1 = document.querySelector("h1");
+function changecolor(color,delay){
+    return new Promise((resolve,reject)=>{
+        let ran = Math.floor(Math.random()*5)+1;
+        if(ran < 2){
+            reject("Promise is breaked");
+        }
+        else{
+            setTimeout(()=>{
+            h1.style.color = color;
+            console.log(`Color is ${color}`);
+            resolve(`Color is ${color}`);
+        },delay);
+        }
+    });
+}
+
+async function Run() {
+try{
+    await changecolor("Red",1000);
+    await changecolor("lime",1000);
+    await changecolor("orange",1000);
+    await changecolor("green",1000);
+}
+catch(err){
+    console.log("this is Error ", err);
+}
+console.log("Next time i will generate more");
+}

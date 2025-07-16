@@ -1,0 +1,354 @@
+<link rel="icon" href="dog.jpg" type="image/x-icon"> Tag which is used to add image 
+alert("Ali");
+console(.warn() & .error())
+let name = prompt("Enter the name") // for input
+String methods which are used to make some functionalities with String
+
+strname.method();
+let name = "Ali is a good boy";
+
+1. name.trim(); this is used to remove the extra spaces only at the start and end of the string
+2. name.ToUpperCase or .ToLowerCase is used to make the String choti wadii
+3. name.indexOf("A") = 0 it is only show the first index and if it is not found it show -1.
+4. we also use them both at same time eg: name.trim().ToUpperCase();
+5. we use th name.slice(index or (start,end+1)index) it is used to cut and take the specific part of the string 
+6. name.replace(value which is replaced ,value which i want to replace) eg: name.replace("is", "not")
+7. name.repeat(count) if i want to repeat the number of string value
+
+
+ARRAYS
+
+1. let names =["ALi","Qadir","Hassan"];
+2. names[0] = "ALi"; , names[0][1] = "L" the second 2D array like syntax show the index of the the selected index like 0 = 'Ali'  and 1 of 'Ali' is 'L'.
+3. name[0].length = 3 bcz Ali has 3 letters and Ali is the 0 index of names
+
+Array functions or methods used to manupilate them
+Push add to end 
+pop delete from end
+shift delete from start 
+unshift add in start 
+
+we use push and unshift with arguments and we use pop and shift without any argument
+
+indexOf is used to find the index of value in array eg: name.indexOf('Qadir'); if present then it gave the index if not it show -1;
+include is used to find the value in th array eg: names.include('Qadir'); its output is true or false;
+
+concat is used to add data of one array into other and mix it primary.concat(secondary);
+reverse is used to reverse the array eg: name.reverse();
+Slices are also used in arrays
+
+Splice is used to remove,replace,Add values in it.
+Syntax: name.splice(NoOfIndex(starting value),how many values you want to delete(number),"items1","item2"....."item(n)");
+
+sort is used to sort the array but it is not proper working on the array data of numbers in it bcz it converts the data into string then its ASCII value set according to it
+
+hey baby listen we use to make the const array in which we make the chnages into its values but we never make changes in its name
+
+eg: let arr = [1,2,3,4,5];
+so we can use push,pop etc functions to manupilate its values but we never change its name "arr" and also to never gave its value to other
+
+nested array is used to make the arrays in the array eg: let num = [ [1,2],[3,4],[5,6] ]
+basically there are 3 arrays in that array and each have 2 elements
+num[isme jo arrays hn inka index][jo inme array hn inme jo value hn inka index] to access eg : num[0][1] = 2 and we also find the length of nested array by num[2].length; 
+// let name = prompt("Enter Your name");
+// let Roll = prompt("Enter Your Roll no");
+// if(name=="Abdullah" && Roll == 123){
+//     console.log("Abdullah ki hal a");
+// }
+// else{
+//     alert("Kali kalrii not Available");
+// }
+// Push add to end 
+// pop delete from end
+// shift delete from start 
+// unshift add in start 
+// Array functions or methods used to manupilate them
+
+// let name = ["ALi","Qadir","Hassan"];
+// let withpush = name.push("Mahid");
+// let withpop = name.pop();
+// let withUnShift = name.unshift("Khalid");
+// let withShift = name.shift();
+// console.log(`With Push ${withpush}`);
+// console.log(`With Pop ${withpop}`);
+// console.log(`With Un Shift ${withUnShift}`);
+// console.log(`With Push ${withShift}`);
+
+// let num = [ ['X',null,'O'],[null,'X',null],['O',null,'X'] ];
+// for(let i =0;i<3;i++){
+//     for(let j=0;j<3;j++){
+//         if(num[i][j]==null){
+//             num[i][j]=0;
+//         }
+//     }
+// }
+// for(let i =0;i<3;i++){
+//     for(let j=0;j<3;j++){
+//         console.log(`${num[i][j]}`);
+//     }
+//     console.log("\n");
+// }
+
+// let number = prompt("Enter the number which table You want: ");
+// for(let i=1;i<=10;i++){
+//     console.log(`${number} x ${i} = ${number*i}`);
+// }
+
+// let fav = "Avatar";
+// while(1){
+//     let gus = prompt("Guess the movie name");
+//     if(gus==fav){
+//         console.log("You guessed it right");
+//         break;
+//     }
+//     else if(gus=="Quit"){
+//         console.log("You quit the game");
+//         break;
+//     }
+//     else{
+//         console.error("Wrong Guess");
+//         console.log("Try Again");
+//     }
+// }
+
+
+// OBJECT LITERALS (OOP like property)
+//we also use const keyword with it..
+// let student = {
+//     name: "Ali",
+//     class: "BSSE",
+//     age: 15,
+//     Subject: ["OOP","DSA"]
+// };
+
+// const post ={
+//     username: "Ali",
+//     content: ["Action","Elder"],
+//     likes: 19,
+//     repost: 90,
+//     tags: "Many"
+// };
+
+//to add new key
+//post.name;//initialization
+//post.name="Lipo";//declaration
+
+// update existing value
+// post.likes =987;
+
+// delete the existing value
+// delete post.tags;
+
+// we can access it with post["tags"]; & also post.content etc same like OOP
+
+// we also create the nested objects 
+//  let classinfo = {
+//     Ali : {
+//         marks: 12,
+//         age: 19
+//     },
+//     Aliza : {
+//         marks: 15,
+//         age: 14
+//     },
+//     Alina : {
+//         marks: 16,
+//         age: 20
+//     }
+//  };
+ //access method classinfo.Ali.age; it show the exact value;
+
+//  we also create array of objects
+// let classinfoarray = [
+// {
+//     name:"Ali",
+//     marks: 12,
+//     age: 19
+//     },
+// {
+//     name:"Aliza",
+//     marks: 12,
+//     age: 19
+//     },
+// {
+//     name:"Alina",
+//     marks: 12,
+//     age: 19
+//     },
+// ];
+// we can perform same functions with the array objects like the by accessing index eg: object[index].key;
+// we can update add and delete
+
+// to generate random Number
+
+// let random = Math.floor( Math.random() * 10 ) + 1; it generates the random number from 1 - 10
+
+// if we want to generate the random number form 21 to 25
+// then this line Math.floor( Math.random() * 5 ) generated 0-4 random number then if we add
+// Math.floor( Math.random() * 5 ) + 21,22,23 according to need 
+// 21 add if i want to make random 21 - 25 eg: Math.floor( Math.random() * 5 ) + 21;
+
+// To-do list code
+
+// let list = ["Eat","Code","Walk","Sleep"];
+// while(1){
+//     let ans = prompt("Enter the Task You want to do: \n1. Show All\n2. Add new\n3. Delete\n4. Quit");
+// if(ans!=""){
+//     while(1){
+//     if(ans==1){
+//     console.log("All Items are: ");
+//     for (lis of list) {
+//         console.log(lis);
+//     }
+//     break;
+// }
+// else if(ans==2){
+//     let add = prompt("Enter the New Item");
+//     list.push(add);
+//     console.log("New Item Added");
+//     break;
+// }
+// else if(ans==3){
+//     let item = prompt("Enter the item you want to Delete");
+//     let index = list.indexOf(item);
+//     list.splice(index,1);
+//     console.log("Item Deleted");
+//     break;
+// }
+// }
+// }
+// else if(ans=="Quit"){
+//     console.log("You Quit the To-do list");
+//     break;
+// }
+// }
+
+// guess game 
+// let give = prompt("Enter the number you want to make sequence: ");
+// let ran = Math.floor( Math.random() * give ) + 1;
+// let Guess = prompt(`Guess the number From 1 - ${give} and ${ran}`);
+    
+//     while(1){
+//     if(Guess < ran){
+//         Guess = prompt(" Your Guess was Small TRY AGAIN!!");
+//     }
+//     else if(Guess > ran){
+//         Guess = prompt(" Your Guess was Large TRY AGAIN!!");
+//     }
+//     else if(Guess == ran){
+//         console.log(`congrats you Found it! ${ran}`);
+//         break;
+//     }
+//     else if (Guess == "Exit"){
+//         console.log("You Exit");
+//         break;
+//     }
+//   }
+
+
+ok when we want to make changes in the function same like the variable then we create them Function Expression
+Eg: let sum = Function(a,b){
+    return a+b;
+}
+we can call it like sum(1,3); and also change its value and pass it value like the variables 
+eg : sum = Function(){
+    return 1+2;
+} now i change the values by just initialization not with again declaration
+
+nested Function
+//function mul(fun, n) {
+//     for (let i = 0; i < n; i++) {
+//         fun();
+//     }
+// }
+
+// let greet = function(){
+//     console.log("ALi");
+// }
+
+// mul(greet, 3);
+
+
+Function Factory Give the Desired Function:
+let request;
+function Multiple(req){
+    if(req == "even"){
+        return function(n){
+            console.log(n%2==0);
+        }
+    }
+    else if(req == "odd"){
+        return function(n){
+            console.log(!(n%2==0));
+        }
+    }
+    else{
+        console.log("Invalid input. Please enter 'even' or 'odd'.");
+    }
+}
+
+ok when we create the multiple functions in the object then it is known as METHOD:
+let Method = {
+    add : function(a,b){
+        return a+b;
+    },
+    sub : function(a,b){
+        return a-b;
+    },
+    mul : function(a,b){
+        return a*b;
+    }
+};
+
+we also use try & catch which is used to handle the error without any error
+
+call back is a function which pass to another function as an argument
+
+let power = (a,b) => {
+    return a**b;
+}
+
+const cube = (n) =>{
+    return n*n*n;
+}
+
+// we can use it same as the function but if there is only one argument we use it without ()
+
+const cube1 = n =>{
+    console.log(n**3);
+}
+
+// we can write arrow function simply without return keyword if there is only one value to return
+
+let sum = (a,b) => a+b; // valid
+
+console.log("Hi Ali");
+
+setTimeout(()=>{
+    console.log("Ali is Here");
+},4000);
+
+console.log("Cube After 4secs");
+
+
+on the other hand we use the the setInterval function which print data in loop after the specific time
+
+console.log("This is Set Interval Function");
+let id = setInterval(()=>{
+    console.log("Lipo");
+},1000);
+
+console.log("This is End of interval");
+
+clearInterval(id); // to stop the interval according to the specific id;
+
+let pow = (n) => n**2;
+
+let id = setInterval(()=>{
+    console.log("Ali");
+},2000);
+
+let id2 = setTimeout(() => {
+    console.log("Stopped");
+    clearInterval(id);
+}, 10000); 

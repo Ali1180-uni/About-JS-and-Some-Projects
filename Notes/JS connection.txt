@@ -1,0 +1,138 @@
+WE ALWAYS USE CONSOLE.DIR TO SELECT THE THINGS FROM THE HTML BY JAVASCRIPT
+getelementbyid is used to select the element by its id and it is always an object
+
+let img1 = document.getElementById("mainimg");
+
+let img2 = document.getElementsByClassName("old");
+
+// for(let i = 0;i < 3;i++){
+//     console.log(`Iteration ${i}`);
+//     setInterval(()=>{
+//     img1.src = img2[i].src;
+// },2000);
+// }
+
+let i = 0;
+let change = setInterval(()=>{
+    img1.src = img2[i].src;
+    i++;
+    if(i==3){
+        clearInterval(change);
+    }
+},2000);
+
+let q1 = document.querySelector("p"); //it select only the first p tag in the document.
+let q2 = document.querySelectorAll("p");// it select all the p tags in the document.
+
+console.dir(q1);
+console.dir(q2);
+
+The 3 properties are :
+1. InnerText // major text shown on screen
+2. text content // show the actual text in html as written in html no issue if it is hidden by display Non
+3. InnerHtml // show how the text is written in the html with tags
+
+// We can get and set the Attributes
+// obj.getAttribute(attribute name);
+// obj.setAttribute(attribute name,value);
+
+
+let img = document.querySelector("img");
+img.getAttribute("id");
+img.setAttribute("id","localImg");
+
+// it is used to set the inline styling to the tags in the html
+// Object.style.property = "value"
+
+let name1 = document.querySelector("p").style;
+ name1.color = "pink";
+
+
+ // We can add multiple classes in one tag and also make changes in them with the help of classlist
+
+// obj.classList.add("class name"), to add the new class
+// obj.classList.remove("class name"), to remove the class
+// obj.classList.contain("class name"), to check that this tag consist of that class
+// obj.classList.toggle("class name") if the tag contain that class it remove it if not it add it.
+
+// Navigation in JAVASCRIPT
+
+let div = document.querySelector(".pubInfo");
+let clc  = div.childElementCount; 
+let cl = div.children;
+
+let h4 = document.querySelector("h4");
+let h4p = h4.parentElement;
+let sibling1 = h4.nextElementSibling;
+let sibling2 = h4.previousElementSibling;
+
+
+// we can add elements or tags in html with the help of DOM
+// we can also remove elements or tags in html with the help of DOM
+
+let NewP = document.createElement("p"); // create a new paragraph element
+NewP.innerText = "This is a new paragraph created using DOM"; // add text to the new paragraph
+let body = document.querySelector("body"); // select the body of the document
+body.appendChild(NewP); // append the new paragraph to the body of the document
+
+// we can also shift it in another element 
+
+let btn = document.createElement("button"); // select the button element
+btn.style.borderRadius = "5px";
+btn.innerText = "Click me !";
+body.appendChild(btn);
+
+// also add this text in the specific Element
+// APPEND for add element at the end of the specific tag
+
+let box = document.querySelector(".box");
+box.append(NewP);
+box.append(btn);
+
+// Prepend is used to add the element at the start of the Tag
+
+box.prepend(NewP);
+
+// Insert Adjacent Element used to add the tag in specific position
+
+let NewBtn = document.createElement("button");
+NewBtn.innerText = "New Btn";
+let p = document.querySelector("p");
+p.insertAdjacentElement("beforebegin",NewBtn); // To add button before starting the specific Tag
+p.insertAdjacentElement("afterbegin",NewBtn); // To add button after starting the specific Tag
+p.insertAdjacentElement("beforeend",NewBtn); // To add button at the end of specific Tag
+p.insertAdjacentElement("afterend",NewBtn); // To add the button just after end of the specific Tag
+
+btn.removechild(); // is to remove the element with the respect of its parent
+btn.remove(); //is to remove the element
+
+let p = document.createElement("p");
+p.classList.add("red");
+// p.style.color = "Red";
+p.innerText = "Hey Iam Red";
+
+let h3 = document.createElement("h3");
+h3.classList.add("blue");
+// h3.style.color = "Blue";
+h3.innerText = "Hey Iam Blue H3";
+
+let div = document.createElement("div");
+div.classList.add("box");
+
+// div.style.backgroundColor = "Pink";
+// div.style.border = "2px solid black";
+// div.style.width = "200px";
+
+let h1 = document.createElement("h1");
+h1.innerText = "Iam in div";
+
+let p1 = document.createElement("p");
+p1.innerText = "ME TOO";
+
+let Body = document.querySelector("Body");
+
+Body.append(p);
+Body.append(h3);
+Body.append(div);
+div.appendChild(h1);
+div.appendChild(p1);
