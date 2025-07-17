@@ -1,0 +1,35 @@
+First To check the version comand
+
+-> git --version
+
+To check the git comands
+
+-> git
+
+To config the Git Bash
+
+-> git config --global user.name "Ali"
+-> git config --global user.email "aliuni1180@gmail.com"
+
+To clone the Repositry 
+
+-> git clone (http link without qoutes)
+
+Check the Status of Git files 
+
+-> git status
+
+Too add some type of file before commit
+
+-> git add file-name
+eg: git add index.html
+
+-> (add .) ----> this comand is used to add all the files.
+
+To commit all the changes 
+
+-> git commit -m "Some kind of msg" -------> Enter a message is Essential
+
+To push the code 
+
+-> git push origin main
