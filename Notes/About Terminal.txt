@@ -1,0 +1,52 @@
+Ok Some basic comands About terminal are as follow 
+
+                      Folder == Directory
+
+ls(List Items) ---> this is used to listout all the Items in Directory
+~ ---> represent the Home Directory Most Parent Folder
+pwd(Present Work Directory) ---> tell us in which folder/Directory we are present
+
+if we want to move in and out the Directories
+
+cd(current Directory) folder-name ---> this comand move us to that folder
+cd .. ---> this comand send us back to previous folder
+
+Eg: cd web/About Js/DOM ---> move in multiple Directories
+Eg: cd ../../..
+
+if the path is started with / --> then it is used to move anywhere known as Absolute link
+if the path is relitive then we are restrict to move only front and back not anywhere
+
+Absolute path : cd /users/download/music --> Redirect Directly withou restriction
+relitive path : without / ---> cd web/About Js/DOM
+
+if we just write / then we redirect to root Directory
+if we just write ~ then we redirect to home Directory
+
+Create a new Folder ------->
+mkdir folder-name  ----> create the new folder in specific Directory
+
+There are some flags in comands which gave the extra info or functionality to the comands
+
+man ls(or any other comand(pwd)) ----> it gives the total info about this comand
+
+-a, -l these are the flags which are used to check the extra info after giving it to comand
+
+eg: ls -l ----> this can provide the extra info
+
+Create the Files with terminal
+
+Touch filename.extenstion ------> create the file in that Directory
+
+eg: touch index.html ->> etc....
+
+
+                           --------------->> Disclaimer
+
+THE FILES DELETE WITH THE REMOVE COMANDS CANNOT BE RECOVERED EVER THATS WHY USE IT CAREFULLY
+
+rm file-name --------> Remove the Files
+rmdir folder-name --------> Remove the Folder
+rm -rf Folder-name  ---------> Remove the Folder or any file having content in it Forcefully
+
+                  These actions are permanent & Never be RECOVERED
