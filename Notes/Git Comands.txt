@@ -1,3 +1,7 @@
+Fist step to add the local file for git comand is: 
+
+-> git init
+
 First To check the version comand
 
 -> git --version
