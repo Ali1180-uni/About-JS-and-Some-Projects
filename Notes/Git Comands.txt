@@ -2,6 +2,22 @@ Fist step to add the local file for git comand is:
 
 -> git init
 
+Now The comands for Remote origin it is the link First we create the Repo from github then paste its link ate here
+
+-> git remote add origin <link>
+
+To verify the link
+
+-> git remote -v
+
+To check the branch name
+
+-> git branch
+
+to change the branch name 
+
+-> git branch -M main -----> it is the orignal name always be change it for good practice
+
 First To check the version comand
 
 -> git --version
