@@ -1,0 +1,51 @@
+h1{
+    text-align: center;
+    font-family: sans-serif;
+    color: darkblue;
+    font-size: 2.5em;
+    margin-top: 20px;
+}
+input{
+    display: block;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    font-size: 1.2em;
+    border-radius: 10px;
+    border: 2px solid lightblue;
+    box-shadow: 2px 2px 5px gray;
+    margin-top: 20px;
+}
+p{
+    text-align:left;
+    font-family: sans-serif;
+    color: darkblue;
+    font-size: larger;
+    margin-top: 20px;
+}
+.load {
+    display: block;
+    margin: 40px auto 0 auto;
+    height: 130px;
+    width: 130px;
+    object-fit: contain;
+}
+button{
+    height: 40px;
+    width: 150px;
+    display: inline-block;
+    background-color: aliceblue;
+    margin-left: 44%;
+    margin-top: 50px;
+    font-size: large;
+    font-family: sans-serif;
+    border-radius: 15px;
+    border: 2px solid lightpink;
+    transition: ease-in 0.5s;
+    cursor: pointer;
+}
+button:hover{
+    background-color: chocolate;
+    box-shadow: 2px 2px 8px black;
+    transform: scale(1.02);
+}
