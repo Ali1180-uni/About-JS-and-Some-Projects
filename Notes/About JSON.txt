@@ -194,3 +194,20 @@ async function getAPI(){
         return "Data Not found";
     }
 }
+
+                                       Request Format----------->
+
+                                       
+We can also set the formats of API during the request 
+let url = "https://catfact.ninja/fact";
+
+async function UsingHeader() {
+    try{
+    let config = {headers : {Accept : "text/html"}}; // if we want to show the data into specific format
+    // create an object and and gave the key of object Accept then its value , Text/html ,Text/plain , application/json
+    let res = await axios.get(url, config); //then give this object to it as a second argument
+    console.log("Result is : ", res.data);
+    }catch(err){
+        console.log("Error is : ", err);
+    }
+}
