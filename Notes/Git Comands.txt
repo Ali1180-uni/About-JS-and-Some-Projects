@@ -10,14 +10,6 @@ To verify the link
 
 -> git remote -v
 
-To check the branch name
-
--> git branch
-
-to change the branch name 
-
--> git branch -M main -----> it is the orignal name always be change it for good practice
-
 First To check the version comand
 
 -> git --version
@@ -53,3 +45,34 @@ To commit all the changes
 To push the code 
 
 -> git push origin main
+
+To check the branch name
+
+-> git branch
+
+To change the branch name 
+
+-> git branch -M main -----> it is the orignal name always be change it for good practice
+
+To create a new branch
+
+-> git checkout -b <-new branch name-> like : feature & bug fix. etc
+
+To Switch the Branch 
+
+-> git checkout <-branch name->
+
+To Delete the Branch
+
+-> git branch -d //Advice to Checkout first on main branch then Delete the other branch
+
+----------<When we create a new branch and push something my must make it upstream>--------
+
+-> git push --set-upstream origin <-Branch name-> //feature
+
+Pull Request is used to merge the branches on Github  with specific comments after
+it we can delete the branch these are done remotely on Github not on our local system
+
+Pull comand ----------> used to make the remote chnages on local system
+
+-> git pull origin main
