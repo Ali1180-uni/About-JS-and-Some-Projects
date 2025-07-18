@@ -10,6 +10,10 @@ To verify the link
 
 -> git remote -v
 
+To check all the commits in file 
+
+-> git log // The Oldest commit shows at last of the terminal
+
 First To check the version comand
 
 -> git --version
@@ -41,6 +45,7 @@ eg: git add index.html
 To commit all the changes 
 
 -> git commit -m "Some kind of msg" -------> Enter a message is Essential
+-> git commit -am "Some kind of msg" -------> used to add and commit both
 
 To push the code 
 
@@ -90,3 +95,28 @@ branch and adn then VS code show us code in our file and ask us which change you
 edit it according to our need
 
 Add, Comit & Push it for later use
+
+Now if we want to Go back to previous changes 
+
+Go back to previous add 
+
+-> git reset <-file name->
+-> git reset // these both just to resrt the most recent add only (not commit).
+
+Go back to previous commit
+
+-> git reset HEAD~1 ---> to just go back to only one recent commit
+
+when we want to go back to many recent commit so we just want to add the comit hash
+
+-> git reset <-comit hash-> // it just unstage the hashed commit only
+-> git reset --hard <-commit hash-> // to remove also all the commits to this particular comit hash
+
+    WE GET COMMMIT HASH FROM -> git log (comand)
+
+GIT HASH FORMAT: 6aee8af77ab5c087df8d041ef7953ef67e2a6c18
+
+
+Fork is used to clone the existing Repositry in Github like NODE.js offical Repositry
+now we can make changes in it and also set pull request to officials to merge it
+it might be used to contribute to others project
