@@ -76,3 +76,17 @@ it we can delete the branch these are done remotely on Github not on our local s
 Pull comand ----------> used to make the remote chnages on local system
 
 -> git pull origin main
+
+To find the Difference between branches
+
+-> git diff <-branch name-> 
+
+To merge the branches comand
+
+-> git merge <-branch name->
+
+if the conflict occur then the vs code automatically show us error and always it merge from main
+branch and adn then VS code show us code in our file and ask us which change you want then
+edit it according to our need
+
+Add, Comit & Push it for later use
