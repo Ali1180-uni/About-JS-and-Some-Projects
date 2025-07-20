@@ -27,7 +27,7 @@ Example:
 let response = '// JSON Data or Object';
 let response = " {"fact": "Many cats love having their forehead gently stroked.","length": 52} ";
 
-now we cannot access it in javascriptas an object we must convrt it in a JS object format so we use
+now we cannot access it in javascript as an object we must convrt it in a JS object format so we use
 
 let data = JSON.parse(response); to convrt the data into JS object format
 
@@ -164,7 +164,7 @@ let url = "https://catfact.ninja/fact";
 
 async function getAPI(){
     try{
-        let res = await axios.get(url);          //if we use axios no need of res.json() it directly gave us the format
+        let res = await axios.get(url);   //if we use axios no need of res.json() it directly gave us the format
         console.log("The response is: " , res.data.fact); // first we always use the res.data to print the data according to it
     }
     catch(err){
