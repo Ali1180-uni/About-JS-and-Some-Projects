@@ -1,0 +1,50 @@
+First we have to create a Folder of our Project in which there are two files one 
+which import and other which export
+
+Import is New and Replacement version of Require and better to use
+
+Then we must Enter some functions to export
+
+Also create first package.json -----> npm init ---> Add the (type : Module) at the end of package.json file
+
+Also type ->export<- keyword at the starting of every element which we want to export
+
+Now in Main file which import other file we just write 
+
+import {functions Which We want to import} from "./filename.js";
+
+
+Example Code : 
+
+Function file which export data :
+
+
+export const sum = (a,b) =>{
+    return a+b
+}
+export const sub = (a,b) =>{
+    return a-b
+}
+export let g = 9.8;
+
+
+File Which Import data :
+
+import { sum } from "./func.js";
+
+console.log(sum(3,5));
+
+package.json : with "type" : "Module"
+
+{
+  "name": "practice-import",
+  "version": "1.0.0",
+  "main": "func.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ali Rehmani",
+  "license": "ISC",
+  "description": "This is Just Practice",
+  "type": "module" --------------------------> module added specifically for import & Export
+}

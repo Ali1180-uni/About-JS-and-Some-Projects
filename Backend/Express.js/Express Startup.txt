@@ -1,0 +1,104 @@
+Express is the Framework which is used to perform Server-Side Programming
+
+-> Redirect to that Folder/Directory First
+
+-> npm init and create our own package.json 
+
+npm install express --------> To install the Express
+
+-> Golbally install Nodemon to avoid to restart Server again and again 
+
+-> npm install -g nodemon // Run Bash as administator
+
+-> Press Ctrl+c to stop the Server
+
+Startup Code :
+
+const Express = require("express); 
+const app = Express(); // Name is Always app
+
+const port = 3000; // Its value is also be 8080 It is the Port value Entry point of Server
+
+app.listen(port , ()=>{
+    console.log(`Server is at : ${port}`);
+});
+
+//For Sending Request to the Server we are using the (use)-->Keyword
+
+app.use((req,res)=>{ // First Parameter is Request & Second is Response
+    console.log("Request is received ");
+});
+
+// Now for Giving Response to our Request we use (.send)---> Method
+It Respond in --> HTML,JSON,TEXT
+
+let obj = {
+    UID: 1134621560,
+    id: "Inv.Algebra"
+};
+
+app.use((req,res)=>{ // First Parameter is Request & Second is Response
+    console.log("Request is received ");
+    // res.send("Your Request is recieved"); // Send is the method of Respond which Show the data
+    // res.send(obj); // Use object to show Data in Json Format --> .send() method Convert it in JSON format
+    res.send("<h1>This Data Shown in HTML<h1>"); // this is how data is shown in HTML tags
+});
+
+OK there is also another Method of 
+App.get() ---> Listen specific requests
+App.use() ---> listen all requests
+
+/somthing in the link defined the specific rourtes in the website link
+
+eg : localhost:8080/home ---> specific route to Home page
+
+Example Code
+
+app.get("/", (req,res)=>{ // this is the Root Path of the Server
+    console.log("Requested Root");
+    res.send("Your are on Root Page");
+});
+
+app.get("/Home", (req,res)=>{ // In this Get Request we Set the also The Route Path With Slash
+    // This is the Home Page Route
+    console.log("Requested Home");
+    res.send("Your are on home Page");
+});
+
+app.get("/Help", (req,res)=>{
+    console.log("Requested Help");
+    res.send("Your are on help Page");
+});
+
+app.get("/Search", (req,res)=>{ // In this Get Request we Set the also The Route Path With Slash
+    console.log("Requested Search");
+    res.send("Your are on Search Page");
+});
+
+app.get('/:any', (req, res) => {  // ok if the Route path is not defines then we use the /:any in the path it is used to show the response if invalid path is entered
+    res.send("The Route Path is not Exist on GET REQUEST");
+});
+
+
+// We can also send the Specific id and username anything other as a route path According to which request is Send and 
+// Respond is shown
+
+
+// if the both parameters are set then it shows the exact respond otherwise '/:any' respond is shown
+
+-> http://localhost:8080/Ali/109
+
+app.get("/:username/:id", (req,res)=>{ // Now Express treats path as a variable and we can access them in Request.
+    let {username , id } = req.params; // req.prams consist the variables value given as a path in URL by user
+    let htm = `<h1>Welcome to the page of @${username}<h1>`;
+    res.send(htm);
+});
+
+
+Now we also manage the Query String with Express.JS
+
+app.get("/Search", (req,res)=>{ // Acsess by /Search?q=Ali ---> or anything 
+    let {Name} = req.query; // ok the Naame is same as in /Search?Name=Something ---> This Code is used to send any Query
+    let htmCode = `<h1>Your Requested Query is ${Name}<h1>`;
+    res.send(htmCode);
+});

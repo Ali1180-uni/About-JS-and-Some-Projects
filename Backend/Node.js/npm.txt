@@ -1,0 +1,61 @@
+# npm is defined as the node package manager 
+# it is a library consist many packages 
+
+-> packages are the pre-witten code in the js like (React.js,Express.js etc).
+
+# these are install with the help of npm of different kind of versions of different packages
+
+-> Fisrt Visit npm website and then according to our need we can install a package
+
+# npm install figlet ---> Example or colde to install also given on the website
+
+We Must install it in Specific folder not anywhere for easy use
+
+Now We must create a file (index.js) in such directory where we install the package and now use it at there and never change the code
+
+-> package.json file is the most inp file in it
+
+ok All the dependencies are present in the package.json and & if node module file is deleted in the folder then 
+we simply write 
+-> npm install bcz we have package.json which contain all the info about that module it automaticall install it
+
+
+
+now if we want to create our own package we must create a new folder and write
+
+npm init -----> it creates our own package.json file which having dependency of our project
+
+When we upload data on GitHub we just want to upload the package.json not the module file 
+
+$ npm init
+
+This utility will walk you through creating a package.json file.
+
+
+package name: (mynewproject)
+version: (1.0.0)
+description: This is my First Project
+entry point: (index.js)
+test command:
+git repository:
+keywords:
+author: Ali Rehmani
+license: (ISC)
+About to write to D:\Web\About JavaScript\BackEnd\MyNewProject\package.json:
+
+{
+  "name": "mynewproject",
+  "version": "1.0.0",
+  "description": "This is my First Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ali Rehmani",
+  "license": "ISC"
+}
+
+
+Is this OK? (yes) yes
+
+This is our own package.json where we install dependency for our own project

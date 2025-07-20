@@ -1,0 +1,31 @@
+Flex
+Only the Dirct childs of the container can only become the flex items of the flex container
+flex display is use to make the containers flexible
+flex direction show its direction (Row,Column)-Reverse
+Justify content is to set the div Start-End-Center & Also for Space
+Space between = make the extra spaces between the div's
+Space around = give the space between them and also divide the 2 parts of extra space half and half around them
+Space evenly = give the exact same space around and between all the div's
+Flex wrap = is to manage the div's if they have more width or height i shift it on another line (nowrap-wrap-wrap reverse)
+Align items is to Align the div's according to cross axis and also i works only when there is space between them
+Align content is the same thing like the justify but in cross axis
+Align Self is to set the Specific Div's for is property
+Align self> Align content
+To set the Size of specific div we use Flex basis if in Row it set for width and if in height it sets for Column
+we also make the flex grow for the specific div in values like Flex-Grow:1,2,3,4 ...;(for Extra Space) & Flex-Shrink:1,2,3,4 ...;(for overflow) and also use max-width & min-width to limits and conditons the width or height for specifc point
+
+GRID
+display: grid;
+it is use to display data in the form of 2D both rows & column 
+Grid Template is to set the div's in Rows & column According to the space
+grid-templete-(row & Column) 100px 100px 100px ... <--(how many rows or columns you want to create)
+auto auto auto... is used to set it according to the space of container number of auto or pixel values tell us in it how many rows & columns you want to create.
+another helpful method is to use this shorthand grid-templete-(row & column): repeat(  --> number of row/column you want to create <-- ,  --> 1fr=divided equal space <-- , --> 2fr= double spcae <--)
+
+column & Row-gap is used to gave the space between rows & columns LIKE column-gap:10px; etc
+SHORTHAND: grid-gap: rowgap columngap --> 10px 30px && grid-gap: rowgapcolumngap --> 10px --> both with same gap 
+Grid-column-start & End (LINES) tells that how much area occupied by the single div and also it is applied for the columns
+Grid-column & Row : start column / End column (ROW also)
+
+Grid properties in which Justify item is used to set the content of complete container horizontal & justify self is for single div (Start-End-Center)
+SAME : align item is set for whole container vertically and align self is for single div vertically (Start-End-Center)

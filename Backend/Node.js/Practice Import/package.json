@@ -1,0 +1,12 @@
+{
+  "name": "practice-import",
+  "version": "1.0.0",
+  "main": "func.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ali Rehmani",
+  "license": "ISC",
+  "description": "This is Just Practice",
+  "type": "module"
+}

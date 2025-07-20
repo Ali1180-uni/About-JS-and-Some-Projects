@@ -1,0 +1,98 @@
+Ok We can also tranfer the data of one file to another file in the same direcotry with the help of 
+
+module.exports = value/object/variable
+
+Steps -> Create a JS file in Same directory 
+
+EXAMPLE CODE -> File Which Export data
+
+let sum = (a,b) => {return a + b}
+let sub = (a,b) => {return a - b}
+let mul = (a,b) => {return a * b}
+
+const g = 9.8;
+const PI = 3.14;
+
+// module.exports = 123; //This Value is return when it is required by another file
+
+//Also Create an object of all the values and pass it to it 
+
+const obj = {
+    sum: sum,
+    sub: sub,
+    mul: mul,
+    g: g,
+    PI: PI
+};
+
+module.exports = obj; // File Passed to another file by required keyword used in that file which import data
+
+EXAMPLE CODE -> File which Import data
+
+let files = require("./Math"); //./filename -> Path of file from which we export data in same directory
+
+console.log(files.sum(4,5));
+console.log(files.PI);
+console.log(files.g);
+console.log(files.mul(2,7));
+
+
+just with comand of -> node filename.js
+
+
+So Now We can also Export the data from one complete Folder/Directory to another File
+
+-> First Create a Folder and Create Specific files in it like 
+Student 1.js ,Student 2.js , Student 3.js .............
+
+Also Create an Index.js file must with same name which collect all the data of all the files and 
+represent that folder to import the info (IMPORTANT)---->!!!!!!!!!
+
+EXAMPLE: --->
+
+File 1: 
+let obj = {
+    name: "ALi",
+    age: 19
+};
+
+module.exports = obj;
+
+File 2:
+let obj = {
+    name: "Aiza",
+    age: 18
+};
+
+module.exports = obj;
+
+File 3:
+let obj = {
+    name: "ALiza",
+    age: 15
+};
+
+module.exports = obj;
+
+
+
+Main INDEX File having Array of all Requires files and nestedly export then to another file
+
+INDEX FILE: 
+let Stu1 = require("./Student 1");
+let Stu2 = require("./Student 2");
+let Stu3 = require("./Student 3");
+
+let data = [Stu1,Stu2,Stu3];
+
+module.exports = data;
+
+Now The Specific Folder path in which these files are present included INDEX.js can be given to that file which import 
+data 
+
+Import file -> CODE
+
+let data = require("./Students"); //./filename -> Path of file from which we export data in same directory
+
+console.log(data[1].name); //Or Specifically any index of array and key of any object
+
