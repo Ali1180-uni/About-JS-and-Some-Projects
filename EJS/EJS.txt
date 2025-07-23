@@ -1,0 +1,59 @@
+EJS --- > Embedded JavaScript Templates
+
+npm install ejs ----> Download the Package First
+
+It is used to Create the templates of a single Page 
+As we know that there are many instagram pages so The Developer never Create HTML for each new page.
+He just Create a Templates of that page and these were uses for each new page of user
+
+Express Requires the EJS internally, There is no need to Require it when using Express
+
+Ok EJS use to Render the Complete HTML Pages 
+
+Step 1: Set the app variable to --> app.set("view engine","ejs"); --> Templates which help to Render is EJS ->Meaning
+
+Step 2: Create a folder views ---> same name contains .ejs files which are basically HTML files --> That Renders
+
+// To send the complete HTML files from app.send ----> is not possible so we use Ejs Method
+
+Step 3: Write the code
+            
+    app.get("/",(req,res)=>{ 
+        res.render("home.ejs"); // Render is used with ejs & Automatically Checks in Views folder for files
+    });
+            
+Step 4: Express Automatically Check the Veiws Folder and Check the Home.ejs file in it 
+
+
+Step 5: We can Access it only From its parent folder Which EJS ---> It means it trying to Find Views folder only 
+        When we run command from EJS folder if we (cd .. ) --> Go Back 
+        and now Run the Command the It trying to Search the view folder there So, We must Call a Function Path
+        to Access it anywhere
+
+If we do this  Error: Failed to lookup view "home.ejs" in views directory "D:\Web\About JavaScript\views" --> Occur
+
+// To Access File From Anywhere 
+
+Step 6: Require a Path Package 
+
+const path = require("path");
+
+app.set("views", path.join(__dirname,"/views")); // __dirname for Folder & __Filename for Files Access from anywhere
+
+__dirname ----> represent the Current Working directory of that File in which these lines Written
+EJS is --> cwd of index.js & views Folder present in ----> EJS
+
+"views", path.join(__dirname,"/views") --> This line Said don't Find Views in that directory where comand is Run
+                                        Find it there Where -->  __dirname = index.js -->  is present
+
+Just Write these lines to universally Access these lines by Path 
+-> nodemon EJS/ index.js
+
+STEPS:
+1. To Require the Path:
+const path = require("path");
+
+2. Then set it to That Directory:
+app.set("views", path.join(__dirname,"/views"));
+
+// If a single line of code make error in EJS All code after it make or Show Error

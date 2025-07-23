@@ -1,0 +1,134 @@
+-> EJS having the specific syntax Which are used to Emmbed the Logic of JS in the HTML
+-> to make the HTML Pages Dynamic into Which we insert our JavaScript Logic
+
+One of the most common type of EJS Tags: 
+=> <%= %>
+
+Eg:
+
+<h3>Error Code <%= 400+4 %> </h3>
+<h3>Error Code <%= "Ali Rehmani".toUpperCase(); %> </h3>
+<h3>Error Code <%= ["Ali","Talha","Adil"][2] %> </h3>
+
+
+This is Used in Html Tags to Display Data from Databases --> Always Rturn a String
+
+Now if we want to pass the Variable to EJS File
+-> We Just Write ----> 
+
+app.get("/Dice",(req,res)=>{
+    res.render("Dice.ejs",{DiceVal: Math.floor(Math.random() * 6) + 1});
+});
+
+app.get("/Dice",(req,res)=>{
+    let DiceVal = Math.floor(Math.random() * 6) + 1;
+    res.render("Dice.ejs",{DiceVal});
+});
+
+app.get("/Dice",(req,res)=>{
+    let num = Math.floor(Math.random() * 6) + 1
+    res.render("Dice.ejs",{DiceVal = num});
+});
+
+These Are Few Basic Ways to pass value From Backend to EJS
+
+In EJS CODE ->
+
+<body>
+    <h1>Dice After Roll: <%= DiceVal %></h1>
+</body>
+
+Write these lines only for the implementations work with all Codes.
+
+
+LOOPS IN THE EJS ---> We can Also add the Loops in EJS.
+
+Eg if we want to show Follower Lists:
+
+-> index.js Code
+
+let followers = ["Ali","Adil","Talha"];
+
+app.get("/ig/:username",(req,res)=>{
+    let {username} = req.params;
+    res.render("ig.ejs",{username,followers});
+});
+
+-> EJS CODE:
+
+    <h3>Followers are of @<%= username %></h3>
+    <ul><% for(let Follow of followers){ %>
+        <li><%= Follow %></li>
+    <%}%></ul>
+
+    Lets Talk About When we Get Data From External file eg: JSON file.
+
+    Firt we must Require this file 
+
+    -> let data = require("./data.json"); --> Example File name not present in Views --> Folder
+
+    Now the Next step is to Match data with the specific username provided by the user.
+
+    Syntax:
+
+    app.get("/ig/:username,(req,res)=>{
+        let {username} = req.params;
+        let insdata = require("./data.json");
+        let data = insdata[username]; ---> [username] with data variable for data about specific username
+        console.log(data); // Always Print data of Json first to check a Good Practice
+        if(data){
+        res.render("insta.ejs",{data}); 
+        }
+        else{
+            res.render("error.ejs"); // Some File which show data about Error.
+        }
+    });
+
+    EJS Syntax: 
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram</title>
+</head>
+<body>
+    <h1>Welcome to the Page of @<%= data.name %></h1>
+    <button>Follow</button><button>Message</button>
+
+    <h3>Followers are  <%= Data.followers %> Following are <%= Data.following %></h3>
+    <% for(let post of data.posts){ %>
+    <p>
+    <img src= "<%= post.image %>" />
+    <h4>likes: <%= data.likes %> & Comments: <%= data.Comments %> </h4>
+    </p>
+    <% } %>
+
+</body>
+</html>
+
+
+
+-----> Creating Template in the Template
+
+If some line of Code is same in Every Html page we can create tis Template also without Writing it again 
+& again
+
+Example : Head in Html is same in Every File So we create Template of it.
+
+-> Create a folder(includes) in Views Folder and Create a File eg: head.ejs or any according to the Template
+-> Paste the data of template in this File
+
+-> So where you want to use the template in the ejs Html File Just Write.
+
+-> <%- include("includes(foldername)/head.ejs(filename));
+
+-> EXAMPLE:
+
+<%- include("includes/head.ejs") %>
+<body>
+    <h1>Dice After Roll: <%= DiceVal %></h1>
+</body>
+</html>

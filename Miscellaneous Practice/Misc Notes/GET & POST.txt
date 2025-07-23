@@ -1,0 +1,38 @@
+GET Request Always used to Only for Get Data --> Not to Send bcz URL have some limits
+Post Request is always used to Send Data --> Safe and Good Way.
+
+
+Example --> Create Form in Html File With some Route & Gave Method GET & POST.
+
+<body>
+    <h3>GET Request Form</h3>
+    <form method="get" action="http://localhost:3000/register"> // Method set to GET for Get Request
+        <input name="user" placeholder="Username" type="text"> // Name Value in Input is same access by variable in index.js
+        <input name="pass" placeholder="Password" type="password">
+        <Button>Submit</Button> // Data send by Get Request Shown in the URL
+    </form>
+    <hr>
+    <h3>POST Request Form</h3>
+    <form method="post" action="http://localhost:3000/register"> // Method Set to POST for Post Request
+        <input name="user" placeholder="Username" type="text"> // Name is set for Specifed Data for index.js
+        <input name="pass" placeholder="Password" type="password">
+        <Button>Submit</Button> // Its Used to Send Data Safely Without shown in URL
+    </form>
+</body>
+</html>
+
+Now create a index.js File in another Folder with ---> npm init --> npm i express
+
+Now Just Write the Code for the Form Connection
+
+app.get('/register', (req, res) => { // app.get accept the value from get method of Form
+    let {user , pass} = req.query; // It is used to Get data from the Form Body & Same name as in the Name Value in INPUT of HTML
+    console.log(`Received registration request for: ${user}`);
+    res.send(`GET Request Recieved: Register ${user} with password ${pass}`);
+});
+
+app.post('/register', (req, res) => { //app.post is used to get the Post request to this Route
+    let {user , pass} = req.query; // We Cannot Extract Data from the Post Request
+    console.log(`Received registration request for: ${user}`); // User = Undefined bcz Request = POST
+    res.send(`POST Request Recieved: Register ${user} with password ${pass}`);
+});
