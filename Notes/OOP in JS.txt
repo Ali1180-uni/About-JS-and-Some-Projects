@@ -1,0 +1,120 @@
+I already Know about the OOPS but Due to Different Syntax in JS lets Talk about OOP in JS.
+
+First ---> Arrays are the Objects and they have a Specific Functions Built-in  in it Known as Prototype
+
+We can Acces it Simply with Following Syntax
+
+-> let arr = [1,2,3];
+
+// Prototype has all the Functions eg: slice, splice, trim & push etc...
+
+-> arr.__proto__.push = (n) => {console.log(`The Pushed on is: ${n}`);} // Its Just change the Complete Functioning of Push.
+
+Now we can Access the Prototype Also for the Strings
+
+-> Arrays.Prototype // Actual Functions on Backend
+-> Strings.Prototype
+
+Basically they never created everytime They are just inherit again & again everytime when the 
+Array or String created
+
+
+-----------------------> NOT A GOOD PRACTICE CREATE FACTORY FUNCTION <-----------------------
+
+-> Factory Functions also Resolve this issue but one conflict is also occur --> they always create copy
+
+Eg:
+    function PersonMaker(name,age){
+        let person = {
+            name: name,
+            age: age,
+            talk(){                // Always Create the copy of this Function Which increase the memory.
+                console.log(`My name is ${this.name}`);
+            }
+        };
+
+        return person;
+    }
+
+// let p1 = PersonMaker("Ali",12);
+// let p2 = PersonMaker("Aliza",11); // On EachCall it Create the Copy of that Function
+
+
+
+
+-----------------------> GOOD PRACTICE CREATE CONSTRUCTOR <-----------------------
+
+function Person(name,age){ // Constructor 
+    this.name = name;
+    this.age = age;  
+}
+//IF we want to add a function in it we just simply write.
+
+-> p1.talk === p2.talk; == true // bcz it never create a copy
+
+Person.prototype.talk = function (){
+    console.log(`My name is ${this.name}`);
+}
+
+let p1 = new Person("Ali",10); // new Keyword Defines the New Values.
+let p2 = new Person("AlizA",11); // new Keyword Defines the New Values.
+
+
+
+-----------------------> MORE EFFICIENT CREATE CLASS <-----------------------
+
+
+Class Person { // Class 
+    constructor(name,age){ // Constructor
+        this.name = name;
+        this.age = age;
+    }  
+    talk(){
+        console.log(`My name is : ${this.name}`);
+    }
+}
+
+let p1 = new Person("Ali",10); // new Keyword Defines the New Values.
+let p2 = new Person("AlizA",11); // new Keyword Defines the New Values.
+
+
+
+
+---------------------------------------> Inheritance <---------------------------------------
+
+class Animal{
+    constructor(name){
+        this.name = name;
+        this.type = "Animal";
+    }
+
+    eat(){
+        console.log("Iam Eating");
+    }
+}
+
+class Cat extends Animal{ // (child class) extends (base class)
+    constructor(name,ability){
+        super(name);             // Calling constructor of Parent Class for Values
+        this.ability = ability; 
+    }
+
+    mew(){
+        console.log("Meow...");
+    }
+}
+
+class Dog extends Animal{ // (child class) extends (base class)
+    constructor(name,age){
+        super(name);
+        this.age = age; 
+    }
+
+    bark(){
+        console.log("wofff...");
+    }
+
+    eat(){  // Child class Method Overrides the Method of Base class if same name
+        console.log("Iam not Eating");
+    }
+}

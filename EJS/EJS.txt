@@ -57,3 +57,40 @@ const path = require("path");
 app.set("views", path.join(__dirname,"/views"));
 
 // If a single line of code make error in EJS All code after it make or Show Error
+
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+
+If we want to Add the CSS & Images File with the EJS So we Must Create a Public Folder same as Views
+
+-> The Public Folder consist of CSS & IMAGES & JS files
+
+-> First Create a Folder name Public & create the sub Folders ->  Stylesheet,Images & JavaScript
+
+Now we must connect this Folder with the EJS by index.js 
+
+-> app.use(express.static(path.join(__dirname,"public"))); ----> This Folder Connect the EJS by this code
+
+Now we can link the Stylesheet & Images & JavaScript
+
+-> For Images --> <img src = "/Folder-Name/File-Name" />
+
+In HTML eg:
+For CSS --> <link rel = "Stylesheet" herf = "/Stylesheet/style.css />
+For Images --> <img src = "/Images/img.png" />
+For JavaScript --> <script src = "/JavaScript/app.js />
+
+Folders Present in the Public Folder and these files are Present in it.
+If we never create the Folder so we must Just Write.
+
+In HTML eg:
+For CSS --> <link rel = "Stylesheet" herf = "/style.css />
+For Images --> <img src = "/img.png" />
+For JavaScript --> <script src = "/app.js />
+
+
+Always use for Views === app.set("views",path.join(__dirname,"views"));
+Always use for public === app.use(express.static(path.join(__dirname,"public")));

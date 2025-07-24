@@ -1,0 +1,98 @@
+body {
+    background: linear-gradient(120deg, #f0f4f8 0%, #e0eafc 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+    background: #fff;
+    padding: 32px 40px 28px 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1 {
+    color: gold;
+    background-color: black;
+    display: inline-block;
+    margin-left: 35%;
+    margin-bottom: 18px;
+    box-shadow: 2px 2px 10px gold;
+    padding: 8px 32px;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s;
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+input, textarea {
+    width: 100%;
+    max-width: 320px;
+    color: #333;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: box-shadow 0.3s, border-color 0.3s, transform 0.3s;
+    display: block;
+    margin: 12px 0 20px 0;
+    font-size: 1rem;
+    padding: 10px 14px;
+    box-sizing: border-box;
+}
+input {
+    height: 38px;
+}
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+button {
+    background: linear-gradient(90deg, #ffb347 0%, #ffcc33 100%);
+    color: #222;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 32px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(255, 204, 51, 0.15);
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s, transform 0.2s, box-shadow 0.3s;
+    margin-top: 8px;
+    letter-spacing: 1px;
+}
+button:hover, button:focus {
+    background: linear-gradient(90deg, #ffd700 0%, #ffb347 100%);
+    color: #000;
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(255, 204, 51, 0.25);
+    outline: none;
+}
+
+h1:hover {
+    background-color: gold;
+    color: black;
+    box-shadow: 0 4px 20px gold;
+    transform: scale(1.08) rotate(-2deg);
+}
+input:hover, input:focus {
+    box-shadow: 0 0 10px #4caf50;
+    border-color: #4caf50;
+    transform: scale(1.04);
+    outline: none;
+}
+textarea:hover, textarea:focus {
+    box-shadow: 0 0 12px #2196f3;
+    border-color: #2196f3;
+    transform: scale(1.03);
+    outline: none;
+}

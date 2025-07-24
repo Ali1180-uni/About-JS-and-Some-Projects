@@ -1,0 +1,191 @@
+C -> CREATE
+R -> READ
+U -> Update
+D -> DELETE 
+
+// DATA FROM THE DATABASE
+
+GET -> Retrieves Resources // VIEW
+POST -> Submit new data to the Server // CREATE
+PUT -> Updates Existing Data // UPDATE
+PATCH -> Update Existing data partially // Specific Data --> like : Email only From many data //UPDATE
+DELETE -> Remove data 
+
+
+The Resources are known as the particular thing on which we are working
+// Twitter X tweet api or User api are the Resourcesspecified for User & tweets
+
+
+----------------------------------> POST CREATOR WITH CRUD GUIDE <----------------------------------------
+
+
+DEPENDENCIES ADDED --->
+
+let Express = require('express'); // ADD Express
+let app = Express(); // CREATE TEMPLATE
+let path = require("path"); // ADDING PATH TO FIX IT
+app.set("views", path.join(__dirname, "views")); // Setting EJS path to Views Folder
+
+
+let {v4 : uuid} = require("uuid"); //  TO CREATE RANDOM AND EFFICIENT ID'S 
+-> npm i uuid
+
+let override = require("method-override"); // IT IS USED TO override PUT,PATCH & DELETE bcz HTML FORMS  method Accept only the GET & POST REQUESTS
+-> npm i method-override
+
+app.set("view engine", "ejs"); // Adding the EJS
+
+app.use(override("_method")); // Using the override Package.
+
+app.use(Express.urlencoded({ extended: true })); // Parse the data for the POST REQUEST of Query String URL
+
+app.use(Express.static(path.join(__dirname, "public"))); // Setting PUBLIC folder For Style.css Files
+
+
+CREATE ARRAY TEMPLATE BCZ NO DATABASE CONNECTED --->
+
+let posts = [
+    {
+        id: uuid(),
+        username: "Ali",
+        content: "Iam working with web dev"
+    },
+    {
+        id: uuid(),
+        username: "Aliza",
+        content: "Iam not Working"
+    },
+    {
+        id: uuid(),
+        username: "Adil",
+        content: "Happy Working"
+    },
+];
+
+
+SETTING THE CRUD OPERATIONS WITH (GET, POST, (PATCH,PUT), DELETE).
+
+READ(GET) ---->
+
+app.get("/posts",(req,res)=>{ // posts ---> constant --> always noun not verb --> GOOD ROUTING NAME
+    res.render("index.ejs",{posts});
+});
+
+CREATE(POST) --->
+
+app.post("/posts",(req,res)=>{
+    let id = uuid();  // For Creating Everytime new id with the help of package uuid
+    let {username,content} = req.body; // Set the variable to the specific data of body
+    posts.push({id,username,content}); // Push or Set the data to Array of these specific variables and id
+    res.redirect("/posts"); // Redirect Method is used to Redirect to some specific path or URL.
+});
+
+UPDATE(PATCH) --->
+
+app.patch("/posts/:id", (req, res) => {
+    let { id } = req.params;
+    let NewContent = req.body.content; // Setting the content of the Body of Post to a specific variable
+    let post = posts.find((p) => p.id === id); // Checking the id of post is same as the id link clicked
+    if (post) { // Condition to check the presense of Post
+        post.content = NewContent; // if post present then make it equal to the new content with the help of variable
+        console.log(post);
+        res.redirect("/posts"); // Redirecting to Home page to check the changes
+    } else {
+        res.status(404).send("Post not found"); // Showing Error if post not present
+    }
+});
+
+DELETE(DELETE) ---->
+
+app.delete("/posts/:id",(req,res)=>{ // To delete the route of Specific id
+    let {id} = req.params; // Extracting id
+    posts = posts.filter((p) => p.id != id); // Using Filter Method to Extract all data Except that id --> p.id != id
+    res.redirect("/posts"); // Redirecting to home page
+});
+
+
+----------------------------------> Anchor Tags Functioning <----------------------------------
+
+So there are some others GET REQUESTS which specifically Route to that EJS files According to the link
+
+->  GET REQUEST TO SHOW ALL POSTS --->
+
+app.get("/posts",(req,res)=>{ // HOME ROUTE
+    res.render("index.ejs",{posts});
+});
+
+->  GET REQUEST TO SHOW THE EJS WHEN USER WANT TO CREATE THE NEW POST --->
+
+app.get("/posts/new",(req,res)=>{ // SPECIFIC NEW ROUTE FOR NEW EJS FILE
+    res.render("new.ejs");
+});
+
+->  GET REQUEST TO SHOW THE PAGE WHEN USER WANTS TO SEE THE POST CONTENT IN DETAIL --->
+
+app.get("/posts/:id",(req,res)=>{ // SPECIFIC ID ROUTE TO SHOW DATA OF SPECIFIC ID
+    let {id} = req.params;  // GET THE ID 
+    let post = posts.find((p)=> p.id === id); // FINDS THE SPECIFC ID MATCHES WITH POST ID
+    if(!post){ // CHECK THE AVAILABILITY OF POST
+        return res.status(404).send("Post not found");
+    }
+    else{
+        res.render("show.ejs",{post}); // RENDERING THE EJS PAGE WITH POST DATA
+    }
+});
+
+->  GET REQUEST TO SHOW THE PAGE WHEN USER WANTS TO EDITS THE POST
+
+app.get("/posts/:id/edit",(req,res)=>{ // EDIT ROUTE TO EDITS THE DATA EJS FILE
+    let {id} = req.params;
+    let post = posts.find((p)=> p.id === id);
+    res.render("edit.ejs",{post});
+});
+
+
+----------------------------------> SOME HTML OR EJS CHANGES <----------------------------------
+
+MAIN OR HOME PAGE --->
+
+    <h1>Post Viewer</h1>  // JUST HEADING
+    <% for(post of posts){ %>  CREATING FOR OF LOOP TO SHOW THE SAME TYPE OF DATA
+        <div class="con">
+            <h3 class="user">Username is @<%= post.username %></h3> // SHOWING THE POST Username
+            <h4 class="data"><b><i>Content:</i></b> <%= post.content %></h4> // SHOWING THE POST CONTENT
+            <a href="/posts/<%= post.id %>">See in Details</a> // LINK TO Redirecting THE SHOW.ejs FOR SPECIFIC ID
+            <a href="/posts/<%= post.id %>/edit">Edit Post</a> // LINK TO Redirecting THE EDIT.ejs FOR SPECIFIC ID
+            <form method="post" action="/posts/<%= post.id %>?_method=DELETE"> // OVERRIDING POST REQUEST WITH DELETE WITH THE HELP OF Package
+                <button>DELETE</button>
+            </form>
+        </div>
+    <% } %>
+
+   <a href="http://localhost:3000/posts/new" type="button">Create a New post</a> // LINK TO REDIRECT THE NEW.ejs PAGE
+
+
+SHOWING DETAIL EJS PAGE --->
+
+    <div class="con">
+        <h2 class="user">Username is <%= post.username %></h2>
+        <h3 class="data"> ID: <%= post.id %> </h3>
+        <h3 class="data"><b><i>Content: <%= post.content %></i></b></h3>
+    </div>
+
+EDIT POST EJS PAGE --->
+
+    <h1 style="margin-left: 41%;">Edit POST</h1>
+    <form method="post" action="/posts/<%= post.id %>?_method=PATCH">  // OVERRIDING THE METHOD FROM POST TO PTACH TO UPDATE THE DATA
+    <p>ID: <%= post.id %></p> // SHOWING SPECIFC ID
+    <p>Username: @<%= post.username %></p> // SHOWING SPECIFC USERNAME OF THE POST
+    <textarea name="content" placeholder="Enter Content .."><%= post.content %></textarea> <br> // TEXTAREA WITH NAME FOR IDENTIFICATION FOR Server
+    <button>Submit</button>
+    </form>
+
+NEW POST CREATION EJS PAGE --->
+
+    <h1>Enter Data For POST</h1>
+    <form method="post" action="/posts">
+    <label for="name">Username</label> <br>
+    <input type="text" name="username" placeholder="username" id="name"> <br><br>
+    <textarea name="content" placeholder="Enter Content .."></textarea> <br>
+    <button>Submit</button>
+    </form>

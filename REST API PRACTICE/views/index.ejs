@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <title>API Config</title>
+</head>
+<body>
+    <h1>Post Viewer</h1>
+    <% for(post of posts){ %>
+        <div class="con">
+            <h3 class="user">Username is @<%= post.username %></h3>
+            <h4 class="data"><b><i>Content:</i></b> <%= post.content %></h4>
+            <a href="/posts/<%= post.id %>">See in Details</a>
+            <a href="/posts/<%= post.id %>/edit">Edit Post</a>
+            <form method="post" action="/posts/<%= post.id %>?_method=DELETE">
+                <button>DELETE</button>
+            </form>
+        </div>
+    <% } %>
+
+   <a href="http://localhost:3000/posts/new" type="button">Create a New post</a>
+</body>
+</html>

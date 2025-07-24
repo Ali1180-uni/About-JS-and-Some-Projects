@@ -31,8 +31,26 @@ app.get('/register', (req, res) => { // app.get accept the value from get method
     res.send(`GET Request Recieved: Register ${user} with password ${pass}`);
 });
 
+
+              --------------------> WRONG SYNTAX FOR POST REQUEST <--------------------
+
 app.post('/register', (req, res) => { //app.post is used to get the Post request to this Route
     let {user , pass} = req.query; // We Cannot Extract Data from the Post Request
     console.log(`Received registration request for: ${user}`); // User = Undefined bcz Request = POST
+    res.send(`POST Request Recieved: Register ${user} with password ${pass}`);
+});
+
+              --------------------> Correct SYNTAX FOR POST REQUEST <--------------------
+
+            Always Use in the Start of Code to Parse Data for Express for req.body in app.post() 
+
+// Middlewares Which are Used to Parse Data From URL to Data.
+app.use(Express.urlencoded({ extended: true }));
+// Middlewares Which are Used to Parse Data From JSON to Data.
+app.use(Express.json());
+
+app.post('/register', (req, res) => {
+    let {user , pass} = req.body; // Using req.body for the POST REQUEST
+    console.log(`Received registration request for: ${user}`);
     res.send(`POST Request Recieved: Register ${user} with password ${pass}`);
 });

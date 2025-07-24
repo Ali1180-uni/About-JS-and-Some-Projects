@@ -1,0 +1,79 @@
+h1{
+    background-color: brown;
+    color: gold;
+    display: inline;
+    margin-left: 43%;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+    cursor: pointer;
+}
+.con{
+    background-color: aquamarine;
+    border-radius: 11px;
+    box-shadow: 10px 10px 15px black;
+    height: 150px;
+    width: 500px;
+    margin-left: 30%;
+    transition: box-shadow 0.3s, transform 0.3s;
+    cursor: pointer;
+}
+.user{
+    color: chocolate;
+    text-align: center;
+    letter-spacing: 5px;
+    text-decoration: underline black;
+    text-shadow: 2px 10px 12px black;
+    font-weight: bold;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: color 0.3s, text-shadow 0.3s, transform 0.3s;
+    cursor: pointer;
+}
+.data{
+    text-shadow: 2px 10px 12px black;
+    font-weight: bold;
+    transition: text-shadow 0.3s, color 0.3s, transform 0.3s;
+    cursor: pointer;
+}
+
+h1:hover {
+    background-color: gold;
+    color: brown;
+    transform: scale(1.08) rotate(-2deg);
+    box-shadow: 0 4px 20px gold;
+}
+.con:hover {
+    box-shadow: 0 8px 30px 2px #00bfae;
+    transform: translateY(-8px) scale(1.03);
+    background: linear-gradient(135deg, aquamarine 60%, #e0ffe0 100%);
+}
+.user:hover {
+    color: #ff9800;
+    text-shadow: 2px 10px 20px #ff9800, 0 0 10px #fff;
+    transform: scale(1.07) rotate(1deg);
+}
+.data:hover {
+    color: #009688;
+    text-shadow: 2px 10px 20px #009688, 0 0 10px #fff;
+    transform: scale(1.05) rotate(-1deg);
+}
+button {
+    background: linear-gradient(90deg, #ffb347 0%, #ffcc33 100%);
+    color: #222;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 32px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(255, 204, 51, 0.15);
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s, transform 0.2s, box-shadow 0.3s;
+    margin-top: 8px;
+    letter-spacing: 1px;
+}
+button:hover, button:focus {
+    background: linear-gradient(90deg, #ffd700 0%, #ffb347 100%);
+    color: #000;
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(255, 204, 51, 0.25);
+    outline: none;
+}
