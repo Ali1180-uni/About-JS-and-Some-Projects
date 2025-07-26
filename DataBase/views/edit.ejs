@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style2.css">
+    <title>Edit Username</title>
+</head>
+<body>
+    <h1>Edit Username</h1>
+    <form method="post" action="/user/<%= val.id %>?_method=PATCH" >
+        <textarea name="username" placeholder="Enter new username" required><%= val.username %></textarea>
+        <input type="password" id="passwordInput" name="password" placeholder="Enter your password" required>
+        <button type="submit" id="updateBtn" disabled>Update</button>
+    </form>
+    <script>
+        const correctPassword = "<%= val.password %>";
+        const input = document.getElementById('passwordInput');
+        const btn = document.getElementById('updateBtn');
+        input.addEventListener('input', function() {
+            if (input.value === correctPassword) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>

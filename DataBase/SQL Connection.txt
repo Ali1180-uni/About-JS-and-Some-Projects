@@ -1,0 +1,167 @@
+--> Creating the Connection with JS of MySQL Workbench.
+
+npm i mysql2 ---> Package for the connection 
+
+we can Access the Abilities of MySQL Workbench on Terminal with this command
+
+-> & "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p
+
+
+Terminal for SQL -->
+
+Create schema.sql
+source schema.sql --> give the File name ---> eg: source filename.sql
+
+
+
+We Can also create the Schema.sql File to run the SQL Commands 
+
+NOW in index.js We can create Connection by Writing Following Commands
+
+const mysql = require('mysql2');
+
+const connection = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    database: "JS_APP", // Specific database name
+    password: "Rx321e10", // Password of Workbench
+});
+
+let query = "Select * From users"; // Specific Query Passing to function
+try{
+    connection.query(query,(err,result)=>{ // For Query Execution in JS
+    if(err) throw err;
+    console.log(result);
+});
+} catch(err){
+    console.log(err);
+}
+
+connection.end(); // End Everytime 
+
+
+
+Ok For Adding INSERT QUERY WE JUST WRITE -->
+
+let query2 = "INSERT into user (id,username,email,password) VALUES (?,?,?,?)";  --> (?) REPRESENT THE VALUES OF ARRAY
+
+let user = ["1","Ali","email@123","123"]; --> THESE VALUES ARE USED AS IN (?) OF INSERT QUERY
+
+try{
+    connection.query(query2,user,(err,result)=>{ ----> THIS USER ARRAY PASED AS AN ARGUMENT IN FUNC();
+    if(err) throw err;
+    console.log(result);
+});
+} catch(err){
+    console.log(err);
+}
+
+
+SO IF THE DATA IS LARGE SE WE MUST Create THE ARRAY OS ARRAYS 
+-> [[],[],[]]
+
+let users = [["2","AliZA","email@1234","1234"],["3","Alic","email@1233","1233"],["4","Aliv","email@1235","1235"]];
+
+we can just create only one (?) if there is a jacked ARRAY
+
+let query2 = "INSERT into user (id,username,email,password) VALUES ?";
+
+And now we can just add it in the FUNC();
+
+    connection.query(query2,[users],(err,result)=>{ // When we add the Jacked array variable we just write it in [] --> these brackets
+    if(err) throw err;
+    console.log(result);
+    });
+
+
+-------------------------> FAKER EXAMPLE AS An OBJECT <-------------------------
+
+let Random = () => {
+  return {
+    id: faker.string.uuid(),
+    username: faker.internet.username(), // before version 9.1.0, use userName()
+    email: faker.internet.email(),
+    password: faker.internet.password(),
+  };
+}
+
+-------------------------> FAKER EXAMPLE AS An ARRAY <-------------------------
+
+let Random = () => {
+    return [
+        faker.string.uuid(),
+        faker.internet.username(),
+        faker.internet.email(),
+        faker.internet.password(),
+    ];
+}
+
+
+-------------------------> Adding Data with FAKER <-------------------------
+
+let query = "INSERT INTO user (id,username,email,password) VALUES ?";
+
+let Random = () => {  // Get the Faker Data into the Array Create the Arrow Function that returns the Array of Fake Data
+    return [
+        faker.string.uuid(),
+        faker.internet.username(),
+        faker.internet.email(),
+        faker.internet.password(),
+    ];
+}
+
+let data = []; // Make a jacked array contains the data of All arrays of fake data
+for(let i = 1; i <= 50; i++){
+  data.push(Random()); // Pushing the Fake data into the Array.
+}
+
+Data is Passed to the Query Function ---> 
+
+try{
+    connection.query(query,[data],(err,result)=>{
+    if(err) throw err;
+    console.log(result);
+});
+}
+
+
+app.get("/",(req,res)=>{
+    let query = "SELECT COUNT(*) AS count FROM user";
+    try{
+        connection.query(query,(err,result)=>{
+            // console.log(result[0].key); One option to show the Data
+            // console.log(result[0]["count"]); Second way to Show Only the data of key value
+            let val = result[0]["count"];
+            res.render("index.ejs",{val});
+        });
+    }catch(err){
+        console.log(err);
+        res.send("Something is Error");
+    }
+});
+
+
+
+
+
+app.get("/",(req,res)=>{
+    let query = "SELECT * FROM user";
+    let query2 = "SELECT COUNT(*) AS count FROM user";
+    try{
+        connection.query(query,(err,result)=>{
+            if(err) throw err;
+            // console.log(result[0].key); One option to show the Data
+            // console.log(result[0]["count"]); Second way to Show Only the data of key value
+            connection.query(query2,(err,result2)=>{
+                if(err) throw err;
+            let val = result;
+            let val2 = result2[0]["count"];
+            // console.log(result);
+            res.render("index.ejs",{val,val2});
+            });
+        });
+    }catch(err){
+        console.log(err);
+        res.send("Something is Error");
+    }
+});

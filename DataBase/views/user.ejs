@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style1.css">
+    <title>Database</title>
+</head>
+<body>
+    <h1>Data of All Users are Here</h1>
+    <% for(let i = 0; i<val.length; i++){ %>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Password</th>
+            </tr>
+            <tr>
+                <td><%= val[i].id %></td>
+                <td><%= val[i].username %></td>
+                <td><%= val[i].email %></td>
+                <td><%= val[i].password %></td>
+                <td>
+                    <form method="get" action="/users/<%= val[i].id %>/edit">
+                        <Button>Edit Username</Button>
+                    </form>
+                </td>
+                <td>
+                    <form method="post" action="/users/<%= val[i].id %>?_method=DELETE">
+                        <Button class="btn">Delete User</Button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    <% } %>
+</body>
+</html>
