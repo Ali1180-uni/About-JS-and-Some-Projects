@@ -1,0 +1,66 @@
+Ok We can also Use the other Comparison Operator in the MongoDB as we use in the SQL
+
+Few Comparison Operator are
+
+-> Greater Than --> $gt ---> use >>  db.student.find( {name:"Ali", marks: {$gt: 75}} ); // Name Ali & Marks Greater than 75
+
+These are same as with other Operator
+
+Less Than --> $lt
+Less Than Equal --> $lte
+Greater Than Equal --> $gte
+IN ---> $in
+
+\\ Other are same as these also prefered to check the documentation on the MongoDB Docs
+
+Now If we want to use the IN operator to check that Cities present in the list or not.
+
+-> db.student.find( {city: {$in: ['Lahore','Faisalabad']} } ); --> Gave the Array and and show Data According to that Cities
+
+--> Always Use Comparison Operator in {} Curly Braces ---> {marks: {$gt:75}}
+
+
+Logical Operators
+
+
+// Check that User in Lahore and Having Marks Less than equal to 75.--> Using Logical Conditions
+
+-> OR ---> $or  ---> db.student.find( { $and: [ {marks: {$lte:75}} ,{city: "Lahore"} ] } );
+-> AND ---> $and  ---> db.student.find( { $or: [ {marks: {$lte:75}} ,{city: "Lahore"} ] } );
+-> NOR ---> $nor  ---> db.student.find( { $nor: [ {marks: {$lte:75}} ,{city: "Lahore"} ] } );
+-> NOT ---> $not  ---> db.student.find( { $not: [ {marks: {$lte:75}} ,{city: "Lahore"} ] } );
+
+---> UPDATE METHODS IN MongoDB
+
+db.student.updateOne(); // Update only one Document matching with Conditions
+db.student.updateMany(); // Update Many Documents matching with Conditions
+db.student.replaceOne(); // Replace Completely only one Document matching with Conditions
+
+Using -->
+
+$set --> Operator To Update --> It is used to Update the Existing Value and if the Match Never Exist it Create the Key Value Pair
+
+db.student.updateOne(//Selection Previous Value,//Condition which we want to set);
+eg: db.student.updateOne({name:"Ali"},{$set:{name:"Khalid"}}); // Update only one Document According to Condition
+---> db.student.updateMany({name:"Ali"},{$set:{name:"Khalid"},{age:90}}); // Update only All Document According to Condition
+---> db.student.replaceOne({Class:"OOP"},{{Subject:"DSA"},{Name:"Ali"},{Area:"LHR"}}); //It can completely Replace the Document with Specific Values and Remove the Previous Values
+
+We Can Also Perform Nesting Bcz We are Working with BSON & JSON --> Objects in the Object
+
+db.student.insertOne({Name:"Ali", Address: { Street: "Main", Area: "FSD" }});
+
+To Check the Nested value we just write.
+
+db.student.find( { "Address.Street": "Main" } ); // Finds the Nested Values which written in the String Format
+
+--------------------------------------------> DELETE <--------------------------------------------
+
+We can Also Delete the Specific Value or Document in the Collection
+
+db.student.deleteOne( {Name:"Ali"} ); // Delete the Document which Name is Ali.
+db.student.deleteMany( {Name:"Ali"} ); // Delete All Documents which Name is Ali.
+db.student.deleteMany( {} ); // Delete All Documents without any Conditions.
+
+-> To Drop the Database
+
+>> db.dropDatabase(); // Drop the Current Database.

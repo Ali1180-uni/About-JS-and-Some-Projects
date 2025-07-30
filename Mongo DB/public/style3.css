@@ -1,0 +1,112 @@
+
+body {
+    background: linear-gradient(135deg, #fcb69f 0%, #ffecd2 100%);
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.container {
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 6px 32px #0002;
+    padding: 36px 32px 28px 32px;
+    max-width: 420px;
+    width: 95vw;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    animation: fadeInUp 0.7s cubic-bezier(.39,.575,.56,1.000);
+    border: 2px solid #fcb69f;
+}
+
+h2, h1 {
+    color: #d35400;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    font-size: 2rem;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+p, label {
+    margin: 10px 0;
+    color: #333;
+    font-size: 1.08rem;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+
+button, input[type="submit"] {
+    background: linear-gradient(90deg, #fcb69f 0%, #ffecd2 100%);
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 14px 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 18px auto 0 auto;
+    cursor: pointer;
+    box-shadow: 0 2px 12px #0001;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    letter-spacing: 1px;
+    width: 70%;
+    display: block;
+}
+button:hover, input[type="submit"]:hover {
+    background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
+    color: #d35400;
+    transform: scale(1.07);
+    box-shadow: 0 4px 24px #0002;
+}
+
+input[type="text"], textarea {
+    border: 2px solid #fcb69f;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 1.12rem;
+    margin-bottom: 16px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    outline: none;
+    resize: none;
+    background: #fff8f3;
+    color: #d35400;
+    box-shadow: 0 1px 6px #fcb69f33;
+}
+input[type="text"]:focus, textarea:focus {
+    border-color: #d35400;
+    box-shadow: 0 2px 12px #d3540033;
+    background: #fff;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 18px 6px 16px 6px;
+        max-width: 99vw;
+    }
+    h2, h1 {
+        font-size: 1.3rem;
+    }
+    p, label, button, input[type="submit"] {
+        font-size: 1rem;
+    }
+}

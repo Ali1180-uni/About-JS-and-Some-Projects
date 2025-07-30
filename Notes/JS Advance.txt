@@ -200,7 +200,7 @@ let name = async ()=>{
 name();
 
 We have one more function which is used only in the Async functions 
-Await Function which waits for the promise to done and when the promiseis resolve it start to execute next Function
+Await Function which waits for the promise to done and when the promises resolve it start to execute next Function
 Syntax:
 let h1 = document.querySelector("h1");
 function changecolor(color,delay){
@@ -250,3 +250,6 @@ catch(err){
 }
 console.log("Next time i will generate more");
 }
+
+
+// When We use .then() in Function with Promise so there is no need to use Async & await with that Promise

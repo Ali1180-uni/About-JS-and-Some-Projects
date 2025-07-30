@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Message</title>
+    <link rel="stylesheet" href="/style3.css">
+</head>
+<body>
+    <h3>Edit Your Message</h3>
+    <form method="post" action="/chats/<%= Chats._id %>?_method=PATCH">
+        <textarea name="Msg" id="Msg" placeholder= <%= Chats.Msg %> ></textarea>
+        <button type="submit">Edit</button>
+    </form>
+</body>
+</html>

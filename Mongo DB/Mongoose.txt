@@ -1,0 +1,169 @@
+First Setup the mongoose by -> npm i mongoose
+
+It is used to Connect the MongoDB with Javascript
+
+Basic Connection Code:
+
+let mongoose = require('mongoose'); // Require the mongoose in Code
+
+main().then(()=> { // Using .then() & .catch() due to Promises, Async & Await.
+    console.log('Connected to MongoDB');
+}).catch((err) => {
+    console.error('Connection error:', err);
+});
+
+async function main() { // async Function bcz mongoose.connect Always Return a Promise & Using Await also
+    await mongoose.connect("mongodb://127.0.0.1:27017/test"); 
+    // Same as mongodb = https, 127.0.0.1 = localhost, 27017 = port, test = DB name
+}
+
+Creating a New Schema for collection it means fix values taken by the schema never take any other sam as SQL
+
+const NewUser = mongoose.Schema({ // It is same as the Data template we create in the Classes of OOP
+    Name: String,
+    Age: Number,
+    Bio: String
+});
+
+// Schema is like the The Template means which type of data in this class exist & Modeling is the way to use this template
+// Modeling can create the Instance of these class and then we can use it which its object
+
+SYNATX: 
+
+-> const ModelName = mongoose.model("CollectionName",SchemaName); // It is like a Class we are Creating and its Feilds and Data Members are in Schema
+
+-> const User = mongoose.model("User",NewUser); // Collection name is same as Model name(Singular not Plural) --> Automatically MongoDB make it Plural // Good Practice
+
+test> show collections
+users ---> It Become Plural & LowerCase in MongoDB
+
+
+--------------------------------------------> Insertion mongoose <--------------------------------------------
+
+let user1 = new User({  // Creating a New Object But It is not save the Data into the MongoDB until we save it
+    Name: "Ali",
+    Age: 12,
+    Bio: "Good Boy"
+});
+
+user1.save(); ---> Return a Promise // Also Use .then() & .catch() with it
+
+user1.save().then((res)=>{
+    console.log(res);
+}).catch((err)=>{
+    console.log(err);
+});
+
+Verify it on MongoDB Shell with --->
+test> db.users.find();
+[
+  {
+    _id: ObjectId('6887b58b248866dc8c7cb27a'), // Special id Always Alloted
+    Name: 'Ali',
+    Age: 12,
+    Bio: 'Good Boy',
+    __v: 0 // Some kind of Version
+  }
+]
+
+// Mostly we never use it
+---> We can Insert Many Data Documents in the Collection at ones.
+
+User.insertMany([ // We can Pass an Arrays of Data for All the Data Feilds
+    {Name: "Shahid", Age: 34, Bio: "Jira"},
+    {Name: "Sayyam", Age: 44, Bio: "Butt"},
+    {Name: "Hashir", Age: 54, Bio: "Rana"}
+]).then((res)=>{ // It can Insert All the Data into the collection
+    console.log(res);
+});
+
+---------------------------------------------------------------------------------------------------------------------
+
+Find All the Documents of Collection
+
+-> User.find({}).then((res)=>{ // It never returns a Promise it returns a Query but we can use .then() & .catch() with it
+    console.log(res);
+}).catch((err)=>{
+    console.log(err);
+});
+
+Find Documents on the Basis of Condition
+
+-> User.find({Age: {$lt:40}}).then((res)=>{ // It can prints the Multiple Data According to Condition.
+    console.log(res);
+}).catch((err)=>{
+    console.log(err);
+});
+
+User.findOne({Age: {$lt:40}}).then((res)=>{ // Returns only one Matching Condition
+    console.log(res);
+}).catch((err)=>{
+    console.log(err);
+});
+
+User.findById("6887b58b248866dc8c7cb27a").then((res)=>{ // Returns Document According to the id
+    console.log(res);
+}).catch((err)=>{
+    console.log(err);
+});
+
+-------------------------------------------------------------------------------------------------------------------
+
+We can ALso Update the Documents of the Collection
+
+//To Update only Single Document
+
+User.updateOne( // Also Return Query not Promise but we can use .then() & .catch() with it.
+    {Name: "Ali"}, // Selection Of Document by this key value
+    {Name: "Ali Rehmani"} // Changes its Data with this value
+).then((res)=>{
+    console.log(res)
+});
+
+//To Update Many Documents at once --> Same as updateOne but chnages all the Documents Satisfy the Condition
+
+User.updateMany(
+    {Age: {$gt: 12}},
+    {Bio: "Non Filer Persons"}
+).then((res)=>{
+    console.log(res)
+});
+
+// We can Also Find First & Update the Specific Document
+
+User.findOneAndUpdate(
+    {Name: "Sayyam"},
+    {Bio: "Hire me as Soon as Possible"},
+    {new: true} ).then((res)=>{  // New is True is an Option Show the Updated Value In terminal First
+    console.log(res);
+});
+
+-------------------------------------------------------------------------------------------------------------------
+
+//To Delete only Single Document
+
+User.deleteOne( // Also Return Query not Promise but we can use .then() & .catch() with it.
+    {Name: "Ali"}
+).then((res)=>{
+    console.log(res)
+});
+
+//To Delete Many Documents at once --> Same as DeleteOne but changes all the Documents Satisfy the Condition
+
+User.deleteMany(
+    {Age: {$gt: 12}}
+).then((res)=>{
+    console.log(res)
+});
+
+// We can Also Find First & Delete the Specific Document
+
+User.findOneAndDelete(
+    {Name: "Sayyam"},
+    {new: true} ).then((res)=>{  // New is True is an Option Show the Updated Value In terminal First
+    console.log(res);
+});
+
+// To delete all the Documents at once -->
+
+User.deleteMany({}).then((res)=>{console.log(res);});

@@ -1,0 +1,118 @@
+body {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+h3 {
+    color: #2d2d2d;
+    margin-top: 32px;
+    font-size: 2.3rem;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-shadow: 1px 1px 10px #fff8;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+}
+
+form button, .msgBox button {
+    background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 28px;
+    font-size: 1.08rem;
+    font-weight: 600;
+    margin: 10px 0;
+    cursor: pointer;
+    box-shadow: 0 2px 12px #0001;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    letter-spacing: 1px;
+}
+form button:hover, .msgBox button:hover {
+    background: linear-gradient(90deg, #185a9d 0%, #43cea2 100%);
+    transform: scale(1.08);
+    box-shadow: 0 4px 24px #0002;
+}
+
+.msgBox {
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 6px 32px #0002;
+    margin: 22px 0;
+    padding: 28px 34px;
+    width: 97%;
+    max-width: 500px;
+    animation: fadeInUp 0.7s cubic-bezier(.39,.575,.56,1.000);
+    position: relative;
+    transition: box-shadow 0.3s, transform 0.2s;
+    border: 2px solid #43cea2;
+}
+.msgBox:hover {
+    box-shadow: 0 12px 40px #0003;
+    transform: translateY(-4px) scale(1.01);
+    border-color: #185a9d;
+}
+
+.msg {
+    margin: 12px 0 0 0;
+    padding: 0 0 0 14px;
+    border-left: 5px solid #43cea2;
+    font-size: 1.15rem;
+    color: #185a9d;
+    font-weight: 500;
+    letter-spacing: 1px;
+    transition: border-color 0.3s, color 0.3s;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+.msgBox:hover .msg {
+    border-color: #185a9d;
+    color: #43cea2;
+}
+
+p, label {
+    margin: 8px 0;
+    color: #333;
+    font-size: 1.08rem;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+hr {
+    border: none;
+    border-top: 1.5px solid #eee;
+    margin: 22px 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .msgBox {
+        padding: 14px 8px;
+        max-width: 99vw;
+    }
+    h3 {
+        font-size: 1.3rem;
+    }
+    .msg {
+        font-size: 1rem;
+    }
+    form button, .msgBox button {
+        font-size: 0.97rem;
+        padding: 8px 14px;
+    }
+}

@@ -1,0 +1,22 @@
+-> First Setup the Mongoose with Express
+-> Add Paths,EJS & Overrides
+
+Now we create a new Folder in the Same Folder Which name is Models and Having Number of Schema
+
+-> When we create the Model Folder into which we create project.js file into which we require the mongoose
+and also Define the Schemas in this file
+
+-> Create an init.js File which is used only to Insert the Data.
+// This File is used when sometimes we want to check the sample Data we just run it
+-> Check this File In This Directory its Notes Present it it
+
+Creating an Index Route ---->
+
+app.get("/chats",async (req,res)=>{ //Bcz we are using Await we make it an async Function
+    let chats = await Chat.find(); // This is Always Returns the Promise So we use await
+    res.render("index.ejs",{chats});
+});
+
+
+
+

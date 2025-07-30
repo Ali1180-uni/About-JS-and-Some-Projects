@@ -1,0 +1,77 @@
+Lets Start Mongo Db with Some basic Commands
+
+-> First We Just use the MongoDb Shell With its just Basic Commands
+
+-> Please Install MongoDB Shell also it tease you alot also add thier both bin paths to Environmental variables 
+-> Go to the Services & Check MongoDB is Running or not?
+
+-> Start it & then we use ----> mongosh command to start the Shell of MongoDB
+
+-> mongosh //to start mongoDB Shell
+-> use databasename --> use database1 --> to create and use new database
+-> show dbs ---> to see all the databases
+
+It always Create a Temporary Datbase until we don't add some values in it.
+So these use commands are not work they just create the temporary database until we don't add data in it.
+
+-> The Data is Stored in the MongoDB in the BSON -> (Binary JSON) -> Format
+
+Data is Given in the Format of JSON But MongoDB convert it into BSON and Store it
+
+Data Stored in Documents with the help of BSON and The Number of Documents is known as Collection
+
+Comparing with SQL
+
+   SQL    |   MongoDB
+
+   database = database
+   TABLE    = Collection
+   ROWS     = Documents 
+
+Ok the Collection of of many documents in MongoDB is same the Table of Many rows in SQL of database
+
+We Can see All the Collections with command
+-> show Collections
+
+We can insert the Document in Collection with the command
+-> db.CollectionName.insertOne( { name: "Ali", Class: "BSSE", age: 18 } ); --> Data is Stored in JS OBJECT Format
+
+There is no restriction of Datatype and Values in Each Coloumn Name 
+
+eg: -> db.student.insertOne( { name: "Ali", Hobby: "Coding", age: 18 } ); //Collection = student
+
+so there is no restriction of same column name of all the data in the collection we can create any type of
+document in it and store it easily
+
+-> db.student.find() --> Shows all the data in the collection in the form of Array of Objects
+
+// Also Create an object.id on each document when created in the Collection which is the primary key of that document in collection
+
+So if we want to Insert Large Amount of Data in the MongoDB we just write
+
+-> db.student.insertMany( [ { name: "Ali", Class: "BSSE", age: 18 } , { name: "Ali", Hobby: "Coding", age: 18 } ] );
+
+
+// Fisrt Create the Array and then Store the Data in it might be more helpful way to store the data and
+this is the same format in which MongoDB Shows the data
+
+
+Ok To find the values or documents in the collections we user 
+
+-> db.student.find({key:value}); ---> This command with alternative method work like WHERE clause of SQL
+// It Always returns the Array of Documents.
+// This also returns the cursor which is like the pointers which is like the call by refernece
+// It is Important bcz we can use Loops on it or on the Array it is not the actual document 
+
+-> db.student.findOne({key:value}); ---> This Command is also work Same as the Where Clause But only Find One Document
+// Always returns the actual Document
+// It is used to Take the Output Document Without an Array just a Single Document
+
+EXAMPLE ----> Select * From student Where Name = "Ali" AND age = '18'; --> SQL
+
+IN MongoDB ----> db.student.findOne({name:"Ali",age:18}); --> For Multiple Conditions
+// If We Search Data many files with same in findOne its just show the single data of user either many other users with same key pair value exists
+
+Run find() ---> Return --> cursor --> Call by refernece --> Help to Access Indivisual Data
+Run findOne() ---> Return --> Single Document --> Call by Value --> Difficult to Access Required Data
+

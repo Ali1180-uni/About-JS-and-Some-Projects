@@ -1,5 +1,5 @@
 Flex
-Only the Dirct childs of the container can only become the flex items of the flex container
+Only the Direct childs of the container can only become the flex items of the flex container
 flex display is use to make the containers flexible
 flex direction show its direction (Row,Column)-Reverse
 Justify content is to set the div Start-End-Center & Also for Space

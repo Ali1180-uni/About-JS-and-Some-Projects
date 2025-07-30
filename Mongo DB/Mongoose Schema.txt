@@ -1,0 +1,125 @@
+// First Type to Define the Schema without any Constraint and Restrictions
+
+const NewUser = mongoose.Schema({
+    Name: String,
+    Age: Number,
+    Bio: String
+});
+
+const User = mongoose.model("User",NewUser);
+
+// Second Type of Schema is Most Restrict and in which we can Define the types and More Constraints as we Defined (NULL & Unique)etc in the SQL
+
+let NewBook = mongoose.Schema({
+    Title: {
+        type: String,
+        required: true // Essential to Enter the Value
+    },
+    Price: {
+        type: Number // Schema Validation Method
+    },
+    Auther: {
+        type: String,
+        required: true
+    }
+});
+
+let Book = mongoose.model("Book",NewBook);
+
+let B1 = new Book({Title: "OOP", Auther: "AQ Bilal", Price: 123});
+
+B1.save().then((res)=>{
+    console.log(res);
+}).catch((err)=>{
+    console.log(err);
+});
+
+
+//Using More Options in the Schema For Validation
+
+let NewBook = mongoose.Schema({
+    Title: {
+        type: String,
+        required: true,
+        max: 20 // Restrict its Title to 20 words only
+    },
+    Discount:{
+        type: Number,
+        default: 1,  // To Avoid non-Negative Value.
+        min: 1, // Restricts it minimum discount length is only one Word
+        max: 3
+    },
+    Price: {
+        type: Number,
+        min: 1
+    },
+    Auther: {
+        type: String,
+        required: true
+    },
+    genere: [String], // We can Pass it to the String of Data
+    Catagory: {
+        type: String,
+        enum: ["Friction","Non-Friction"] // Data Must be only Friction or Non-Friction otherwise Error Occur
+    }
+});
+
+let Book = mongoose.model("Book",NewBook);
+
+let B1 = new Book({
+    Title: "OOP",
+    Auther: "AQ Bilal",
+    Price: 123,
+    Catagory: "Non-Friction",
+    genere: ["Amazing","Funny","Action"]
+});
+
+// Now if we want to Update the value so in this way the Restrictions of Schema Never Affect Like(min,max & required)
+
+// lets Try:
+
+    Price: {  // Here Price is minimum 1 it means ever not be Negative
+        type: Number,
+        min: 1
+    },
+
+// But when we want to Update it. It would be Update Easily without any Error
+
+Book.findByIdAndUpdate("6888b4172ab6c4a02ae01e07",
+    {Price: -495}
+).then((res)=>{
+    console.log(res);
+}).catch((err)=>{
+    console.log(err)
+});
+
+// To Apply these Restrictions We Must Use an option when we are updating --->{ runValidators: true }
+
+Book.findByIdAndUpdate("6888b4172ab6c4a02ae01e07",
+    {Price: -495},
+    { runValidators: true } // Now we are not Able to Update the Value with Negative Value.
+).then((res)=>{
+    console.log(res);
+}).catch((err)=>{
+    console.log(err)
+});
+
+
+// We Also Specify Our Own with MongoDB Schema Declaration
+
+
+    Price: {  // Here Price is minimum 1 it means ever not be Negative
+        type: Number,
+        min: [1, "Price is too Low for Book"]
+    },
+
+
+Book.findByIdAndUpdate(
+    "6888b4172ab6c4a02ae01e07",
+    {Price: -5},
+    {runValidators: true},  // Now we are not Able to Update the Value with Negative Value.
+).then((res)=>{
+    console.log(res);
+}).catch((err)=>{
+    console.log(err.errors.Price.properties.message); // Used to Show Only Error Message Not Complete
+});

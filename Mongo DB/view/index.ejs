@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Routes</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <h3>All Chats</h3>
+  <form method="get" action="/chats/new">
+    <button type="submit">Click For New Chat</button>
+  </form>
+  <% for(let Chat of chats){ %>
+  <div class="msgBox">
+    <p>From: <%= Chat.From %></p>
+    <div class="msg">
+      <p>Message: <%= Chat.Msg %>
+      <form method="get" action="/chats/<%= Chat._id %>/edit">
+        <button type="submit">Edit Message</button>
+      </form>
+      </p>
+    </div>
+    <p>Recieved by: <%= Chat.To %></p>
+  </div>
+  <form method="post" action="/chats/<%= Chat._id %>?_method=DELETE">
+    <button>Delete Message</button>
+  </form>
+  <hr>
+  <% if (Chat.Created) { %>
+  <p><%= Chat.Created.toString().split(" ")[4] %></p>
+  <p><%= Chat.Created.toString().split(" ").slice(0, 4).join("-") %></p><br>
+  <% } else { %>
+  <p>No date</p>
+  <% } %>
+  <% } %>
+</body>
+
+</html>
