@@ -26,7 +26,7 @@ body {
     border: 2px solid #fcb69f;
 }
 
-h2, h1 {
+h3 {
     color: #d35400;
     font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
     font-size: 2rem;
@@ -103,7 +103,7 @@ input[type="text"]:focus, textarea:focus {
         padding: 18px 6px 16px 6px;
         max-width: 99vw;
     }
-    h2, h1 {
+    h3 {
         font-size: 1.3rem;
     }
     p, label, button, input[type="submit"] {

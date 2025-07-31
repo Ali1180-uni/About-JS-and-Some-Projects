@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="/style3.css">
 </head>
 <body>
-    <h3>Edit Your Message</h3>
+    <h3>Your Message: <%= Chats.Msg %></h3>
     <form method="post" action="/chats/<%= Chats._id %>?_method=PATCH">
-        <textarea name="Msg" id="Msg" placeholder= <%= Chats.Msg %> ></textarea>
+        <textarea class="container" name="Msg" id="Msg" placeholder= "Enter the Message to Update" ></textarea>
         <button type="submit">Edit</button>
     </form>
 </body>
