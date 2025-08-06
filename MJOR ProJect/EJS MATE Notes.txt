@@ -1,0 +1,35 @@
+Ok EJS-Mate is Used to make template in the template 
+
+Example:
+
+آسان مثال
+layout.ejs // Its The Template Page <%- body %> it can show the Specific content of body of that file where we use 
+// <% layout('/Layout/boilerplate') %> This line --> Represent the path of that Specific file
+<html>
+  <body>
+    <h1>میری ویب سائٹ</h1>
+    <div class="con">
+        <%- body %>
+    </div>
+  </body>
+</html>
+
+
+
+home.ejs
+
+<h2>خوش آمدید!</h2>
+<p>یہ میرا پہلا پیج ہے۔</p>
+👉 جب چلائیں گے تو result ہوگا:
+
+
+
+<html>
+  <body>
+    <h1>میری ویب سائٹ</h1>
+    <div class="con">
+        <h2>خوش آمدید!</h2>
+        <p>یہ میرا پہلا پیج ہے۔</p>
+    </div>
+  </body>
+</html>

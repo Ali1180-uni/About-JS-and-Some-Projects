@@ -17,6 +17,31 @@ app.get("/chats",async (req,res)=>{ //Bcz we are using Await we make it an async
     res.render("index.ejs",{chats});
 });
 
+ok if we have the Number of Objects or variable as the name in the inputs of EJS body then we must use to make them in a JS object 
+
+-> EJS SYNTAX:
+
+    <form method="post" action="/listing">                          // Convert them into listing[title] and make them its object to Access it
+        <!-- This listing[title] is the way to make all them a part of an object name listing and Access it Easily -->
+        <input name="listing[title]" placeholder="Enter Title" type="text"> 
+        <textarea name="listing[description]" id="desc" placeholder="Enter Description"></textarea>
+        <input name="listing[price]" placeholder="Enter Price" type="text">
+        <input name="listing[image]" placeholder="Paste Image URL" type="text">
+        <input name="listing[location]" placeholder="Enter Location" type="text">
+        <input name="listing[country]" placeholder="Enter Country" type="text">
+        <button>Submit</button>
+    </form>
+
+-> index.js Syntax:
+
+app.post("/listing",async (req,res)=>{
+    // let {title,description,image,price,location,country} = req.body;
+    // let List = await list.insertOne({title: title,description: description,image: image,price: price,location: location,country: country});
+    // Also An Alternative method to Add Data First Make EJS File name -> listing[name];
+    let newList = new list(req.body.listing); //  Affective way to Avoid The Bulky Code
+    newList.save();
+    res.redirect("/listing");
+});
 
 
 

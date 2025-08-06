@@ -1,0 +1,116 @@
+body{
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.con{
+    flex: 1;
+}
+
+.navbar{
+    height: 5rem;
+    background-color: aliceblue !important;
+}
+
+.fa-umbrella-beach{
+    color: rgb(27, 27, 187);
+    font-size: larger;
+}
+
+.nav-link{
+    color: black !important;
+    font-weight: bold !important;
+}
+
+.f-info{
+    /* background: linear-gradient(136deg, rgba(128, 128, 128, 0.511) 0%, rgba(0, 0, 255, 0.461) 50%, rgba(0, 0, 0, 0.466) 100%); */
+    background-color: aliceblue;
+    height: 5rem;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: center;
+}
+
+.f-info-links,
+.Social{
+    width: 100%;
+    font-size: larger;
+}
+
+.f-info-links a{
+    text-decoration: none;
+    color: black;
+}
+.f-info-links a:hover{
+    text-decoration: underline;
+}
+
+.card{
+    border: none !important;
+    margin-bottom: 3rem !important;
+}
+
+.card-img-top,
+.show-img{
+    border-radius: 2rem !important;
+    width: 100%;
+    object-fit: cover;
+}
+
+.card-text p{
+    padding: 0 !important;
+}
+
+.Img-links{
+    text-decoration: none;
+}
+
+.card-img-overlay{
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card-img-overlay:hover{
+    opacity: 0.2;
+    background-color: white;
+}
+
+.btn{
+    background: linear-gradient(136deg, aliceblue 0%, rgb(68, 83, 92) 200%);
+}
+.btn:hover{
+    background: linear-gradient(136deg, rgb(68, 83, 92) 0%, aliceblue 100%);
+    transform: scale(1.08) rotate(-2deg);
+}
+
+.span-btns{
+    display: flex;
+}
+
+.btn1{
+    background: linear-gradient(136deg, rgb(21, 119, 205) 0%, rgb(14, 35, 48) 200%);
+    border-radius: 15px;
+    border: none;
+    padding: 7px 30px;
+}
+.btn1:hover{
+    background: linear-gradient(136deg, rgb(14, 35, 48) 0%, rgb(21, 119, 205) 100%);
+    transform: scale(1.08) rotate(-2deg);
+}
+
+.btn2{
+    background: linear-gradient(136deg, aliceblue 0%, rgb(193, 12, 12) 00%);
+    border-radius: 15px;
+    border: none;
+    padding: 7px 30px;
+}
+.btn2:hover{
+    background: linear-gradient(136deg,  rgb(193, 12, 12)  0%, aliceblue 100%);
+    transform: scale(1.08) rotate(-2deg);
+}
+

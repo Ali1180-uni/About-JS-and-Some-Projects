@@ -1,0 +1,270 @@
+const express = require('express');
+const cors = require('cors');
+const ytdl = require('ytdl-core');
+const fs = require('fs');
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+const mongoose = require('mongoose');
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use('/downloads', express.static(path.join(__dirname, 'downloads')));
+
+// MongoDB Connection
+mongoose.connect('mongodb://localhost:27017/youtube-downloader', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// Download Schema
+const downloadSchema = new mongoose.Schema({
+  id: String,
+  title: String,
+  url: String,
+  filename: String,
+  status: String,
+  progress: Number,
+  createdAt: { type: Date, default: Date.now }
+});
+
+const Download = mongoose.model('Download', downloadSchema);
+
+// Store active downloads
+const activeDownloads = new Map();
+
+// Routes
+
+// Get video info
+app.post('/api/video-info', async (req, res) => {
+  try {
+    const { url } = req.body;
+    
+    if (!ytdl.validateURL(url)) {
+      return res.status(400).json({ error: 'Invalid YouTube URL' });
+    }
+
+    const info = await ytdl.getInfo(url);
+    const videoDetails = info.videoDetails;
+    
+    // Get available formats
+    const formats = ytdl.filterFormats(info.formats, 'videoandaudio');
+    const audioFormats = ytdl.filterFormats(info.formats, 'audioonly');
+    
+    const availableFormats = [
+      ...formats.map(format => ({
+        itag: format.itag,
+        quality: format.qualityLabel || format.quality,
+        container: format.container,
+        hasVideo: format.hasVideo,
+        hasAudio: format.hasAudio,
+        filesize: format.contentLength
+      })),
+      ...audioFormats.slice(0, 3).map(format => ({
+        itag: format.itag,
+        quality: 'Audio Only',
+        container: format.container,
+        hasVideo: false,
+        hasAudio: format.hasAudio,
+        filesize: format.contentLength
+      }))
+    ];
+
+    res.json({
+      title: videoDetails.title,
+      thumbnail: videoDetails.thumbnails[0]?.url,
+      duration: videoDetails.lengthSeconds,
+      author: videoDetails.author.name,
+      formats: availableFormats
+    });
+
+  } catch (error) {
+    console.error('Error getting video info:', error);
+    res.status(500).json({ error: 'Failed to get video information' });
+  }
+});
+
+// Start download
+app.post('/api/download', async (req, res) => {
+  try {
+    const { url, format } = req.body;
+    
+    if (!ytdl.validateURL(url)) {
+      return res.status(400).json({ error: 'Invalid YouTube URL' });
+    }
+
+    const info = await ytdl.getInfo(url);
+    const videoDetails = info.videoDetails;
+    const downloadId = uuidv4();
+    
+    // Create filename
+    const title = videoDetails.title.replace(/[^\w\s]/gi, '').slice(0, 50);
+    const filename = ${title}_${downloadId}.mp4;
+    const filepath = path.join(__dirname, 'downloads', filename);
+    
+    // Create downloads directory if it doesn't exist
+    if (!fs.existsSync(path.join(__dirname, 'downloads'))) {
+      fs.mkdirSync(path.join(__dirname, 'downloads'));
+    }
+
+    // Save to database
+    const download = new Download({
+      id: downloadId,
+      title: videoDetails.title,
+      url: url,
+      filename: filename,
+      status: 'downloading',
+      progress: 0
+    });
+    await download.save();
+
+    // Start download
+    const video = ytdl(url, { 
+      format: format,
+      quality: 'highest'
+    });
+    
+    const writeStream = fs.createWriteStream(filepath);
+    video.pipe(writeStream);
+
+    let downloadedBytes = 0;
+    let totalBytes = 0;
+
+    video.on('response', (response) => {
+      totalBytes = parseInt(response.headers['content-length']);
+    });
+
+    video.on('data', async (chunk) => {
+      downloadedBytes += chunk.length;
+      const progress = totalBytes ? Math.floor((downloadedBytes / totalBytes) * 100) : 0;
+      
+      // Update progress in database
+      await Download.findOneAndUpdate(
+        { id: downloadId },
+        { progress: progress }
+      );
+      
+      activeDownloads.set(downloadId, { progress, status: 'downloading' });
+    });
+
+    video.on('end', async () => {
+      await Download.findOneAndUpdate(
+        { id: downloadId },
+        { status: 'completed', progress: 100 }
+      );
+      activeDownloads.set(downloadId, { progress: 100, status: 'completed' });
+    });
+
+    video.on('error', async (error) => {
+      console.error('Download error:', error);
+      await Download.findOneAndUpdate(
+        { id: downloadId },
+        { status: 'failed' }
+      );
+      activeDownloads.set(downloadId, { progress: 0, status: 'failed' });
+    });
+
+    res.json({ 
+      downloadId: downloadId,
+      message: 'Download started',
+      filename: filename
+    });
+
+  } catch (error) {
+    console.error('Error starting download:', error);
+    res.status(500).json({ error: 'Failed to start download' });
+  }
+});
+
+// Get download progress
+app.get('/api/download/:id/progress', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const download = await Download.findOne({ id: id });
+    
+    if (!download) {
+      return res.status(404).json({ error: 'Download not found' });
+    }
+
+    res.json({
+      id: download.id,
+      title: download.title,
+      status: download.status,
+      progress: download.progress,
+      filename: download.filename
+    });
+
+  } catch (error) {
+    console.error('Error getting progress:', error);
+    res.status(500).json({ error: 'Failed to get download progress' });
+  }
+});
+
+// Get all downloads
+app.get('/api/downloads', async (req, res) => {
+  try {
+    const downloads = await Download.find().sort({ createdAt: -1 }).limit(20);
+    res.json(downloads);
+  } catch (error) {
+    console.error('Error getting downloads:', error);
+    res.status(500).json({ error: 'Failed to get downloads' });
+  }
+});
+
+// Download file
+app.get('/api/download/:id/file', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const download = await Download.findOne({ id: id });
+    
+    if (!download || download.status !== 'completed') {
+      return res.status(404).json({ error: 'Download not found or not completed' });
+    }
+
+    const filepath = path.join(__dirname, 'downloads', download.filename);
+    
+    if (!fs.existsSync(filepath)) {
+      return res.status(404).json({ error: 'File not found' });
+    }
+
+    res.download(filepath, download.filename);
+
+  } catch (error) {
+    console.error('Error downloading file:', error);
+    res.status(500).json({ error: 'Failed to download file' });
+  }
+});
+
+// Delete download
+app.delete('/api/download/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const download = await Download.findOne({ id: id });
+    
+    if (!download) {
+      return res.status(404).json({ error: 'Download not found' });
+    }
+
+    // Delete file
+    const filepath = path.join(__dirname, 'downloads', download.filename);
+    if (fs.existsSync(filepath)) {
+      fs.unlinkSync(filepath);
+    }
+
+    // Delete from database
+    await Download.findOneAndDelete({ id: id });
+    
+    res.json({ message: 'Download deleted successfully' });
+
+  } catch (error) {
+    console.error('Error deleting download:', error);
+    res.status(500).json({ error: 'Failed to delete download' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(Server running on port ${PORT});
+});

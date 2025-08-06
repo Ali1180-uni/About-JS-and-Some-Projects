@@ -1,0 +1,163 @@
+Middlewares are defined as the Functions between the Requests & Responses 
+
+-> These are used to perform Functionalities After the Request & Before the Responses
+-> Some Common Examples are : Method Override, urlEncoded etc ---> These are Used to Perform Some Specific Functions
+
+Properties: 
+-> Middlewares can Access Both the Request & Responses. (objects)
+-> They can Perform Chaining -> Transfer of Control from one Function to another until Response GET
+-> Functionalities are Stopped when Response is Send
+-> It(Middlewares) can Send Responses From it Self to Stop All the Functionalities -> (Chaining)
+
+What do Middlewares do?
+-> Execute any Code
+-> Make Chnages to Request Response objects
+-> Call next Function in the Stack
+-> End the Request-Response Cycle Anythime -> By sending Response itself
+
+Example (Basic Express Code):
+
+-> Const express = require('express');
+-> Const app = express();
+
+-> // Middlewares --> If it send the Response Before the GET Request --> Chaining Stopped.
+
+-> app.get('/',(req,res)=>{ // This Response is not be sent if Middlewares Sent the Response first and Chainingis stopped
+    res.send("Response");
+})
+
+app.listen(3000, ()=>{
+    Console.log('Connected');
+});
+
+Example:
+const express = require('express');
+const app = express();
+
+app.listen(3000, ()=>{
+    console.log("Server Run");
+});
+
+app.use((req,res)=>{ // It Runs on every Request Send by Client to Server
+    console.log("Middleware is Working");
+    res.send("This is Middleware Baby");
+});
+
+app.get("/",(req,res)=>{ // When Every time Request is send the Middlewares are run & these Responses are not send
+    res.send("The Root Route is Running");
+});
+
+
+Next Steps:
+
+-> There are two Steps which can perform by the Middleware:
+--> Send Response
+--> Redirect --> Using next() --> To Perform Chaining
+
+// Middlewares are Execute with all type of Request & They Execute First like Constructor
+
+--> Using next() --> This is used to redirect to next Middleware if not then to Desired Route.
+
+app.use((req,res,next)=>{ // Always Pass next parameter to use the next for redirection
+    console.log("Middleware is Working");
+    next(); // Code will also be Execute after the next but not Considered to run
+});
+
+--> Thats why Programmers never write the Code after next() & they always --> return next() --> it nevers run code after it
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+-> Always Write the Code of Middlewares in top of File.
+// Now the Middlewares Written at the top of Code Not at End Bcz if we use it at the end It is not able to Access
+// the Middlewares --> Only first Responses are send thats why there is no need of Middlewares.
+
+---> Creating Utility Middleware // Logger -> it is used to show the time of Print on console
+
+app.use((req,res,next)=>{
+
+// Creating own method of request in Middleware bcz Middlewares can easily manipulate the objects of request & Response.
+
+    req.CurTime = new Date(Date.now()).toString(); // Show the Currnt Day time
+    console.log(req.method,req.hostname,req.CurTime);
+    next();
+});
+
+// Middlewares are Also used for Specific Paths --->
+
+Example:
+
+-> Just Gave the Path to app.use() ---> General Formation
+
+app.use( path , callBack(){
+    //Function Body
+});
+
+-> Example with Specific Path -->
+
+app.use("/random",(req,res)=>{  ---------> This Middleware can only work for "/random" path
+    console.log("Middleware For Random page);
+});
+
+-> Example with Root Path -->
+
+app.use("/",(req,res)=>{  ---------> This Middleware can work for All Paths
+    console.log("Middleware For All pages);
+});
+
+---> Also if we want to Create the Error Handling Middleware:
+Example--> If we want to Show Error Page if not any other Route Path Matches
+
+// Error Handling Middleware
+
+--> We Must write the Middleware at the End of Code without any Path
+
+app.use((req,res)=>{ // Writing this at the End of Code and Without any path
+    res.send("Page not Found");
+});
+
+// Also Write
+
+app.use((req,res)=>{
+    res.status(404).send("Page not Found");
+});
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+// Simple Example of Middleware for Authentication with the Help of Query String
+
+
+app.use("/api",(req,res,next)=>{
+    let {Call} = req.query;  // Check the Query From the URL 
+    if(Call === "AliHere"){
+        next();
+    }else{
+        res.send("Request Denied Wrong Call");
+    }
+});
+
+--> Only Work if URL is : http://localhost:3000/api?Call=AliHere otherwise Request Denied
+
+app.get("/api",(req,res)=>{
+    res.send("SucessFully Autherized");
+});
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+-> We can Pass Multiple callBack Functions to the Middleware
+
+if we Create Middleware Code as a Function.
+
+let callBack = (req,res,next)=>{
+    let {Call} = req.query;  // Check the Query From the URL 
+    if(Call === "AliHere"){
+        next();
+    }else{
+        res.send("Request Denied Wrong Call");
+    }
+}
+
+app.get("/api", callBack ,(req,res)=>{ // we can pass it as a Function in the Get Route and can be Multiple callBacks send 
+    res.send("SucessFully Autherized");
+});

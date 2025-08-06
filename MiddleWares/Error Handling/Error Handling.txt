@@ -1,0 +1,81 @@
+We Can Create our Custom Error Handling Middlewares to Handle the Errors
+
+-> Syntax Changes
+
+So in this Middlewares we use 4 Arguments in app.use();
+
+-> app.use((err,req,res,next)=>{  // First Argument err is show that this is an Error Handling Middleware
+    console.log("--> Error <--");
+    next(); // This Next Give the Control From this Middleware to next (--> NON-ERROR Handling Middleware <--)
+});
+
+----------> BUT
+
+-> if we pass this err Argument to the next() --> next(err);
+
+-> app.use((err,req,res,next)=>{
+    console.log("--> Error <--");
+    next(err); // This Next Give the Control From this Middleware to next (--> ERROR Handling Middleware <--)
+});
+
+-> Significant Difference
+
+next() --> Give the Control to non-Error Handling Middleware.
+next(err) --> Give the Control to Error Handling Middleware.
+
+// If there is no other Middleware exist it gives the Control to Express's Default Error Handler --> if Error Still Exists
+
+
+-> We can Also Create the Custom Error Handling Class which can Show the Specific Message and Status of the Error
+// Create another File .js and then Write the Code of Specific Class at there and Exports it to main Express File
+
+class ExpressError extends Error{
+    constructor(status,message){
+        super();
+        this.status = status;
+        this.message = message;
+    }
+}
+
+module.exports = ExpressError;
+
+-> Require:
+
+// Require it to main File of express ---> const CustomErr = require('./ExpressErrorHandle.js');
+
+-> Use it like this:
+
+let callBack = (req,res,next)=>{
+    let {Call} = req.query;  // Check the Query From the URL 
+    if(Call === "AliHere"){
+        next();
+    }else{
+        throw new CustomErr(401,"<--- Unautherized Access --->"); -> // (status,message)
+    }
+}
+
+app.get("/api",callBack,(req,res)=>{
+    res.send("Ali Here");
+});
+
+--> We Can Also Send the Error Through the Middlewares as res.send(err) --> in JSON format 
+
+
+app.use((err,req,res,next)=>{ // This Middleware can Send the Error Status & Message on Screen in JSON format
+    res.send(err);
+})
+
+-> So we can Also Send the Message only with the Status -> Using this Code
+
+app.use((err,req,res,next)=>{
+    let {status , message} = err; // This can Extract the From the Error object But Sometimes if the objects dont have these values it Send Undefined which is also an Error
+    res.status(status).send(message);
+});
+
+-> To Handle this Error give them Default Value:
+
+app.use((err,req,res,next)=>{
+    let {status = 404 , message = "Page not Found"} = err; // These are the Default values if Values are not Extract these values are shown
+    res.status(status).send(message);
+});
+

@@ -1,0 +1,43 @@
+<% layout('/Layout/boilerplate') %>
+
+<body>
+
+  <form method="post" action="/listing/<%= List.id %>?_method=PATCH">
+    <!-- This listing[title] is the way to make all them a part of an object name listing and Access it Easily -->
+    <div class="row">
+      <div class="col-8 offset-2">
+        <br><br>
+        <h3>Edit Your information</h3>
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input name="listing[title]" value="<%= List.title %>" class="form-control" type="text">
+        </div>
+        <div class="mb-3">
+          <label for="desc" class="form-label">Description</label>
+          <textarea name="listing[description]" id="desc" class="form-control"><%= List.description %></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="price" class="form-label">Price</label>
+          <input name="listing[price]" value="<%= List.price %>" class="form-control" type="text">
+        </div>
+        <div class="mb-3">
+          <label for="image" class="form-label">Image URL</label>
+          <input name="listing[image]" value="<%= List.image %>" class="form-control" type="text">
+        </div>
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label for="location" class="form-label">Location</label>
+            <input name="listing[location]" value="<%= List.location %>" class="form-control" type="text">
+          </div>
+          <div class="mb-3 col-md-8">
+            <label for="country" class="form-label">Country</label>
+            <input name="listing[country]" value="<%= List.country %>" class="form-control" type="text">
+          </div>
+        </div>
+        <br><br>
+        <button class="btn" type="button">Submit</button>
+        <br><br>
+      </div>
+    </div>
+  </form>
+</body>

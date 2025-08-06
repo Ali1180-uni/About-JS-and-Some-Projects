@@ -1,0 +1,281 @@
+import React, { useState, useEffect } from 'react';
+import { Download, Play, Clock, User, FileVideo, Trash2, ExternalLink } from 'lucide-react';
+
+const API_BASE = 'http://localhost:5000/api';
+
+const App = () => {
+  const [url, setUrl] = useState('');
+  const [videoInfo, setVideoInfo] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [downloads, setDownloads] = useState([]);
+  const [selectedFormat, setSelectedFormat] = useState('');
+
+  useEffect(() => {
+    fetchDownloads();
+  }, []);
+
+  const fetchDownloads = async () => {
+    try {
+      const response = await fetch(${API_BASE}/downloads);
+      const data = await response.json();
+      setDownloads(data);
+    } catch (error) {
+      console.error('Error fetching downloads:', error);
+    }
+  };
+
+  const fetchVideoInfo = async () => {
+    if (!url.trim()) return;
+    
+    setLoading(true);
+    try {
+      const response = await fetch(${API_BASE}/video-info, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setVideoInfo(data);
+        setSelectedFormat(data.formats[0]?.itag || '');
+      } else {
+        alert(data.error || 'Failed to fetch video info');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to fetch video information');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const startDownload = async () => {
+    if (!videoInfo || !selectedFormat) return;
+    
+    try {
+      const response = await fetch(${API_BASE}/download, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url, format: selectedFormat }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        alert('Download started!');
+        fetchDownloads();
+        setVideoInfo(null);
+        setUrl('');
+      } else {
+        alert(data.error || 'Failed to start download');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to start download');
+    }
+  };
+
+  const deleteDownload = async (id) => {
+    try {
+      const response = await fetch(${API_BASE}/download/${id}, {
+        method: 'DELETE',
+      });
+      
+      if (response.ok) {
+        alert('Download deleted!');
+        fetchDownloads();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const formatFileSize = (bytes) => {
+    if (!bytes) return 'Unknown';
+    const mb = bytes / (1024 * 1024);
+    return ${mb.toFixed(1)} MB;
+  };
+
+  const formatDuration = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return ${mins}:${secs.toString().padStart(2, '0')};
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+            YouTube Downloader
+          </h1>
+          <p className="text-gray-300 text-lg">
+            Download your favorite YouTube videos in high quality
+          </p>
+        </div>
+
+        {/* URL Input Section */}
+        <div className="max-w-4xl mx-auto mb-12">
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <input
+                type="text"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="Paste YouTube URL here..."
+                className="flex-1 px-6 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent backdrop-blur-sm"
+              />
+              <button
+                onClick={fetchVideoInfo}
+                disabled={loading || !url.trim()}
+                className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2 min-w-fit"
+              >
+                {loading ? (
+                  <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
+                ) : (
+                  <ExternalLink className="w-5 h-5" />
+                )}
+                {loading ? 'Loading...' : 'Get Info'}
+              </button>
+            </div>
+
+            {/* Video Info Display */}
+            {videoInfo && (
+              <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+                <div className="flex flex-col md:flex-row gap-6">
+                  <img
+                    src={videoInfo.thumbnail}
+                    alt={videoInfo.title}
+                    className="w-full md:w-64 h-48 object-cover rounded-lg"
+                  />
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-white mb-3">{videoInfo.title}</h3>
+                    <div className="space-y-2 text-gray-300 mb-4">
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4" />
+                        <span>{videoInfo.author}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        <span>{formatDuration(videoInfo.duration)}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Select Quality:
+                      </label>
+                      <select
+                        value={selectedFormat}
+                        onChange={(e) => setSelectedFormat(e.target.value)}
+                        className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      >
+                        {videoInfo.formats.map((format) => (
+                          <option key={format.itag} value={format.itag} className="bg-gray-800">
+                            {format.quality} - {format.container} {format.filesize && (${formatFileSize(format.filesize)})}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    <button
+                      onClick={startDownload}
+                      className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg font-semibold hover:from-green-600 hover:to-emerald-600 transition-all duration-200 flex items-center justify-center gap-2"
+                    >
+                      <Download className="w-5 h-5" />
+                      Start Download
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Downloads Section */}
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+            <FileVideo className="w-8 h-8" />
+            Recent Downloads
+          </h2>
+          
+          <div className="grid gap-6">
+            {downloads.length === 0 ? (
+              <div className="text-center py-12 text-gray-400">
+                <FileVideo className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                <p className="text-xl">No downloads yet</p>
+                <p>Start by entering a YouTube URL above</p>
+              </div>
+            ) : (
+              downloads.map((download) => (
+                <div
+                  key={download.id}
+                  className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20 shadow-lg"
+                >
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-white mb-2">
+                        {download.title}
+                      </h3>
+                      <div className="flex items-center gap-4 text-sm text-gray-300">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          download.status === 'completed' ? 'bg-green-500/20 text-green-400' :
+                          download.status === 'downloading' ? 'bg-yellow-500/20 text-yellow-400' :
+                          download.status === 'failed' ? 'bg-red-500/20 text-red-400' :
+                          'bg-gray-500/20 text-gray-400'
+                        }`}>
+                          {download.status}
+                        </span>
+                        <span>{download.progress}%</span>
+                        <span>{new Date(download.createdAt).toLocaleDateString()}</span>
+                      </div>
+                      
+                      {download.status === 'downloading' && (
+                        <div className="mt-3">
+                          <div className="w-full bg-white/10 rounded-full h-2">
+                            <div
+                              className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-500"
+                              style={{ width: ${download.progress}% }}
+                            ></div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      {download.status === 'completed' && (
+                        <a
+                          href={${API_BASE}/download/${download.id}/file}
+                          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg font-medium hover:from-blue-600 hover:to-cyan-600 transition-all duration-200 flex items-center gap-2"
+                        >
+                          <Download className="w-4 h-4" />
+                          Download
+                        </a>
+                      )}
+                      <button
+                        onClick={() => deleteDownload(download.id)}
+                        className="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg font-medium hover:bg-red-500/30 transition-all duration-200 flex items-center gap-2"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
