@@ -1,7 +1,7 @@
 <% layout('/Layout/boilerplate') %>
 
 <body>
-  <form method="post" action="/listing">
+  <form method="post" action="/listing" novalidate class="needs-validation">
     <!-- This listing[title] is the way to make all them a part of an object name listing and Access it Easily -->
     <div class="row">
       <div class="col-8 offset-2">
@@ -9,32 +9,38 @@
         <h1>Create a New Site</h1>
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
-          <input name="listing[title]" placeholder="Enter Title" class="form-control" type="text">
+          <input name="listing[title]" placeholder="Enter Title" class="form-control" type="text" required>
+          <div class="invalid-feedback">Please Enter the Title First</div>
         </div>
         <div class="mb-3">
           <label for="desc" class="form-label">Description</label>
-          <textarea name="listing[description]" id="desc" placeholder="Enter Description" class="form-control"></textarea>
+          <textarea name="listing[description]" id="desc" placeholder="Enter Description" class="form-control" required></textarea>
+          <div class="invalid-feedback">Please Enter the Description</div>
         </div>
         <div class="mb-3">
           <label for="price" class="form-label">Price</label>
-          <input name="listing[price]" placeholder="Enter Price" type="text" class="form-control">
+          <input name="listing[price]" placeholder="Enter Price" type="text" class="form-control" required>
+          <div class="invalid-feedback">Please Enter the Price</div>
         </div>
         <div class="mb-3">
           <label for="image" class="form-label">Image URL</label>
-          <input name="listing[image]" placeholder="Paste Image/URL" type="text" class="form-control">
+          <input name="listing[image]" placeholder="Paste Image/URL" type="text" class="form-control" required>
+          <div class="invalid-feedback">Please Enter the URL of Image</div>
         </div>
         <div class="row">
           <div class="mb-3 col-md-4">
             <label for="location" class="form-label">Location</label>
-            <input name="listing[location]" placeholder="Faisalabad,Lahore" type="text" class="form-control">
+            <input name="listing[location]" placeholder="Faisalabad,Lahore" type="text" class="form-control" required>
+            <div class="invalid-feedback">Please Enter the Location</div>
           </div>
           <div class="mb-3 col-md-8">
             <label for="country" class="form-label">Country</label>
-            <input name="listing[country]" placeholder="Pakistan" type="text" class="form-control">
+            <input name="listing[country]" placeholder="Pakistan" type="text" class="form-control" required>
+            <div class="invalid-feedback">Please Enter the Valid Country</div>
           </div>
         </div>
         <br><br>
-        <button class="btn">Submit</button>
+        <button class="btn" type="submit">Submit</button>
         <br><br>
       </div>
     </div>

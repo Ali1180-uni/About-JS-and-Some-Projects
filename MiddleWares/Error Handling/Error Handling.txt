@@ -79,3 +79,13 @@ app.use((err,req,res,next)=>{
     res.status(status).send(message);
 });
 
+--> We can Send the Specific Error with the Help Of Custom Error Handling of our Class
+
+app.get("/admin", (req,res)=>{  // Get is Given Before the Middleware
+    throw new CustomErr(402,"Admin Acces is Not Available"); // Custom Error Class
+});
+
+app.use((err,req,res,next)=>{  // Middleware With Err Argument is Error Handling Middleware
+    let { status = 500 , message = "Not Working"} = err;
+    res.status(status).send(message);   --> Specific Status and Message
+});

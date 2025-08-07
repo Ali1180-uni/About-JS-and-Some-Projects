@@ -1,0 +1,87 @@
+-> Custom Error Handling in Async Functions is Little Bit Different
+
+Difference ->
+
+1. So in the Simple Functions The Class can Automatically Redirect the Control without Using Next()
+but in the Async Functions we must Describe it by ourself to show the Custom Error otherwise it shows the EJS Error
+
+we must write:
+
+app.get("/chats/:id/edit", async(req,res)=>{
+    let {id} = req.params;
+    let Chats = await Chat.findById(id);
+    if(!Chats){
+        next(new CustomErr(404,"Not Found")); >> Use Next Here // Wese mera Code Simple bhi run kr raha tha
+    }
+    res.render("edit.ejs",{Chats});
+});
+
+--> Also This is Not a Good Practice bcz it handles only Single Problems thats why we use the try & Catch
+
+app.get("/chats/:id/edit", async(req,res)=>{
+    try{
+    let {id} = req.params;
+    let Chats = await Chat.findById(id);
+    if(!Chats){
+        next(new CustomErr(404,"Not Found"));
+    }
+    res.render("edit.ejs",{Chats});
+    }catch(err){
+        next(err); ---> This Can Send the Control to Error Handling Middleware at any type of Error
+    }
+});
+
+
+--------------------------------------------------------------------------------------------------------
+                                -> ASYNC WRAP FUNCTION
+
+// try & catch is Bulky_____
+--> To Solve this Bulky Try & Catch Problem we use asyncWrap Function instead of try & Catch
+
+-> asyncWrap is a Function Which Takes the Functions Argument & Again Return this Function
+// Its is the Method to wrap the async Functions without any Error it is Used Instead of 
+try & Catch For the Error Handling
+
+its SYNTAX is little bit Different
+
+1. First Create a asyncWrap Function with specific arguments and return value
+
+function asyncWrap(fn) {
+    return function(req,res,next) {
+        fn(req,res,next).catch((err)=>{
+           next(err); 
+        });
+    }    
+}
+
+
+--> Now we Can Simply Replace All the Async Functions & Gave them as an argument to the asyncWrap
+
+-> Pass the Async Function of Get to asyncWrap like this:
+
+app.get("/chats",asyncWrap( async (req, res, next) => {
+        let chats = await Chat.find();
+        res.render("index.ejs", { chats });
+}));
+
+--> Now This Can Automatically works like try & catch in the Async Function
+
+
+// We can Also Handle the specific errors with its name:
+
+using err.name
+
+SYNTAX:
+
+const HandleValidationError = (err)=> {
+    console.log("Please Follow the Rules of Database");
+}
+
+
+app.use((err, req, res, next) => {
+    let { status = 500, message = "Something went Wrong" } = err;
+    res.status(status).send(message);
+    if(err.name === "ValidationError"){
+        HandleValidationError(err);
+    }
+});
