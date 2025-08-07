@@ -1,0 +1,81 @@
+-> npm i joi ---> It is the Node Package
+
+-> USE: 
+1. It is used to define the Schema For Server Side Validation
+2. It also Check it Exactly the Format of Data According to it.
+
+-> Client Side Validadtion:
+Done with the Help of Forms used to Html to make them Required & with BootStrap.
+
+-> Server Side Validadtion:
+Done with joi to Restrict the Specific Key Object
+
+EXAMPLE -> Create another File & write & Require it:
+
+const joi = require('joi');
+
+module.exports.listingSchema = joi.object({ // Joi schema for validating listing data -> listingSchema is a joi object
+    listing: joi.object({ // Having this another object inside the listingSchema
+        title: joi.string().required(), // title is a string and required
+        description: joi.string().required(), // description is a string and required
+        price: joi.number().required().min(0), // price is a number, required, and must be at least 0
+        location: joi.string().required(),
+        country: joi.string().required(),
+        image: joi.string().allow("",null), // image is a string, can be empty or null
+    }).required() // The listing object itself is required
+});
+
+
+// Restriction :
+
+listing: joi.object({ ... }).required() ---> This line listing Word is always that word which is in the ejs File Set in the Name
+
+<form action="/listing" method="POST">
+  <input type="text" name="listing[title]" />
+  <input type="text" name="listing[description]" />
+  <input type="number" name="listing[price]" />
+  <!-- and so on... -->
+</form>
+
+---> Like this Format
+
+
+Require it in index.js --> Main File
+
+Now we can use joi with the Help of Specific Code:
+
+let result = listingSchema.validate(req.body); // Validate the incoming data against the Joi schema
+if (result.error) {
+    throw new CusErrHandle(400,result.error);
+}
+
+Creating a Function to check the Errors of Validation with the Help of joi :
+
+const validateListing = (req, res, next) => {
+
+
+    // 📦 { error } is called object destructuring.
+    // It’s just a short way of writing:
+    
+    // let result = listingSchema.validate(req.body);
+    // let error = result.error;
+    // So you're extracting only the error part from the result object.
+
+
+    const {error} = listingSchema.validate(req.body);
+    if (error) {         // Check the Body Consists Data or not ..
+                         // If the error is present, throw a custom error with status code 400 and the error message
+        let errMsg = error.details.map((el) => el.message).join(","); // Join the error messages into a single string
+        throw new CusErrHandle(400, errMsg);
+    }else {
+        next(); // If no error, proceed to the next middleware or route handler
+    }
+}
+
+
+Use this Function Everytime in the Post and Patch requests before the asyncWrap:
+
+// Update Route
+app.patch("/listing/:id",validateListing, wrapAsync(async (req, res, next) => { // Paasing this Function to Validate the Data Before Updating }));
+
+Something Like this can check the Validadtion Everytime Strongly with the help of Joi

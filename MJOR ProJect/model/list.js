@@ -8,14 +8,16 @@ const NewList = new mongoose.Schema(
         },
         description: {
             type: String,
-            default: "Must Visit this Location"
+            default: "Must Visit this Location",
+            required: true
         },
         image: {
             type: String,
             default: "https://unsplash.com/photos/red-canoes-are-stacked-near-a-mountain-lake-yHc2gPFqJek",
             set: (v) => v === ""
             ? "https://unsplash.com/photos/red-canoes-are-stacked-near-a-mountain-lake-yHc2gPFqJek"
-            : v
+            : v,
+            required: true
         },
         price: {
             type: Number,

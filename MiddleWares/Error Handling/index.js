@@ -7,24 +7,30 @@ app.listen(3000, ()=>{
 });
 
 
-let callBack = (req,res,next)=>{
-    let {Call} = req.query;  // Check the Query From the URL 
-    if(Call === "AliHere"){
-        next();
-    }else{
-        throw new CustomErr(401,"<--- Unautherized Access --->");
-    }
-}
+// let callBack = (req,res,next)=>{
+//     let {Call} = req.query;  // Check the Query From the URL 
+//     if(Call === "AliHere"){
+//         next();
+//     }else{
+//         throw new CustomErr(401,"<--- Unautherized Access --->");
+//     }
+// }
 
-app.get("/api",callBack,(req,res)=>{
-    res.send("Ali Here");
+app.get("/admin", (req,res)=>{
+    throw new CustomErr(402,"Admin Acces is Not Available");
 });
 
 app.use((err,req,res,next)=>{
-    res.send(err);
-})
+    let { status = 500 , message = "Not Working"} = err;
+    res.status(status).send(message);
+});
 
 
+
+
+// app.get("/api",callBack,(req,res)=>{
+//     res.send("Ali Here");
+// });
 
 
 // app.use((err,req,res,next)=>{

@@ -1,0 +1,30 @@
+-> Firsct Create another Class to Write the Class For Error Handling Code & to Import it.
+
+// Write the Code in it.
+
+class ExpressError extends Error{
+    constructor(status,message){
+        super();
+        this.status = status;
+        this.message = message;
+    }
+}
+
+module.exports = ExpressError;
+
+-> Now in the Main File -> Require this File & then Write it as the Middleware
+
+const Err = require('./ErrorFileName.js');
+
+-> And Then write the Middleware for Specific Error
+
+app.use((err,req,res,next)=>{
+    let {status = 500, message = "Sever is Not Responding"} = err;
+    res.status(status).send(message);
+});
+
+-> Now use this Custom Error in non-async Functions anywhere by this line
+
+throw new ExpressError(404,"Page not Found");
+
+// These are the Basic Steps to Throw the Our Own Custom Error

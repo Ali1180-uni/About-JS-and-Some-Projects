@@ -2,7 +2,7 @@
 
 <body>
 
-  <form method="post" action="/listing/<%= List.id %>?_method=PATCH">
+  <form method="post" action="/listing/<%= List.id %>?_method=PATCH" novalidate class="needs-validation">
     <!-- This listing[title] is the way to make all them a part of an object name listing and Access it Easily -->
     <div class="row">
       <div class="col-8 offset-2">
@@ -10,32 +10,38 @@
         <h3>Edit Your information</h3>
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
-          <input name="listing[title]" value="<%= List.title %>" class="form-control" type="text">
+          <input name="listing[title]" value="<%= List.title %>" class="form-control" type="text" required>
+          <div class="invalid-feedback">Please Enter the Title First</div>
         </div>
         <div class="mb-3">
           <label for="desc" class="form-label">Description</label>
-          <textarea name="listing[description]" id="desc" class="form-control"><%= List.description %></textarea>
+          <textarea name="listing[description]" id="desc" class="form-control" required><%= List.description %></textarea>
+          <div class="invalid-feedback">Please Enter the Description First</div>
         </div>
         <div class="mb-3">
           <label for="price" class="form-label">Price</label>
-          <input name="listing[price]" value="<%= List.price %>" class="form-control" type="text">
+          <input name="listing[price]" value="<%= List.price %>" class="form-control" type="text" required>
+          <div class="invalid-feedback">Please Enter the Price First</div>
         </div>
         <div class="mb-3">
           <label for="image" class="form-label">Image URL</label>
-          <input name="listing[image]" value="<%= List.image %>" class="form-control" type="text">
+          <input name="listing[image]" value="<%= List.image %>" class="form-control" type="text" required>
+          <div class="invalid-feedback">Please Enter the URL of Image</div>
         </div>
         <div class="row">
           <div class="mb-3 col-md-4">
             <label for="location" class="form-label">Location</label>
-            <input name="listing[location]" value="<%= List.location %>" class="form-control" type="text">
+            <input name="listing[location]" value="<%= List.location %>" class="form-control" type="text" required>
+            <div class="invalid-feedback">Please Enter the Loaction</div>
           </div>
           <div class="mb-3 col-md-8">
             <label for="country" class="form-label">Country</label>
-            <input name="listing[country]" value="<%= List.country %>" class="form-control" type="text">
+            <input name="listing[country]" value="<%= List.country %>" class="form-control" type="text" required>
+            <div class="invalid-feedback">Please Enter the Country</div>
           </div>
         </div>
         <br><br>
-        <button class="btn" type="button">Submit</button>
+        <button class="btn" type="submit">Submit</button>
         <br><br>
       </div>
     </div>
