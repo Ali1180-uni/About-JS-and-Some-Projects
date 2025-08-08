@@ -40,7 +40,7 @@ Too add some type of file before commit
 -> git add file-name
 eg: git add index.html
 
--> (add .) ----> this comand is used to add all the files.
+-> (git add .) ----> this comand is used to add all the files.
 
 To commit all the changes 
 
