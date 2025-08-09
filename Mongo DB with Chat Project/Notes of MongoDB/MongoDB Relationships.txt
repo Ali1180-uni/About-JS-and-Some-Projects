@@ -1,0 +1,130 @@
+-> One to Few Relationship in MongoDB
+
+// Sirf thora sa hi Data hn jo ham store krwatay hn one to few Relationship ku ke jis tarah ab is example me hn
+// ab jo food order kr raha hn user akhir wo kitnay hi different Address ke sath order kr lay gay 
+// is liye isko ik Array form me nechay likha hn
+
+let userSchema = new mongoose.Schema({
+    username:  String,
+    Address: [
+        {
+            _id: false, // It Specifically Assign the id to Every Index of the Address Array to Deny it we use false here
+            location: String,
+            city: String,
+        }
+    ],
+});
+
+let User = mongoose.model("User", userSchema);
+
+const addUser = async () =>{
+    let User1 = new User({
+        username: "John Doe",
+        Address: [
+            {
+                location: "123 Main St",
+                city: "New York"
+            },
+        ]
+    });
+    User1.Address.push({location: "456 Elm St",city: "Los Angeles"})
+    let newUser = await User1.save();
+    console.log(newUser);
+}
+
+addUser();
+
+--> Thinking 1:
+// Acha ab jo hamarii thinking honii chaiye ke Address ke liye Aleda se model banany ki zarorat nahi hn ku ke.
+// Address ka aleda se use nai hn wo hamesha Username ke sath hi use hoga
+
+
+-> One to Many Relationship in MongoDB
+
+// Ab in Relations me jo Forign key hoti hn wo is tarah hn ke 
+// Dosry object ki id just first object me use hoti hn
+
+
+Simply First Create another File And make 2 or any number of schema in which Relations of
+One to many you want to create 
+
+Write the Code of the two models and Attach them in the Form of One to many Relations
+
+
+-> First Create the Schema  of the order or that Model which Reference you want to pass to other Document
+
+
+let OrderSchema = new mongoose.Schema({
+  item: String,
+  price: Number,  
+});
+
+let Order = mongoose.model("Order", OrderSchema);
+
+const addOrders = async () => {
+    let result = await Order.insertMany([
+        {
+            item: "Milk",
+            price: 12,
+        },
+        {
+            item: "Lemon",
+            price: 10,
+        },        
+        {
+            item: "Polish",
+            price: 16,
+        },
+    ]);
+
+    console.log(result);
+}
+
+addOrders();
+
+----> Its just the normal Schema with Values Nothing New.
+
+// First Create the Schema which Reference you want to pass it.
+let CustomerSchema = new mongoose.Schema({
+    Name:  String,
+    Orders: [ // Here we create the Array of it to define the id's here
+        {
+            type: mongoose.Schema.Types.ObjectId, // This Send the id of particular object in the Reference Object
+            ref: "Order", // Name of the Reference object or Model or Collection
+
+        }
+    ]
+});
+
+let Customer = mongoose.model("Customer", CustomerSchema);
+
+const addCustomer = async () =>{
+    let Cus1 = new Customer({
+        Name: "John Doe",
+    });
+    let order1 = await Order.findOne({item: "Milk"}); // Just Pushing the objects into the Reference Collection
+    let order2 = await Order.findOne({item: "Lemon"}); // Bcz it Gets the whole Object but we got just id in this case
+
+    Cus1.Orders.push(order1); // Indivisually passing the objects to Array
+    Cus1.Orders.push(order2);
+
+    let result = await Cus1.save();
+
+    console.log(result);
+}
+
+addCustomer();
+
+-> But the Main Object Can store only the Array of id's 
+
+[  
+  {
+    _id: ObjectId('689734cd619808e5b14495a6'),
+    Name: 'John Doe',
+    Orders: [
+      ObjectId('68972fd98683e5f0c5389681'), // With the Help of these id's We got the Complete Object
+      ObjectId('68972fd98683e5f0c5389682')
+    ],
+    __v: 0
+  }
+]

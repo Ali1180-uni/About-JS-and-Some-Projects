@@ -1,0 +1,52 @@
+-> Meaning of populate is to show the complete data instead of just to print the id's
+
+Instead of this ->
+
+[  
+  {
+    _id: ObjectId('689734cd619808e5b14495a6'),
+    Name: 'John Doe',
+    Orders: [
+      ObjectId('68972fd98683e5f0c5389681'), // With the Help of these id's We got the Complete Object
+      ObjectId('68972fd98683e5f0c5389682')
+    ],
+    __v: 0
+  }
+]
+
+To this --->
+
+{
+  _id: new ObjectId('689734cd619808e5b14495a6'),
+  Name: 'John Doe',
+  Orders: [
+    {
+      _id: new ObjectId('68972fd98683e5f0c5389681'),
+      item: 'Milk',
+      price: 12,
+      __v: 0
+    },
+    {
+      _id: new ObjectId('68972fd98683e5f0c5389682'),
+      item: 'Lemon',
+      price: 10,
+      __v: 0
+    }
+  ],
+  __v: 0
+}
+  ---> In this Updated Result We Got Directly the Complete object instead of id's
+
+
+Using Populate: 
+
+const showCustomer = async () =>{
+    try{           
+     let result = await Customer.find({}).populate("Orders"); // Here Just Write the .populate("Key name"); ---> The Specific Array of key which store the id's and now complete object 
+    console.log(result[0]); // using result[0] --> To show the complete object instead of Just [object] --> this
+    }catch(err){
+        console.log(err.message);
+    }
+}
+
+showCustomer();
