@@ -1,0 +1,42 @@
+// Imagine an insta Account Having Posts so. If someone Delete his accounts his stories and posts are automatically deleted.
+
+-> Same like this there are some middlewares in the MongoDb which are used to Make these Functioning Easily.
+-> These are used to Delete the Data & Handling the Functioning What Happen Before & After the Run of Query
+
+Middlewares:
+-> Post -> Run after the Query
+-> Pre -> Run Before the Query
+
+// Ok now our Task is too Delete the Customers and Also their orders at same time.
+
+
+-> We can Define 2 Middlewares Here and Write the Nested Code in the Middleware to Delete the Customers
+-> as well as orders realted to insta
+
+//schemaName.pre/post("specificQuery", async()=>) --> Arrow Function
+
+CustomerSchema.pre("findOneAndDelete", ()=>{   // Pre Middleware which Runs at first only when the Delete Query Exists
+    console.log("Pre Comand to Delete All");
+});
+
+CustomerSchema.post("findOneAndDelete", async(Customer)=>{ // Every Delete Query Triggers this Middleware
+    if(Customer.Orders.length){
+        let res = await Order.deleteMany({_id: {$in: Customer.Orders}});
+        console.log(res);
+    }
+});
+
+Pre Comand to Delete All
+Connected to MongoDB
+{ acknowledged: true, deletedCount: 2 }
+{
+  _id: new ObjectId('689734cd619808e5b14495a6'),
+  Name: 'John Doe',
+  Orders: [
+    new ObjectId('68972fd98683e5f0c5389681'),
+    new ObjectId('68972fd98683e5f0c5389682')
+  ],
+  __v: 0
+}
+
+// Deleted Successfull

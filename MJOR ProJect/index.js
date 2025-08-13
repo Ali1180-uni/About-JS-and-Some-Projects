@@ -1,4 +1,5 @@
 const list = require('./model/list.js');
+const Review = require('./model/Review.js');
 const Express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -6,7 +7,7 @@ const MethodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const wrapAsync = require('./utils/WrapAsync.js');
 const CusErrHandle = require('./utils/CustomErrorHandler.js');
-const {listingSchema} = require('./joiSchema.js');
+const {listingSchema, ReviewSchema} = require('./joiSchema.js');
 
 
 let app = Express();
@@ -44,6 +45,16 @@ const validateListing = (req, res, next) => {
         throw new CusErrHandle(400, errMsg);
     }else {
         next(); // If no error, proceed to the next middleware or route handler
+    }
+}
+
+const validateReview = (req, res, next) => { // Same as listing to Validate the Reviews
+    const {error} = ReviewSchema.validate(req.body);
+    if (error) { 
+        let errMsg = error.details.map((el) => el.message).join(","); // Join the error messages into a single string
+        throw new CusErrHandle(400, errMsg);
+    }else {
+        next(); 
     }
 }
 
@@ -91,7 +102,7 @@ app.delete("/listing/:id", wrapAsync(async (req, res, next) => {
 // Show Route
 app.get("/listing/:id", wrapAsync(async (req, res, next) => {
     let { id } = req.params;
-    let List = await list.findById(id);
+    let List = await list.findById(id).populate("Reviews");
     res.render("./Lists/show.ejs", { List });
 }));
 
@@ -110,6 +121,27 @@ app.post("/listing", validateListing, wrapAsync(async (req, res, next) => { // T
     let newList = new list(req.body.listing); //  Affective way to Avoid The Bulky Code
     await newList.save();
     res.redirect("/listing");
+}));
+
+app.post("/listing/:id/Review", validateReview, wrapAsync(async (req,res,next)=>{
+    let listing = await list.findById(req.params.id);
+    let newReview = new Review(req.body.Review);
+
+    await listing.Reviews.push(newReview);
+
+    await newReview.save();
+    await listing.save();
+
+    res.redirect(`/listing/${listing._id}`);
+
+}));
+
+app.delete("/listing/:id/Review/:reviewId",wrapAsync(async(req,res)=>{
+    let {id, reviewId}= req.params;
+    await list.findByIdAndUpdate(id, {$pull: {Reviews: reviewId}}); // Delete the Specific Review From Listing
+    await Review.findByIdAndDelete(reviewId);
+
+    res.redirect(`/listing/${id}`);
 }));
 
 app.all("/:any",(req,res,next)=>{  // This is the Route which Access if All other were deny and also be written at the end of the Code.

@@ -10,3 +10,10 @@ module.exports.listingSchema = joi.object({ // Joi schema for validating listing
         image: joi.string().allow("",null), // image is a string, can be empty or null
     }).required() // The listing object itself is required
 });
+
+module.exports.ReviewSchema = joi.object({
+    Review: joi.object({
+        comment: joi.string().required(),
+        rating: joi.number().required().min(1).max(5),
+    }).required()
+});

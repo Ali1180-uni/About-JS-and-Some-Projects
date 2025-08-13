@@ -167,3 +167,6 @@ User.findOneAndDelete(
 // To delete all the Documents at once -->
 
 User.deleteMany({}).then((res)=>{console.log(res);});
+
+
+Same we have also a $pull operator in mongoose which is used to Delete the Existing Data in the Array of Data

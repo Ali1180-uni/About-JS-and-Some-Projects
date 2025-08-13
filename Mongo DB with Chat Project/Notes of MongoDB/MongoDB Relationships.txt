@@ -117,6 +117,7 @@ addCustomer();
 
 -> But the Main Object Can store only the Array of id's 
 
+
 [  
   {
     _id: ObjectId('689734cd619808e5b14495a6'),
@@ -128,3 +129,53 @@ addCustomer();
     __v: 0
   }
 ]
+
+-> The Last Relationship is One to Squillion --> This is the Reverse of One to Many Relationship
+
+// Axha One to Many me ye hota tha ke Har Customer me isne jinay bhi product buy kiye hotay thay
+// inki orders ki id's inke objects me as an Array Store hotay thay like this: 
+
+
+[  
+  {
+    _id: ObjectId('689734cd619808e5b14495a6'),
+    Name: 'John Doe',
+    Orders: [
+      ObjectId('68972fd98683e5f0c5389681'), // Indivisual ID's Stored Like this in a Customer who order thses Orders
+      ObjectId('68972fd98683e5f0c5389682')
+    ],
+    __v: 0
+  }
+]
+
+// Lkn ab One to Squillion me zara ulta scene hn ku ke One to many me Customer me Sab Products ki Array
+// Store hotii thii but isme ab jo order hoga isme Customer ki Details Save hogii is tarah jo hn wo less Space Occupy hogi in Each Object
+
+[
+  {
+    caption: 'Beautiful sunset!',
+    likes: 150,
+    _id: new ObjectId('6898329539b2554d0b335329'),
+    Creator: {
+      _id: new ObjectId('689830d60135f0b018fa0aa7'),
+      Name: 'Alice',
+      Age: 30,
+      __v: 0
+    },
+    __v: 0
+  },
+  {
+    caption: 'Delicious food!',
+    likes: 200,
+    _id: new ObjectId('6898329539b2554d0b33532a'),
+    Creator: {
+      _id: new ObjectId('689830d60135f0b018fa0aa7'),
+      Name: 'Alice',
+      Age: 30,
+      __v: 0
+    },
+    __v: 0
+  }
+]
+
+--> These Two Posts are Created by the Same Person So they have One to Squillion Realtion Between them.

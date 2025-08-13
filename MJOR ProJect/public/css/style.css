@@ -53,6 +53,12 @@ body{
     margin-bottom: 3rem !important;
 }
 
+.border{
+    border: 2px solid black;
+    box-shadow: 2px 2px 10px black;
+    margin-bottom: 3rem !important;
+}
+
 .card-img-top,
 .show-img{
     border-radius: 2rem !important;

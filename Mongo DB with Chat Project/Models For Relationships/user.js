@@ -1,3 +1,5 @@
+// --> One to One Relationship
+
 const mongoose = require("mongoose");
 
 main().then(() => {
