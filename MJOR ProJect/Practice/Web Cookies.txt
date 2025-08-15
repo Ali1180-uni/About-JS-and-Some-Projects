@@ -1,0 +1,71 @@
+-> Web Cookies are the Key Value Pair Set of Data on the Website which remain present for every webpage
+-> These are Used to Tracking and Gather the infor about the User & it is also used as tha Cache memory on Web
+-> It is Mostly used in the Authentication & Autherization
+-> They Having Very Small limit to store the Data
+
+// Sending Cookies
+
+const express = require('express');
+let app = express();
+
+app.get("/",(req,res)=>{
+    res.send("This is Root");
+});
+
+app.get("/cookies",(req,res)=>{
+    res.cookie("Name","Ali"); //This is How we send th Cookies and This Info is in Key Value Pair
+    res.cookie("Area","FSD"); //This Info is Remain same on Every webpage
+    res.send("Got Cookies");
+})
+
+app.listen(8080, (req,res)=>{
+    console.log("Connected with Practice")
+});
+
+-> This is How we Send Cookies Now Lets see How other Pages Access these Cookies
+-> So All the Cookies are Stored in our Request(req) -> Parameter
+-> We Never Directly Access these Cookies on other Webpages
+-> We Must Parse the Cookies with the help of Node Package
+-> cookie-parser
+-> It is the middleware which always parse the Cookies first as the job of every middleware to execute first
+
+SYNTAX: 
+First Require and then use its Middleware
+
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
+Now Use it on any webpage
+
+Write like this:
+
+app.get("/about",(req,res)=>{
+    let {Name = "Fellow", Area = "LHR"} = req.cookies; // Setting Default
+    res.send(`Hi this is: ${Name} & Area is: ${Area}`); // Extracting Name Value From Cookies otherwise Show Default
+    // Extracting Area Value From Cookies otherwise Show Default
+
+});
+
+-> Two types of cookies which are used to store some data in browser and able to use them on different different Webpages
+1. Signed Cookies (encrypted)
+2. Unsigned Cookies Normal Cookies
+
+-> Purpose of Signed Cookies is too Check that the Cookies Weather Changed or not ...
+
+app.use(cookieParser("Code")); // Some Code like String is passed to the middleware to decrypt or verify data
+
+app.get("/Signed",(req,res)=>{
+    res.cookie("Situation","Not Good",{signed: true}); // {signed: true} Line is written to make the Cookies encrypted
+    res.send("Signed Cookies Send");
+});
+
+app.get("/verify",(req,res)=>{
+    console.log(req.signedCookies); // This can print the Signed Cookies
+    res.send("Verfied");
+});
+
+It Show this after Verify if Cookies are not Chnaged : [Object: null prototype] { Situation: 'Not Good' }
+It Show this after Verify if Cookies are totally Chnaged : [Object: null prototype] { }
+It Show this after Verify if Cookies are little bit Chnaged : [Object: null prototype] { Situation: 'false' }
+
+// These are the Basics of the Cookies

@@ -1,0 +1,81 @@
+-> Express Router Is like the EJS mate which Also make the code into small pieces having Same kind of route Paths
+-> Ab jo App.js hn isme bht ziada Code hogaya hn Listing Model ke liye CRUD or Review Model ke liye CRUD
+-> In Future or bhi models ayee to Code bht Bulky ho jayee ga is liye ham akele akele Model ko Express Router me convert kr le gay
+
+-> METHOD -> First Create another Folder Router & Indivisually Create Files For Indivisual Models CRUD
+
+// sab se pele Iske Express ko require kr ke isko Router Object assign kree gay
+
+const Express = require('express');
+
+const route = Express.Router();
+
+// Then phr Jis Model ke liye wo Route Banana hn iske Saray Routes index.js se CUt kr ke Route wali file me save kree gay
+// Then waha app.get, app.patch, app.post --> Inki jagah -> const route -> likhay gay ya jis bhi variable ko Route object assign hoga
+
+route.get("/", wrapAsync(async (req, res, next) => {
+    let List = await list.find({});
+    res.render("./Lists/index.ejs", { List });
+}));
+
+// iske bad sarii Dependencies ko require kr le gay ->
+
+const validateListing = (req, res, next) => { // It must also be Need to move here bcz it is used in all the Routes
+    const {error} = listingSchema.validate(req.body);
+    if (error) {
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new CusErrHandle(400, errMsg);
+    }else {
+        next(); // If no error, proceed to the next middleware or route handler
+    }
+}
+
+
+// Yad se inke path ko change krna hn is file ke According ->
+
+const list = require('../model/list.js'); 
+const wrapAsync = require('../utils/WrapAsync.js');
+const CusErrHandle = require('../utils/CustomErrorHandler.js');
+const {listingSchema, ReviewSchema} = require('../joiSchema.js');
+
+// next ab jaha jaha bhi hamne is path ka name use kia hn -> /listing -> isko change krna hn
+
+route.get("/", wrapAsync(async (req, res, next) => {  // For the index route ->  "/listing" -> "/"
+route.get("/new", (req, res) => { // For the New route ->  "/listing/new" -> "/new"
+route.get("/:id/edit", wrapAsync(async (req, res, next) => { // For the Edit route ->  "/listing/:id/edit" -> "/:id/edit"
+route.patch("/:id",validateListing, wrapAsync(async (req, res, next) => { // For the Update route ->  "/listing/:id" -> "/:id"
+route.delete("/:id", wrapAsync(async (req, res, next) => { // For the delete route ->  "/listing/:id" -> "/:id"
+
+// Same isi tarah index route ke ilawa listing ka "/" bhi nai rehne dena hn 
+// ku ke ab isko ham as a middleware pass kr de gay export & require kr ke in index.js File
+
+// Next ab Is File ko Export krna hn Router Object walay Variable se
+
+module.exports = route;
+
+// Next ab ham isko  index.js file me require kr ke Middleware through pass kr day gay
+
+
+-> const listing = require('./Routes/ListingCRUD.js'); // require
+
+-> app.use("/listing", listing); // Using Middleware
+// It Tells that Every Lisiting Route will use this File to Access the Lisiting Routes 
+// Also thats why we use this -> route.get("/") instead of -> app.get("/listing)
+
+app.use("/commonPath", RequiredFile); ---> UseCase
+app.use("/listing", ListingCRUD); // Jese Isme /listing sabme same use ho raha tha
+app.use("/listing/:id/Review", ReviewCRUD); // Jo Path Common Hoga isko Yaha likhna hn
+
+// Axha ab mere sath asa hoa ke mene Revies add krne ki kosis ki jokay dosay model me tha or in relationship with Listings the
+// Kia hoa ke isen Reviews ko add nai kia isne mujhay Error de dia 
+// ku ke wo Id Ko identify nai kr pa raha tha
+
+-> app.use("/listing/:id/Review", ReviewCRUD); --> ID sirf yaha pr hi reh jati thii (index.js) me
+or ReviwCRUD me ham just "/" likh dete hn jis se {req.prams.body} -> isko extract nai kr pati
+
+-> Solution:
+
+const route = Express.Router({mergeParams: true}); -> mergeParams is used to merge and Connect the Routes From parent to Child
+
+-> /listing/:id/Review -> PARENT Route
+-> /listing/:id/Review/:reviwID -> Child Route -> We use here /:reviwID -> bcz due to this line (app.use("/listing/:id/Review", ReviewCRUD);) -> It will Connected

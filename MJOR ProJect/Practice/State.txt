@@ -1,0 +1,24 @@
+// State is the info of the Current Webpage 
+-> It is like the Request related info on the Webpage
+// Session is defined as the Single Exchnage of info Between Client & Server
+
+Types:
+1. Stateful Protocol -> Save Status & Session info in Server -> FTP (File Transfer Protocol)
+2. Stateless Protocol (By Default) -> Never Save Status and Session info in Server -> HTTP (Hyper-Text Transfer Protocol)
+
+-> Express Sessions make our Sessions Stateful
+// Ye kam asa krte hn ke agr hamarii E-commerence website hn or waha koi person akay kuc add to cart krte hn
+// to kuch time ke liye jo cheeze store hotii hn ye inke user ke liye ik SESSION ID create krta hn or 
+// object ki form me iska Data Store krwata hn 
+Eg:
+User1:
+sessionId:{
+    item: ["laptop","charger"]
+}
+
+----> Something like this
+
+// Ab ye to Server-side hn but for Client-side Browser me hamaray pass sara data save nai hoga waha
+// Hamaray pass just sessionId Browser me save hogi just in the Form of (Cookies)
+
+
