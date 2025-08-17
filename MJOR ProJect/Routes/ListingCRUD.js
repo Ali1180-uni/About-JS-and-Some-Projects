@@ -35,6 +35,24 @@ route.get("/new", (req, res) => {
     res.render("./Lists/new.ejs");
 });
 
+// Add Route
+route.post("/", validateListing, wrapAsync(async (req, res, next) => { // This is the Route to Add New Listing with validation
+    // let {title,description,image,price,location,country} = req.body;
+    // let List = await list.insertOne({title: title,description: description,image: image,price: price,location: location,country: country});
+    // Also An Alternative method to Add Data First Make EJS File name -> listing[name/Object Key];
+    // if(!req.body.listing){ // This Can Check that the Listing Consists Data or not ..
+    //     throw new CusErrHandle(400, "Please Enter the valid info")
+    // }
+    let result = listingSchema.validate(req.body); // Validate the incoming data against the Joi schema
+    if (result.error) {
+        throw new CusErrHandle(400,result.error);
+    }
+    let newList = new list(req.body.listing); //  Affective way to Avoid The Bulky Code
+    await newList.save();
+    req.flash("Success","New Location Added");
+    res.redirect("/listing");
+}));
+
 // Edit Route
 route.get("/:id/edit", wrapAsync(async (req, res, next) => {
     let { id } = req.params;
@@ -52,12 +70,14 @@ route.patch("/:id",validateListing, wrapAsync(async (req, res, next) => { // Paa
 // ✅ The spread operator (...) in { ...req.body.listing } is like an:
 // 🔄 Object unpacker or object expander, not exactly a parser — but yes,
 //  it helps convert or expand an object into individual key-value pairs inside a new object.
+    req.flash("Success","Updated Successful");
     res.redirect(`/listing/${id}`);
 }));
 
 route.delete("/:id", wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     await list.findByIdAndDelete(id);
+    req.flash("Success","Location Deleted!");
     res.redirect("/listing");
 }));
 
@@ -68,21 +88,7 @@ route.get("/:id", wrapAsync(async (req, res, next) => {
     res.render("./Lists/show.ejs", { List });
 }));
 
-// Add Route
-route.post("/", validateListing, wrapAsync(async (req, res, next) => { // This is the Route to Add New Listing with validation
-    // let {title,description,image,price,location,country} = req.body;
-    // let List = await list.insertOne({title: title,description: description,image: image,price: price,location: location,country: country});
-    // Also An Alternative method to Add Data First Make EJS File name -> listing[name/Object Key];
-    // if(!req.body.listing){ // This Can Check that the Listing Consists Data or not ..
-    //     throw new CusErrHandle(400, "Please Enter the valid info")
-    // }
-    let result = listingSchema.validate(req.body); // Validate the incoming data against the Joi schema
-    if (result.error) {
-        throw new CusErrHandle(400,result.error);
-    }
-    let newList = new list(req.body.listing); //  Affective way to Avoid The Bulky Code
-    await newList.save();
-    res.redirect("/listing");
-}));
 
 module.exports = route;
+
+

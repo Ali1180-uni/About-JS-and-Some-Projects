@@ -35,7 +35,12 @@ const SessionOptions = {
 };
 
 app.use(session(SessionOptions));
+app.use(flash());
 
+app.use((req,res,next)=>{
+    res.locals.Success = req.flash("Success");
+    next();
+});
 
 main().then(() => {
     console.log('Connected to MongoDB');
@@ -46,6 +51,7 @@ main().then(() => {
 async function main() {
     await mongoose.connect("mongodb://127.0.0.1:27017/Hotels");
 }
+
 
 
 app.use("/listing", ListingCRUD); // Jese Isme /listing sabme use ho raha tha
