@@ -1,13 +1,11 @@
-const list = require('./model/list.js');
-const Review = require('./model/Review.js');
 const Express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const MethodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-const wrapAsync = require('./utils/WrapAsync.js');
 const CusErrHandle = require('./utils/CustomErrorHandler.js');
-const {listingSchema, ReviewSchema} = require('./joiSchema.js');
+const session = require('express-session');
+const flash = require('connect-flash');
 
 const ListingCRUD = require('./Routes/ListingCRUD.js');
 const ReviewCRUD = require("./Routes/ReviewCRUD.js");
@@ -22,6 +20,21 @@ app.use(Express.static(path.join(__dirname, "public")));
 app.use(Express.urlencoded({ extended: true }));
 app.use(MethodOverride("_method"));
 app.engine('ejs', ejsMate);
+
+const SessionOptions = {
+    secret: "strong one",
+    resave: false, // to avoid Warnings
+    saveUninitialized: true,
+    cookie:
+        {
+            expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // It is the Time of Expire the Cookies
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            httpOnly: true, // Security Purpose
+        }
+
+};
+
+app.use(session(SessionOptions));
 
 
 main().then(() => {

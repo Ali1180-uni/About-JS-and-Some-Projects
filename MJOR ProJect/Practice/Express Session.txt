@@ -1,0 +1,137 @@
+-> Express Sessions make our Sessions Stateful
+
+// Stores Some Data Temporary and Store SessionID in Form of Cookies
+// Ye kam asa krte hn ke agr hamarii E-commerence website hn or waha koi person akay kuc add to cart krte hn
+// to kuch time ke liye jo cheeze store hotii hn ye inke user ke liye ik SESSION ID create krta hn or 
+// object ki form me iska Data Store krwata hn 
+
+Eg:
+User1:
+sessionId:{
+    item: ["laptop","charger"]
+}
+
+----> Something like this
+
+// Ab ye to Server-side hn but for Client-side Browser me hamaray pass sara data save nai hoga waha
+// Hamaray pass just sessionId Browser me save hogi just in the Form of (Cookies)
+// Ye always ik Signed Cookies hogi or iske liye ik SecretCode bhi hoga jisko hamne last time Middleware me pass
+// kia tha or ye iske liye always Required hoga for Express Sessions --> Code might be Strong and Change timely
+
+SYNTAX:
+
+-> npm i express-session
+
+const ExpressSession = require('express-session');
+app.use(ExpressSession({secret: "Any Name of Secret Code (strong one)"})); // Middleware for Express Session
+
+ // On Every Request it send a SessionId as a Cookie to the Browser
+app.get("/test",(req,res)=>{
+
+    console.log(req.signedCookies); // This can print the Signed Cookies
+
+    // req.session is an Object which contains the Session Data
+
+    console.log(req.session);
+
+    console.log(req.sessionID); // This is the Session ID which is sent as a Cookie to the Browser
+
+    console.log(req.session.cookie); // This is the Cookie Object which contains the Session ID and other properties
+    
+    // req.session is an Object which contains the Session Data
+    
+    // req.sessionID is the Session ID which is sent as a Cookie to the Browser
+    
+    // req.session.cookie is the Cookie Object which contains the Session ID and other properties
+    
+    // req.session.cookie.expires is the Expiration Date of the Cookie
+    
+    res.send("Tested");
+});
+
+
+// Ab express Session jo id assign krte hn wo har Session ki ik Single Browser pr same hoti hn or 
+// Kisi or Browser pr Diffrent iski Example is tarah ke Jab ham Cart me kuch add krte hn to agr dosra tab 
+// bhi open kree to items remain same hotii hn due to same Session ID
+
+-> To Track the number of SESSIONS:
+app.use(ExpressSession({
+    secret: "strong one",
+    resave: false, // to avoid Warnings
+    saveUninitialized: true
+}));
+
+app.get("/reqCount",(req,res)=>{
+    if(req.session.count){
+        req.session.count++;
+    }else{
+        req.session.count = 1;
+    }
+    res.send(`Count of Request to Same SessionID ${req.session.count} Times`);
+});
+
+-> To Store the Data from one link to another With Express Session:
+
+http://localhost:8080/req?name=Ali
+
+app.get("/req",(req,res)=>{
+    let {name} = req.query;
+    req.session.name = name; //Setting Value of name after extracting and make it to session name now we can use it on any route 
+    res.redirect("/done");
+});
+
+app.get("/done",(req,res)=>{
+    res.send(`Done by ${req.session.name}`);
+});
+
+-> We can Also showa flash Alert type message on our Screen when Something is happened 
+
+-> npm i connect-flash
+
+// It is used with the help of Sessions and EJS also it shown only one time
+
+app.use(flash());
+
+app.get("/req",(req,res)=>{
+    let {name} = req.query;
+    req.session.name = name;
+    req.flash("Success","User Registered Successful"); // "key","msg" --> Access Message with Key
+    res.redirect("/done");
+});
+
+app.get("/done",(req,res)=>{
+    res.render("practice.ejs",{name: req.session.name, msg: req.flash("Success")}) // Access with Key to show Specifc Msg
+});
+
+// It can show msg only one time and it also use and Middleware and Message can access in ejs file by the Key
+
+app.get("/req",(req,res)=>{
+    let {name = "non"} = req.query;
+    req.session.name = name;
+    if(req.session.name === "non"){ // Condition Method
+        req.flash("Error","User Registered Failed");
+    }else{
+        req.flash("Success","User Registered Successful");
+    }
+    res.redirect("/done");
+});
+
+app.get("/done",(req,res)=>{
+    res.locals.SucMsg =  req.flash("Success"); // This can create a variable and no need to pass it -> SucMsg
+    res.locals.ErrMsg =  req.flash("Error"); // This can create a variable and no need to pass it -> ErrMsg
+    res.render("practice.ejs",{name: req.session.name}) // Access with Key to show Specifc Msg
+});
+
+-> EJS SYNTAX:
+    <p><%= SucMsg %><%= ErrMsg %></p>
+    <h1>Kia hal hn -> <%= name %></h1>
+
+-> We can also Create a Middleware for this line:
+res.locals.ErrMsg =  req.flash("Error"); ---> and Simply Call next();
+
+app.use((req,res,next)=>{
+    res.locals.SucMsg =  req.flash("Success"); // This can create a variable and no need to pass it -> SucMsg
+    res.locals.ErrMsg =  req.flash("Error"); // This can create a variable and no need to pass it -> ErrMsg
+    next();
+});
+

@@ -7,18 +7,5 @@ Types:
 2. Stateless Protocol (By Default) -> Never Save Status and Session info in Server -> HTTP (Hyper-Text Transfer Protocol)
 
 -> Express Sessions make our Sessions Stateful
-// Ye kam asa krte hn ke agr hamarii E-commerence website hn or waha koi person akay kuc add to cart krte hn
-// to kuch time ke liye jo cheeze store hotii hn ye inke user ke liye ik SESSION ID create krta hn or 
-// object ki form me iska Data Store krwata hn 
-Eg:
-User1:
-sessionId:{
-    item: ["laptop","charger"]
-}
 
-----> Something like this
-
-// Ab ye to Server-side hn but for Client-side Browser me hamaray pass sara data save nai hoga waha
-// Hamaray pass just sessionId Browser me save hogi just in the Form of (Cookies)
-
-
+-> Stateful me Session ki wajah se request ki info change ho jatii hn but Stateless me asa nai hota

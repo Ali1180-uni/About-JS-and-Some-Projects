@@ -69,3 +69,23 @@ It Show this after Verify if Cookies are totally Chnaged : [Object: null prototy
 It Show this after Verify if Cookies are little bit Chnaged : [Object: null prototype] { Situation: 'false' }
 
 // These are the Basics of the Cookies
+
+ok We can Pass the Cookies for Specific Time:
+
+const SessionOptions = {
+    secret: "strong one",
+    resave: false, // to avoid Warnings
+    saveUninitialized: true,
+    cookie:
+        {
+            expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // It is the Time of Expire the Cookies
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            httpOnly: true, // Security Purpose
+        }
+
+};
+
+// Express Session ki Help se jo Cookies hn inko ham kuch Thory time ke liye bhi pass kr sakte hn
+// Ab jo cookies hn for Example wo hamarii Session ki info store krte hn
+// Example User ne Github pr login kia hn but jab wo ik haftay bad ata hn to isee again login krna prta hn ku ke isky
+// Session ki cookies ka time 1 week tha jo expire ho gai hn jisne iski login info ko store kia hoa tha
