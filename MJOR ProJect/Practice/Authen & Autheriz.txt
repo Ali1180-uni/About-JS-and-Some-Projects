@@ -1,0 +1,26 @@
+-> Authentication is defined as the user is verfied to use our services or not 
+eg: If there is no account on Github we never use its services without account 
+
+-> Autherization is defined as the validate user is onlt Edit its data bcz he is autherized 
+eg: no one can delete my comment from any post bcz iam the auther of my account and iam only who delete that comment from my account
+
+
+Hashing Function:
+-> We never Store a password in simple or as it is form in database of the user we must use the Hashing Method
+-> It is a Security feature which convert simple password (HeloAli) to -> (da94u2n5934892jed024) -> this
+-> Really helpful to make password secure in backend eg: SH256
+
+-> Hashing Function having Diffrent output of every input
+-> We never determine input from output
+-> 923hr7834rhadf9234ojd -> is code ko decrypt kr ke ham iska msg nai pr sakte 
+-> for our situation we use a slow Hashing Function bcz of Bruite-force Attacks
+-> Slow Function work well in this way to avoid this type of Attacks
+
+Salting:
+-> Hashing is a Good way to secure password but it is not enough bcz many hacker create Reverse Table to
+-> decrypt the Hased password
+
+-> Salting is the method to add some string in the orignal password & then Hash it to make it more secure
+-> Ab password hn (Ali) -> Hmaraii Salted String hn (%^&-) --> Isko ham password me kahii bhi add kr ke 
+-> isko Hash kr de gay (Ali%^&-) ---> (%^&-Ali) Something like this, then ab isko dcrypt krna 
+-> impossible ho jaye gay this is called salting or ye sab kam hamray Passport name ka package kr deta hn

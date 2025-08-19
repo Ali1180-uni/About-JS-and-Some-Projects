@@ -1,0 +1,7 @@
+Passport is the Library in the JS which is used for Authentication
+So it is used For Authentication with multiple Platforms -> (google,Facebook & Github etc)
+
+-> npm i passport
+-> npm i passport-local
+-> npm i passport-local-mongoose
+

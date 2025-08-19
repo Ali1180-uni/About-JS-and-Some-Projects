@@ -39,6 +39,7 @@ app.use(flash());
 
 app.use((req,res,next)=>{
     res.locals.Success = req.flash("Success");
+    res.locals.error = req.flash("error");
     next();
 });
 

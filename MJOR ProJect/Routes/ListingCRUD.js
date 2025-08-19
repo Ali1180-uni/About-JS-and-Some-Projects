@@ -57,6 +57,10 @@ route.post("/", validateListing, wrapAsync(async (req, res, next) => { // This i
 route.get("/:id/edit", wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     let List = await list.findById(id);
+    if (!List) {
+        req.flash("error","Listing Not Found!");
+        return res.redirect("/listing");
+    }
     res.render("./Lists/edit.ejs", { List });
 }));
 
@@ -85,10 +89,12 @@ route.delete("/:id", wrapAsync(async (req, res, next) => {
 route.get("/:id", wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     let List = await list.findById(id).populate("Reviews");
+    if (!List) {
+        req.flash("error","Listing Not Found!");
+        return res.redirect("/listing");
+    }
     res.render("./Lists/show.ejs", { List });
 }));
 
 
 module.exports = route;
-
-

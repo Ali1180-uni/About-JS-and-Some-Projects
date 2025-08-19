@@ -1,0 +1,101 @@
+-> Flash message is used to show the short message
+
+-> We can Also showa flash Alert type message on our Screen when Something is happened 
+
+-> npm i connect-flash
+
+// It is used with the help of Sessions and EJS also it shown only one time
+
+app.use(flash());
+
+app.get("/req",(req,res)=>{
+    let {name} = req.query;
+    req.session.name = name;
+    req.flash("Success","User Registered Successful"); // "key","msg" --> Access Message with Key
+    res.redirect("/done");
+});
+
+app.get("/done",(req,res)=>{
+    res.render("practice.ejs",{name: req.session.name, msg: req.flash("Success")}) // Access with Key to show Specifc Msg
+});
+
+// It can show msg only one time and it also use and Middleware and Message can access in ejs file by the Key
+
+app.get("/req",(req,res)=>{
+    let {name = "non"} = req.query;
+    req.session.name = name;
+    if(req.session.name === "non"){ // Condition Method
+        req.flash("Error","User Registered Failed");
+    }else{
+        req.flash("Success","User Registered Successful");
+    }
+    res.redirect("/done");
+});
+
+app.get("/done",(req,res)=>{
+    res.locals.SucMsg =  req.flash("Success"); // This can create a variable and no need to pass it -> SucMsg
+    res.locals.ErrMsg =  req.flash("Error"); // This can create a variable and no need to pass it -> ErrMsg
+    res.render("practice.ejs",{name: req.session.name}) // Access with Key to show Specifc Msg
+});
+
+-> EJS SYNTAX:
+    <p><%= SucMsg %><%= ErrMsg %></p>
+    <h1>Kia hal hn -> <%= name %></h1>
+
+-> We can also Create a Middleware for this line:
+res.locals.ErrMsg =  req.flash("Error"); ---> and Simply Call next();
+
+app.use((req,res,next)=>{
+    res.locals.SucMsg =  req.flash("Success"); // This can create a variable and no need to pass it -> SucMsg
+    res.locals.ErrMsg =  req.flash("Error"); // This can create a variable and no need to pass it -> ErrMsg
+    next();
+});
+
+
+
+Require it ->
+-> const flash = require('connect-flash');
+
+use its middleware ->
+-> app.use(flash());
+
+use another Middleware to pass the Variable in ejs file ->
+-> app.use((req,res,next)=>{
+    re.locals.msgVariable = req.flash("key"); // key is used to identify the specific Flash Message and varibale is passed to ejs file
+    next(); // to make it next() is imp
+});
+
+Create an ejs Syntax ->
+<% if(Success  && Success.length){ %>  <!-- Checking Length Also Bcz Flash msg is an Array -->
+  <div class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
+    <%= Success %>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<% } %>
+
+Also make the Flash Message there where you must show the message ->
+route.delete("/:id", wrapAsync(async (req, res, next) => {
+    let { id } = req.params;
+    await list.findByIdAndDelete(id);
+    req.flash("Success","Location Deleted!"); // Showing Message After Running the Command
+    res.redirect("/listing");
+}));
+
+Also Show Message for invalid data ->
+<% if(error  && error.length){ %>  <!-- Checking Length Also Bcz Flash msg is an Array -->
+  <div class="alert alert-danger alert-dismissible fade show col-6 offset-3" role="alert">
+    <%= error %>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<% } %>
+
+for Specific Routes -> 
+route.get("/:id", wrapAsync(async (req, res, next) => {
+    let { id } = req.params;
+    let List = await list.findById(id).populate("Reviews");
+    if (!List) {  // if Listing is not available
+        req.flash("error","Listing Not Found!");
+        return res.redirect("/listing");
+    }
+    res.render("./Lists/show.ejs", { List });
+}));
