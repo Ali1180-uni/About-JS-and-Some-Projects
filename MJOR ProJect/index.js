@@ -6,9 +6,13 @@ const ejsMate = require('ejs-mate');
 const CusErrHandle = require('./utils/CustomErrorHandler.js');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const passportLocal = require('passport-local');
+const userNew = require('./model/user.js');
 
 const ListingCRUD = require('./Routes/ListingCRUD.js');
 const ReviewCRUD = require("./Routes/ReviewCRUD.js");
+const UserCRUD = require("./Routes/UserCRUD.js");
 
 
 let app = Express();
@@ -37,6 +41,13 @@ const SessionOptions = {
 app.use(session(SessionOptions));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new passportLocal(userNew.authenticate()));
+
+passport.serializeUser(userNew.serializeUser());
+passport.deserializeUser(userNew.deserializeUser());
+
 app.use((req,res,next)=>{
     res.locals.Success = req.flash("Success");
     res.locals.error = req.flash("error");
@@ -55,8 +66,11 @@ async function main() {
 
 
 
+
+
 app.use("/listing", ListingCRUD); // Jese Isme /listing sabme use ho raha tha
 app.use("/listing/:id/Review", ReviewCRUD); // Jo Path Common Hoga isko Yaha likhna hn
+app.use("/", UserCRUD); // Same for Users
 
 
 app.all("/:any",(req,res,next)=>{  // This is the Route which Access if All other were deny and also be written at the end of the Code.
@@ -71,3 +85,25 @@ app.use((err,req,res,next)=>{
 app.listen(3000, () => {
     console.log("You are Connected to Port 3000");
 });
+
+
+
+// app.get("/register",async (req,res)=>{
+//     let fakeUser = new userNew({
+//         email: "ali@gmail",
+//         username: "Rahat",
+//     });
+//     let RegisterdUser = await userNew.register(fakeUser, "Ali123");
+//     res.send(RegisterdUser);
+
+//     // let RegisterdUser = await userNew.register(fakeUser, "Ali123", (err, user) => {
+//         // This is the Callback Function which will be called after the User is Registered
+//         // if (err) {
+//             //     console.log(err);
+//         //     throw new CusErrHandle(500, "Somthing Went Wrong ! Please Try Again Later");
+//         // }
+//         // passport.authenticate("local")(req, res, () => {
+//         //     res.send("User Registered Successfully");
+//         // });
+//     // });
+// });

@@ -1,7 +1,156 @@
-Passport is the Library in the JS which is used for Authentication
+Passport is an authentication middleware for Node.js, designed for simplicity, flexibility, and modularity.
+It integrates seamlessly with Express and supports authentication via many strategies (local, OAuth, JWT, etc.)
+
+-> Passport Use Session always to make the credentials save ->
 So it is used For Authentication with multiple Platforms -> (google,Facebook & Github etc)
 
 -> npm i passport
 -> npm i passport-local
 -> npm i passport-local-mongoose
 
+USING passport-local-mongoose ->
+
+First we create a new Model Schema USER for its use:-
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const passport = require('passport-local-mongoose');
+
+const User = new Schema({
+    email:{
+        type: String,
+        required: true
+    },
+});
+
+User.plugin(passport);
+
+module.exports = mongoose.model("User", User);
+
+// As we know for Authentication of User the Username and Password is also required 
+// But the Passport is very powerful which automatically
+//  add the Username & password Feild with Salting & Hashing
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+->>>> Use in index.js file 
+
+-> Require all the Dependencies
+
+const passport = require('passport');
+const passportLocal = require('passport-local');
+const userSchema = require('./model/user.js');
+
+It is always use with Express Sessions so where we use the Middleware for Express Session we just Write
+Passport Code & Middlewares after it:-
+
+app.use(session(SessionOptions));  >>>>>>>>> Express Session Middleware Essential For Passport
+
+app.use(passport.initialize());
+>>>>> initialize the passport in Middleware which always check User is logged in or not
+
+app.use(passport.session());
+>>>>>>>>>>>> Set passport with Sessions to check that the same User is redirect on the different pages or not 
+
+passport.use(new passportLocal(userSchema.authenticate())); --> Always Use Brackets Here .authenticate()
+>>>>>>> Setting up with passport-local with user to check the the current user having all the required feilds (username,email & password) or not
+
+
+passport.serializeUser(userSchema.serializeUser());
+>>>> Ok serializeUser is used to save the Credential of the User and check that the same user is used everytime
+and perform redirects with same credentials it save the login info and checks it every time until user never logged out
+
+
+passport.deserializeUser(userSchema.deserializeUser());
+>>>> It check that the User is logged out the it never Display the Autherized files or data of user 
+
+
+-> serializeUser() decides what data is stored in the session (e.g., user ID) 
+
+-> deserializeUser() fetches the full user info from session data on subsequent requests, populating
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+ok Lets Create a Demo User and Authenticate it with Passport and lets See how our Password is Stored in Backend
+
+>>>>> SYNTAX:
+
+app.get("/register",async (req,res)=>{  // New Route For Authenticateion
+    let fakeUser = new userNew({  // Fake User
+        email: "ali@gmail", // Email jo hamne add ki thii model me
+        username: "Rahat",  // Username is added by Passport by default & also check username is unique or not
+    });
+    let RegisterdUser = await userNew.register(fakeUser, "Ali123"); // Here we set the password with specific user it also perform hasing & Salting 
+    res.send(RegisterdUser);
+
+    // let RegisterdUser = await userNew.register(fakeUser, "Ali123", (err, user) => {
+        // This is the Callback Function which will be called after the User is Registered
+        // if (err) {
+            //     console.log(err);
+        //     throw new CusErrHandle(500, "Somthing Went Wrong ! Please Try Again Later");
+        // }
+        // passport.authenticate("local")(req, res, () => {
+        //     res.send("User Registered Successfully");
+        // });
+    // });
+
+    >>>>> Ok this commented code is like the callback which we pass it to catch the errors and then authenticate
+});
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+It stored in Database Something like this >>>>>>
+
+  {
+    _id: ObjectId('68a568598710c2d95faea62a'),
+    email: 'ali@gmail',
+    username: 'Rahat',
+    salt: '1453b5476ec8d5d54f79a2bc2fe762a770f4f06c902c2ec2bbe7b0bd2bed6275',
+    hash: '42bfeca84393ddbf454a038d980daa0188648c6700c53b452af87d055584729848ce7c075db93f8090cdf88eeca13667f7cdf5efed27b52026061d23b6bddd63ebe0b2715eb18668b7bb9687285869ebb8e7d9858c2eec3722c2b17cb658f8f72d58b1581b4c7e650f71085947c6263258c4314fe0e11d6eca4005883f6aa0716ab52c03b6461d527cb39e26c0cf5d4130f5ca0b5642c4e4cfc94046a4051885b602466c4a8eb38437f7e08b2b2fa827817d93272f303e19f306021f03b6ea4fc8859515ebce8a6bc332c251aaad96795ae12fe3806dbc60b71f8a8ad5355cdb8f315378d3feb017e5a1029c4dc3547d7e4ea112b37dbfc573c593fe6e1a8865015de42a6cc82bd480040272cfa03e626a3900921ab0a9d26d809b146df4994a593552cc19b2341cc0b6bebf9a00e4a5f0e3e3c861932667c2202132ced960678753a0331476006edecf3799b20b379a0e6cf4deddc7738dd47fe5b78a1754c100ae3776827ccd23908d37cf3975b0ba92eb5c2ec4e668a0f759bc4618aebf9619f5b91a72981f94b0cace02b74015db47a318528500f513ec73a381e7fd769448c13c87cdb681ccccd4fca3eefd6ca96987ec0a30b027c84a35809213ba557f3124384f3921c90c9db7065fc61947e95a9aa89b5a8e42df64b522631656242805c7eeee889cd3acb58bde4366847cd873c5e21294407c34c9f9212a56348bcc',
+    __v: 0
+  }
+  
+------------------------------------------------------------------------------------------------------------------------------------
+
+Routes.get("/signup", (req, res) => {
+    res.render("./Users/signup.ejs");
+});
+
+
+Routes.post("/signup", wrapAsync(async (req, res, next) => {
+    try{
+        let { username, email, Password } = req.body;
+        let NewUser = new User({email,username});
+        await User.register(NewUser,Password);  ---> signup assosiates with .register()
+        req.flash("Success","User Registered Successful");
+        res.redirect("/listing");
+    }catch(e){
+        req.flash("error",e.message);
+        res.redirect("/signup");
+    }
+}));
+
+
+>>>> Some kind of this code is written for EJS data & authenticate it with Passport
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+passport.authenticate(strategy, options, callback?) -> For login
+
+const passportUse = require('passport');
+
+Routes.get("/login",(req,res)=>{
+    res.render("./Users/login.ejs");
+});
+
+Routes.post("/login", // Using passport.authenticate(strategy, options, callback?) this Callback here for Authentication of user easily
+    passportUse.authenticate("local", { ---> Login assosiate with .authenticate()
+        failureRedirect: "/login", failureFlash: true // These Redirect to /login page & show Flash-message in case of failure
+    }),
+    async(req,res)=>{
+        req.flash("Success","Welcome Back to Hi Tour");
+        res.redirect("/listing");
+    }
+);
+
+>>>>> Simple way to Authenticate with passport

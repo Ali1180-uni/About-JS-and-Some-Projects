@@ -5,7 +5,9 @@ const wrapAsync = require('../utils/WrapAsync.js');
 const CusErrHandle = require('../utils/CustomErrorHandler.js');
 const {ReviewSchema} = require('../joiSchema.js');
 
-const route = Express.Router({mergeParams: true});
+const route = Express.Router({mergeParams: true}); //mergeParams is used to merge and Connect the Routes From parent to Child
+// >> It means its check the child route with the reference if parent route eg: /listing/:id/review/:id
+// >> ab ye /review/:id is part ko bhi id hi consider krta hn is wajah se ham mergePramas use krte hn
 
 const validateReview = (req, res, next) => { // Same as listing to Validate the Reviews
     const {error} = ReviewSchema.validate(req.body);

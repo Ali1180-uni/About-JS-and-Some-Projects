@@ -119,4 +119,16 @@ body{
     background: linear-gradient(136deg,  rgb(193, 12, 12)  0%, aliceblue 100%);
     transform: scale(1.08) rotate(-2deg);
 }
-
+.btn-signup{
+    color: white;
+    background-color: green;
+    border: none;
+    border-radius: 8px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.btn-signup:hover{
+    color: black;
+    background-color: white;
+    border: 2px solid green;
+}
