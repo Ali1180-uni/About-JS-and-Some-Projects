@@ -3,6 +3,7 @@ const list = require('../model/list.js');
 const wrapAsync = require('../utils/WrapAsync.js');
 const CusErrHandle = require('../utils/CustomErrorHandler.js');
 const {listingSchema} = require('../joiSchema.js');
+const {isLoggedIn} = require('../Middleware/isAuthenticate.js');
 
 const route = Express.Router();
 
@@ -31,7 +32,7 @@ route.get("/", wrapAsync(async (req, res, next) => {
 }));
 
 // Create Route
-route.get("/new", (req, res) => {
+route.get("/new",isLoggedIn, (req, res) => {
     res.render("./Lists/new.ejs");
 });
 
@@ -54,7 +55,7 @@ route.post("/", validateListing, wrapAsync(async (req, res, next) => { // This i
 }));
 
 // Edit Route
-route.get("/:id/edit", wrapAsync(async (req, res, next) => {
+route.get("/:id/edit", isLoggedIn , wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     let List = await list.findById(id);
     if (!List) {
@@ -65,7 +66,7 @@ route.get("/:id/edit", wrapAsync(async (req, res, next) => {
 }));
 
 // Update Route
-route.patch("/:id",validateListing, wrapAsync(async (req, res, next) => { // Paasing this Function to Validate the Data Before Updating
+route.patch("/:id", isLoggedIn ,validateListing, wrapAsync(async (req, res, next) => { // Paasing this Function to Validate the Data Before Updating
     if(!req.body.listing){ // This Can Check that the Listing Consists Data or not ..
         throw new CusErrHandle(400, "Please Enter the valid info")
     }
@@ -78,7 +79,7 @@ route.patch("/:id",validateListing, wrapAsync(async (req, res, next) => { // Paa
     res.redirect(`/listing/${id}`);
 }));
 
-route.delete("/:id", wrapAsync(async (req, res, next) => {
+route.delete("/:id",isLoggedIn, wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     await list.findByIdAndDelete(id);
     req.flash("Success","Location Deleted!");
@@ -86,7 +87,7 @@ route.delete("/:id", wrapAsync(async (req, res, next) => {
 }));
 
 // Show Route
-route.get("/:id", wrapAsync(async (req, res, next) => {
+route.get("/:id",isLoggedIn, wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     let List = await list.findById(id).populate("Reviews");
     if (!List) {

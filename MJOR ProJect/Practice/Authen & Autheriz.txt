@@ -24,3 +24,25 @@ Salting:
 -> Ab password hn (Ali) -> Hmaraii Salted String hn (%^&-) --> Isko ham password me kahii bhi add kr ke 
 -> isko Hash kr de gay (Ali%^&-) ---> (%^&-Ali) Something like this, then ab isko dcrypt krna 
 -> impossible ho jaye gay this is called salting or ye sab kam hamray Passport name ka package kr deta hn
+
+>>> Adding Fake User Just to Practice Register
+
+// app.get("/register",async (req,res)=>{
+//     let fakeUser = new userNew({
+//         email: "ali@gmail",
+//         username: "Rahat",
+//     });
+//     let RegisterdUser = await userNew.register(fakeUser, "Ali123");
+//     res.send(RegisterdUser);
+
+//     // let RegisterdUser = await userNew.register(fakeUser, "Ali123", (err, user) => {
+//         // This is the Callback Function which will be called after the User is Registered
+//         // if (err) {
+//             //     console.log(err);
+//         //     throw new CusErrHandle(500, "Somthing Went Wrong ! Please Try Again Later");
+//         // }
+//         // passport.authenticate("local")(req, res, () => {
+//         //     res.send("User Registered Successfully");
+//         // });
+//     // });
+// });

@@ -1,0 +1,136 @@
+>>>>>> As we see we can create the Login & SignUp with the Passport Authentication
+Now we can Also Add The Middleware of the req.isAuthenticated()--> checks that the user is Logged in or not ??
+
+>> So we just Simply create a folder(Middlewares) -> file (isAuthenticated.js) -> and create a middleware here and export it
+
+module.exports.isLoggedIn = (req,res,next) => {
+    if(!req.isAuthenticated()){     // req.isAuthenticated checks that the user is loggedin in the Express.Sessions or not
+        req.flash("error", "Please Login First");
+        return res.redirect("/login");
+    }
+    next();  --> Always use next() to allow redirect on th next Route
+}
+
+>>> Just Pass this Middleware after Route ->>
+
+route.get("/:id", isLoggedIn, wrapAsync(async (req, res, next) => { --> in this line
+    let { id } = req.params;
+    let List = await list.findById(id).populate("Reviews");
+    if (!List) {
+        req.flash("error","Listing Not Found!");
+        return res.redirect("/listing");
+    }
+    res.render("./Lists/show.ejs", { List });
+}));
+
+>> So the Passport having by Default logout in the Request object we can simply add it with specific route by get requests
+
+Routes.get("/logout",(req,res,next)=>{
+    req.logout((err)=>{   // Always callback is required in the logout parameter
+        if(err){
+            return next(err);
+        }
+        req.flash("Success","Logged Out Successful");
+        return res.redirect("/listing");
+    });
+});
+
+>>>>> ok ab ham chahtyy hn ke jab ham Signup kree to login bhi ho jaye too ho hamara request object hn isme user ki info hoti hn
+>> if user exist in session by req.user then it show its value otherwise it shows undefined 
+> in this way we use it to make the person login at same time by req.login by registered user in signup Route Code
+
+-> res.locals.currUser = req.user; // This is used to get the Current User in the Navbar
+
+Use it here in ejs bcz ejs never directly use the req.user So first we convert it into res.locals
+
+      <div class="navbar-nav ms-auto">
+        <% if(!currUser){ %>
+        <a class="nav-link" href="/login">Login</a>
+        <a class="nav-link" href="/signup">Sign up</a>
+        <% }else if(currUser){ %>
+        <a class="nav-link" href="/logout">Log out</a>
+        <% } %>
+      </div>
+
+
+Now for Login at same time when user register or signup write this ->
+
+Routes.post("/signup", wrapAsync(async (req, res, next) => {
+    try{
+        let { username, email, Password } = req.body;
+        let NewUser = new User({email,username});
+        const registered = await User.register(NewUser,Password);
+        req.login(registered, (err) => {
+        if (err) {
+            return next(err);
+        }
+            req.flash("Success","User Registered Successful");
+            res.redirect("/listing");
+        });
+    }catch(e){
+        req.flash("error",e.message);
+        res.redirect("/signup");
+    }
+}));
+
+-------------------------------------------------------------------------------------------------------------------
+
+        req.login(registeredUser, (err) => {  >>>>> This is make user Login Specific who registerd just before
+        if (err) {
+            return next(err);
+        }
+            req.flash("Success","User Registered Successful");
+            res.redirect("/listing");
+        });
+
+
+// Ab ik or issue hn ke jab kisi page pr jatay hn but waha janay se pele hamay login ka khty hn but jab ham login krte hn too
+// ham again /lisiting pr jatay hn nakay ispage pr jaha se hamay login pr redirect kia gaya tha its not a good practice
+
+We Can Solve this Problem By this Code:-
+
+module.exports.isLoggedIn = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        req.session.redirectUrl = req.originalUrl; // Store the original URL to redirect after login
+        req.flash("error", "Please Login First");
+        return res.redirect("/login");
+    }
+    next();
+}
+
+we create orignalURL bcz everytime after checking the Authentication passport removes the session info of path so we dont use it directly
+-> req.session.redirectUrl = req.originalUrl; this line
+
+
+So we Create this:-
+module.exports.orignalURL = (req, res, next) => {
+    if (req.session.redirectUrl) {  // Checks it is present or not
+        res.locals.redirectUrl = req.session.redirectUrl; // Make the redirect URL available in the response locals
+    }
+    next();
+}
+
+res.locals.redirectUrl = req.session.redirectUrl; -> Writing this line bcz we never access req.session.redirectUrl anywhere so we make it save in locals
+
+So next we require it in usr.js file 
+
+const { orignalURL } = require('../Middleware/isAuthenticate.js');
+
+then use it just after "/login",orignalURL :-
+
+Routes.post("/login",
+    orignalURL, -----------> Here we use this required Middleware
+    passportUse.authenticate("local", {
+        failureRedirect: "/login", failureFlash: true
+    }),
+    async(req,res)=>{
+        req.flash("Success","Welcome Back to Hi Tour");
+        let urlOrg = res.locals.redirectUrl || "/listing"; 
+
+        // Redirect to original URL or default 
+        // checking that login redirection specific path se khud krwai gai hai ya phr User ne khudi login krna chaha hai
+        // Agr to khudii login krna chaha hn to "/listing" pr jayee ga warna res.locals.redirectURl jo hamne require kia hn
+
+        res.redirect(urlOrg); // Redirect to the original URL or listing page
+    }
+);

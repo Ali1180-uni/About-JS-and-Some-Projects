@@ -51,6 +51,7 @@ passport.deserializeUser(userNew.deserializeUser());
 app.use((req,res,next)=>{
     res.locals.Success = req.flash("Success");
     res.locals.error = req.flash("error");
+    res.locals.currUser = req.user; // This is used to get the Current User in the Navbar
     next();
 });
 
@@ -85,25 +86,3 @@ app.use((err,req,res,next)=>{
 app.listen(3000, () => {
     console.log("You are Connected to Port 3000");
 });
-
-
-
-// app.get("/register",async (req,res)=>{
-//     let fakeUser = new userNew({
-//         email: "ali@gmail",
-//         username: "Rahat",
-//     });
-//     let RegisterdUser = await userNew.register(fakeUser, "Ali123");
-//     res.send(RegisterdUser);
-
-//     // let RegisterdUser = await userNew.register(fakeUser, "Ali123", (err, user) => {
-//         // This is the Callback Function which will be called after the User is Registered
-//         // if (err) {
-//             //     console.log(err);
-//         //     throw new CusErrHandle(500, "Somthing Went Wrong ! Please Try Again Later");
-//         // }
-//         // passport.authenticate("local")(req, res, () => {
-//         //     res.send("User Registered Successfully");
-//         // });
-//     // });
-// });
