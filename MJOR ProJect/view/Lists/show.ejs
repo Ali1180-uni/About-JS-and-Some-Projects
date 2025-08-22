@@ -8,12 +8,14 @@
       <div class="card">
         <img src="<%= List.image %>" class="card-img-top show-img" alt="Image Listings" style="height: 20rem;">
         <div class="card-body">
-          <p class="card-text">RS.<%= List.price.toLocaleString('en-IN') %> / night </p>
+          <i>Owned by: <%= List.owner.username %></i>
           <p class="card-text"><b>Description: </b><%= List.description %></p>
+          <p class="card-text">RS.<%= List.price.toLocaleString('en-IN') %> / night </p>
           <p class="card-text"><b>Location: </b><%= List.location %></p>
           <p class="card-text"><b>Country: </b><%= List.country %></p>
         </div>
       </div>
+      <% if(currUser && currUser._id.equals(List.owner._id)){ %>
       <div class="span-btns">
         <form method="get" action="/listing/<%= List._id %>/edit">
           <button class="btn1 mb-3 offset-2">Edit</button>
@@ -22,9 +24,10 @@
           <button class="btn2 offset-4">DELETE</button>
         </form>
       </div>
+      <% } %>
     </div>
     <div class="col-8 offset-2 mb-3">
-      <hr>
+      <% if(currUser){ %>
       <h4>Leave a Review</h4>
       <form method="post" action="/listing/<%= List._id %>/Review" novalidate class="needs-validation">
         <div class="mb-3 mt-3">
@@ -38,22 +41,23 @@
         </div>
         <button class="btn btn-outline-dark">Submit</button>
       </form>
-    </div>
-    <hr>
-    <h4>All Reviews</h4>
-    <div class="row">
-      <% for(let review of List.Reviews){ %>
-      <div class="card border col-5 mb-3 ms-3">
-        <div class="card-body">
-          <h4 class="card-title">User Response &hearts;</h4>
-          <p class="card-text"><%= review.comment %></p>
-          <p class="card-text"><%= review.rating %> &star;</p>
-          <form class="mb-3" action="/listing/<%= List._id %>/Review/<%= review._id %>?_method=DELETE" method="post">
-            <button class="btn btn-sm btn-dark">DELETE</button>
-          </form>
+      <% } %>
+      <hr>
+      <h4>All Reviews</h4>
+      <div class="row">
+        <% for(let review of List.Reviews){ %>
+          <div class="card border col-5 mb-3 ms-3">
+            <div class="card-body">
+              <h4 class="card-title">@<%= review.author.username %></h4>
+              <p class="card-text"><%= review.comment %></p>
+              <p class="card-text"><%= review.rating %> &star;</p>
+              <form class="mb-3" action="/listing/<%= List._id %>/Review/<%= review._id %>?_method=DELETE" method="post">
+                <button class="btn btn-sm btn-dark">DELETE</button>
+              </form>
+            </div>
+          </div>
+          <% } %>
         </div>
       </div>
-      <% } %>
-    </div>
   </div>
 </body>

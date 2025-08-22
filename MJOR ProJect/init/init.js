@@ -274,3 +274,9 @@ let Data = [
 ];
 
 module.exports = {Sample : Data};
+
+
+// You use Sample as a property name in your export (module.exports = {Sample : Data};) so that when you import the file, you access the data as listing.Sample.
+// You do not need to initialize a variable called Sample—it is just a key in the exported object. The actual data is stored in the Data array, and Sample is the name you use to reference it from other files.
+// If you want to access the data directly as listing, you could export it like this:
+// Then, in other files, you would use listing instead of listing.Sample. The use of Sample is just a naming choice for how you want to access the data after importing.

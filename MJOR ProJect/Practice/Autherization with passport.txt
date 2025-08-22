@@ -1,0 +1,141 @@
+>>> Ok First i add owner to Every Listing 
+
+async function dbMode() {
+    await Model.deleteMany({});
+    listing.Sample = listing.Sample.map((obj)=> (
+        {
+            ...obj, // This can Add Previous data and owner id seperatly added using map function
+            owner:'68a804c3c9f9cc6745163f3a'
+        }
+    ));
+    await Model.insertMany(listing.Sample);
+    console.log("Data inserted successfully");
+}
+
+-> Now i Just add the .populate("owner") to show the Owner Details on page:
+
+// Show Route
+route.get("/:id",isLoggedIn, wrapAsync(async (req, res, next) => {
+    let { id } = req.params;
+    let List = await list.findById(id).populate("Reviews").populate("owner"); --> Here this can help me to use the owner details on ejs
+    if (!List) {
+        req.flash("error","Listing Not Found!");
+        return res.redirect("/listing");
+    }
+    res.render("./Lists/show.ejs", { List });
+}));
+
+-> Now i just add the details on ejs specifically Username:-
+          <i>Owned by: <%= List.owner.username %></i>
+
+Then i just handle one more conflict in which if a user login (A new one) so then its username is used to show on page
+
+
+// Add Route
+route.post("/", validateListing, wrapAsync(async (req, res, next) => {
+    let result = listingSchema.validate(req.body);
+    if (result.error) {
+        throw new CusErrHandle(400,result.error);
+    }
+    let newList = new list(req.body.listing);
+    newList.owner = req.user._id; --------> // Assign the owner of the listing to the currently logged-in user
+    -------------------------------------------> // The req.user._id is the ID of the user who is currently logged in,
+    await newList.save();
+    req.flash("Success","New Location Added");
+    res.redirect("/listing");
+}));
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+Now Just add Authrization for Delete & Edit Buttons that Specifically Deleted by that Person who Created them otherwise these buttons are hidden
+
+      <% if(currUser && currUser._id.equals(List.owner._id)){ %>
+      <div class="span-btns">
+        <form method="get" action="/listing/<%= List._id %>/edit">
+          <button class="btn1 mb-3 offset-2">Edit</button>
+        </form>
+        <form method="post" action="/listing/<%= List._id %>?_method=DELETE">
+          <button class="btn2 offset-4">DELETE</button>
+        </form>
+      </div>
+      <% } %>
+
+-> Just Adding this Condition in the Ejs File
+
+-> Just Creating a Middleware To edit & Delete the Listing by Autherized User on Server-side Also
+
+module.exports.isAdmin = async (req, res, next) => {
+    let { id } = req.params;
+    let List = await list.findById(id);
+    if(!List.owner._id.equals(res.locals.currUser)) { // Check if the logged-in user is the owner of the listing
+        req.flash("error", "You do not have permission to perform this action");
+        return res.redirect(`/listing/${id}`); // return is imp bcz after it it never allow the next function to execute
+    }
+    next();
+}
+
+// In this code it checks the id first then it automatically recogonize that the person is authenticatwed or not
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ok I face Lots of Issue to Set up Reviews Authrization in project
+
+-> Nested populate
+
+    let List = await list.findById(id).populate({ path: 'Reviews', populate: { path: 'author' } }).populate("owner");
+    { path: 'Reviews', populate: { path: 'author' } } ---> This line make nested as Reviews is inside the list and auther is inside the review so we make it nested to Access it
+
+-> Also Check the Author in Current person who logged in or not
+
+    let listing = await list.findById(req.params.id);
+    let newReview = new Review(req.body.Review);
+    newReview.author = req.user._id; // Assign the auther of the review to the currently logged-in user (schema uses 'auther')
+    listing.Reviews.push(newReview);
+    await newReview.populate('author');
+    await newReview.save();
+    await listing.save();
+
+-> Also then in the Middlware i Created the is Auther to Verify the person is Auther of this Review or not?
+
+module.exports.isAuther = async (req, res, next) => {
+    let {id, reviewId}= req.params;
+    let currReview = await Review.findById(reviewId);
+    if (!currReview) {
+        req.flash("error", "Review not found");
+        return res.redirect(`/listing/${id}`);
+    }
+    const reviewAuthorId = String(currReview.author);
+    const currUserId2 = String(req.user && req.user._id);
+    if (reviewAuthorId !== currUserId2) { // Check if the logged-in user is the author of the review
+        req.flash("error", "You do not have permission to perform this action");
+        return res.redirect(`/listing/${id}`); // return is important so next() is not executed
+    }
+    next();
+}
+
+
+-> Then we just pass it as a Middleware in Delete Route
+
+route.delete("/:reviewId", isLoggedIn, isAuther, wrapAsync(async (req, res) => 
+
+// It can Restrict the User who is not Auther and Trying To perform actions of auther
+
+Also Edit the Review Model
+
+const ReviewSchema = new Schema({
+    comment: String,
+    rating: {
+        type: Number,
+        min: 1,
+        max: 5
+    },
+    created: {
+        type: Date,
+        default: Date.now()
+    },
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
+});

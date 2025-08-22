@@ -14,6 +14,12 @@ async function main() {
 
 async function dbMode() {
     await Model.deleteMany({});
+    listing.Sample = listing.Sample.map((obj)=> (
+        {
+            ...obj,
+            owner:'68a804c3c9f9cc6745163f3a'
+        }
+    ));
     await Model.insertMany(listing.Sample);
     console.log("Data inserted successfully");
 }

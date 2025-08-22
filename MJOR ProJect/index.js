@@ -66,9 +66,6 @@ async function main() {
 }
 
 
-
-
-
 app.use("/listing", ListingCRUD); // Jese Isme /listing sabme use ho raha tha
 app.use("/listing/:id/Review", ReviewCRUD); // Jo Path Common Hoga isko Yaha likhna hn
 app.use("/", UserCRUD); // Same for Users

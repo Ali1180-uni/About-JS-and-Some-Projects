@@ -90,6 +90,79 @@ body{
     background: linear-gradient(136deg, aliceblue 0%, rgb(68, 83, 92) 200%);
 }
 .btn:hover{
+
+/* --- Responsive utilities & custom button overrides --- */
+:root{
+    --btn-radius: 14px;
+    --btn-padding-lg: 10px 36px;
+    --btn-padding-md: 8px 28px;
+    --btn-padding-sm: 8px 18px;
+    --btn-font-lg: 1rem;
+    --btn-font-md: 0.95rem;
+    --btn-font-sm: 0.95rem;
+}
+
+/* Ensure buttons use our custom styles (intentionally specific to override Bootstrap defaults).
+     If you load Bootstrap after this file, add !important or change load order. */
+.btn, .btn1, .btn2 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: var(--btn-padding-md);
+    font-size: var(--btn-font-md);
+    border-radius: var(--btn-radius);
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+    text-decoration: none;
+    border: none;
+}
+
+/* Keep color choices from your original rules but make them responsive */
+.btn{ background: linear-gradient(136deg, aliceblue 0%, rgb(68, 83, 92) 200%); color: #111; }
+.btn1{ background: linear-gradient(136deg, rgb(21, 119, 205) 0%, rgb(14, 35, 48) 200%); color: #fff; }
+.btn2{ background: linear-gradient(136deg, aliceblue 0%, rgb(193, 12, 12) 0%); color: #fff; }
+
+.btn:hover, .btn1:hover, .btn2:hover{
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 28px rgba(10,10,10,.12);
+}
+
+.btn:active, .btn1:active, .btn2:active{
+    transform: translateY(0) scale(0.99);
+}
+
+/* Make grouped buttons stack on small screens */
+.span-btns{ gap: .6rem; }
+@media (max-width: 576px){
+    .span-btns{ flex-direction: column; align-items: stretch; }
+    .btn, .btn1, .btn2{ width: 100%; padding: var(--btn-padding-sm); font-size: var(--btn-font-sm); }
+}
+
+/* Responsive tweaks for common elements */
+@media (max-width: 992px){
+    .btn, .btn1, .btn2{ padding: var(--btn-padding-md); }
+    .card { margin-bottom: 2rem !important; }
+}
+
+@media (max-width: 768px){
+    body{ font-size: 0.98rem; }
+}
+
+@media (max-width: 480px){
+    :root{ --btn-font-sm: 0.92rem; }
+    .card-img-top, .show-img{ border-radius: 1rem !important; }
+    .card { margin-bottom: 1.5rem !important; }
+}
+
+/* Small utility: cap wide media inside content areas */
+.card-img-top, .show-img, .error-video{ max-width: 100%; height: auto; }
+
+/* Accessibility: visible focus for keyboard users */
+.btn:focus, .btn1:focus, .btn2:focus{
+    outline: 3px solid rgba(21,119,205,0.18);
+    outline-offset: 3px;
+}
     background: linear-gradient(136deg, rgb(68, 83, 92) 0%, aliceblue 100%);
     transform: scale(1.08) rotate(-2deg);
 }

@@ -3,9 +3,17 @@ const list = require('../model/list.js');
 const wrapAsync = require('../utils/WrapAsync.js');
 const CusErrHandle = require('../utils/CustomErrorHandler.js');
 const {listingSchema} = require('../joiSchema.js');
-const {isLoggedIn} = require('../Middleware/isAuthenticate.js');
+const {isLoggedIn , isAdmin} = require('../Middleware/isAuthenticate.js');
 
 const route = Express.Router();
+
+
+
+// Index Route
+route.get("/", wrapAsync(async (req, res, next) => {
+    let List = await list.find({});
+    res.render("./Lists/index.ejs", { List });
+}));
 
 const validateListing = (req, res, next) => {
     // 📦 { error } is called object destructuring.
@@ -23,13 +31,6 @@ const validateListing = (req, res, next) => {
         next(); // If no error, proceed to the next middleware or route handler
     }
 }
-
-
-// Index Route
-route.get("/", wrapAsync(async (req, res, next) => {
-    let List = await list.find({});
-    res.render("./Lists/index.ejs", { List });
-}));
 
 // Create Route
 route.get("/new",isLoggedIn, (req, res) => {
@@ -49,13 +50,15 @@ route.post("/", validateListing, wrapAsync(async (req, res, next) => { // This i
         throw new CusErrHandle(400,result.error);
     }
     let newList = new list(req.body.listing); //  Affective way to Avoid The Bulky Code
+    newList.owner = req.user._id; // Assign the owner of the listing to the currently logged-in user
+    // The req.user._id is the ID of the user who is currently logged in,
     await newList.save();
     req.flash("Success","New Location Added");
     res.redirect("/listing");
 }));
 
 // Edit Route
-route.get("/:id/edit", isLoggedIn , wrapAsync(async (req, res, next) => {
+route.get("/:id/edit", isLoggedIn, isAdmin , wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     let List = await list.findById(id);
     if (!List) {
@@ -66,7 +69,7 @@ route.get("/:id/edit", isLoggedIn , wrapAsync(async (req, res, next) => {
 }));
 
 // Update Route
-route.patch("/:id", isLoggedIn ,validateListing, wrapAsync(async (req, res, next) => { // Paasing this Function to Validate the Data Before Updating
+route.patch("/:id", isLoggedIn, isAdmin ,validateListing, wrapAsync(async (req, res, next) => { // Paasing this Function to Validate the Data Before Updating
     if(!req.body.listing){ // This Can Check that the Listing Consists Data or not ..
         throw new CusErrHandle(400, "Please Enter the valid info")
     }
@@ -79,7 +82,7 @@ route.patch("/:id", isLoggedIn ,validateListing, wrapAsync(async (req, res, next
     res.redirect(`/listing/${id}`);
 }));
 
-route.delete("/:id",isLoggedIn, wrapAsync(async (req, res, next) => {
+route.delete("/:id",isLoggedIn, isAdmin, wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     await list.findByIdAndDelete(id);
     req.flash("Success","Location Deleted!");
@@ -87,9 +90,9 @@ route.delete("/:id",isLoggedIn, wrapAsync(async (req, res, next) => {
 }));
 
 // Show Route
-route.get("/:id",isLoggedIn, wrapAsync(async (req, res, next) => {
+route.get("/:id", wrapAsync(async (req, res, next) => {
     let { id } = req.params;
-    let List = await list.findById(id).populate("Reviews");
+    let List = await list.findById(id).populate({ path: 'Reviews', populate: { path: 'author' } }).populate("owner");
     if (!List) {
         req.flash("error","Listing Not Found!");
         return res.redirect("/listing");
