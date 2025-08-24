@@ -1,0 +1,30 @@
+// Why your current setup breaks
+// When a user isn’t logged in and tries to delete a review:
+// isLoggedIn stores /listing/:id/Review/:reviewId?_method=DELETE in req.session.redirectUrl
+// Passport redirects to /login
+// After login, your login route redirects to that saved URL.
+// But browsers always follow redirects with a GET, never a DELETE, so Express tries to GET a route you haven’t defined → Cannot GET ....
+
+
+// --> It can resolve the Review Delete issue
+
+
+// Routes.post("/login",
+//     orignalURL,
+//     passportUse.authenticate("local", {
+//         failureRedirect: "/login", 
+//         failureFlash: true
+//     }),
+//     async (req, res) => {
+//         req.flash("Success","Welcome Back to Hi Tour");
+//         let redirectTo = res.locals.redirectUrl || "/listing";
+
+//         // If redirectTo contains "?_method=DELETE", strip it to parent listing page
+//         if (redirectTo.includes("?_method=DELETE")) {
+//             const match = redirectTo.match(/\/listing\/([^/]+)/);
+//             redirectTo = match ? `/listing/${match[1]}` : "/listing";
+//         }
+
+//         res.redirect(redirectTo);
+//     }
+// );

@@ -70,7 +70,7 @@ app.use("/listing", ListingCRUD); // Jese Isme /listing sabme use ho raha tha
 app.use("/listing/:id/Review", ReviewCRUD); // Jo Path Common Hoga isko Yaha likhna hn
 app.use("/", UserCRUD); // Same for Users
 
-app.all("/lisitng/:any",(req,res,next)=>{  // This is the Route which Access if All other were deny and also be written at the end of the Code.
+app.all("/listng/:any",(req,res,next)=>{  // This is the Route which Access if All other were deny and also be written at the end of the Code.
     next(new CusErrHandle(404,"Not Found !"));
 });
 

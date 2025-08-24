@@ -30,3 +30,6 @@ route.delete("/:reviewId", isLoggedIn, isAuther, wrapAsync(Delete));
 module.exports = route;
 
 
+
+
+// ok gpt i am facing an issue in my project basically have created a project in ejs, node & express also add mongoose and pass post so the working flow is that to add the review on a post we must be logged in so i created a delete route to delete the comment and only the autherized user can delete its comment and review and without logged in we just see the comment never delete it and only comment admin can delete it ok when i want to delete it it redirect me to login to login and then i logged in as the admin of same that comment which i want to delete previously now iam the admin but when i logged in it show me that unable to GET the specifc route
