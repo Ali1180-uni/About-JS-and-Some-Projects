@@ -1,7 +1,5 @@
 const express = require('express');
-const path = require('path');
 const wrapAsync = require('../utils/WrapAsync.js');
-const CusErrHandle = require('../utils/CustomErrorHandler.js');
 const User = require('../model/user.js');
 
 const Routes = express.Router();

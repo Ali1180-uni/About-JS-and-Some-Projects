@@ -1,0 +1,25 @@
+MVC is the way to Structure our Code which is one of the most well known way to Structure the Code
+-> MVC = Model, View, Controller
+
+Model --> Consist the Code of Database Models
+View --> Folder contains the Frontend Files Like: ejs
+Controller --> Contains the Backend Codes like : Async Functions in the Routes
+
+Routes Folder Consists only the code for Routes & Controller Folder having Data which Module.exports of Backend Code of Routes
+
+Something Like this:
+
+// Delete Route
+module.exports.Delete = async (req, res, next) => {
+    let { id } = req.params;
+    await list.findByIdAndDelete(id);
+    req.flash("Success","Location Deleted!");
+    res.redirect("/listing");
+}
+
+// Delete Route
+route.delete("/:id",isLoggedIn, isAdmin, wrapAsync(Delete));
+
+Require it in main File and Just Simply Use it to make a Code more Structural
+
+As Same we set the Reviews CRUD with this Structure

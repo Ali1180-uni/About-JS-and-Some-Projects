@@ -1,19 +1,13 @@
 const Express = require('express');
-const list = require('../model/list.js');
+// const list = require('../model/list.js'); Used in Controller Folder
 const wrapAsync = require('../utils/WrapAsync.js');
 const CusErrHandle = require('../utils/CustomErrorHandler.js');
 const {listingSchema} = require('../joiSchema.js');
 const {isLoggedIn , isAdmin} = require('../Middleware/isAuthenticate.js');
+const {index, newList, add, Edit, Update, Delete, Show} = require('../Controller/listingController.js'); // For Listing
 
-const route = Express.Router();
+const router = Express.Router();
 
-
-
-// Index Route
-route.get("/", wrapAsync(async (req, res, next) => {
-    let List = await list.find({});
-    res.render("./Lists/index.ejs", { List });
-}));
 
 const validateListing = (req, res, next) => {
     // 📦 { error } is called object destructuring.
@@ -32,73 +26,25 @@ const validateListing = (req, res, next) => {
     }
 }
 
-// Create Route
-route.get("/new",isLoggedIn, (req, res) => {
-    res.render("./Lists/new.ejs");
-});
+router
+    .route("/")
+    .get(wrapAsync(index))  // Index Route ---> router.get("/", wrapAsync(index));
+    .post(validateListing, wrapAsync(add)); // Add Route ----> router.post("/", validateListing, wrapAsync(add));
 
-// Add Route
-route.post("/", validateListing, wrapAsync(async (req, res, next) => { // This is the Route to Add New Listing with validation
-    // let {title,description,image,price,location,country} = req.body;
-    // let List = await list.insertOne({title: title,description: description,image: image,price: price,location: location,country: country});
-    // Also An Alternative method to Add Data First Make EJS File name -> listing[name/Object Key];
-    // if(!req.body.listing){ // This Can Check that the Listing Consists Data or not ..
-    //     throw new CusErrHandle(400, "Please Enter the valid info")
-    // }
-    let result = listingSchema.validate(req.body); // Validate the incoming data against the Joi schema
-    if (result.error) {
-        throw new CusErrHandle(400,result.error);
-    }
-    let newList = new list(req.body.listing); //  Affective way to Avoid The Bulky Code
-    newList.owner = req.user._id; // Assign the owner of the listing to the currently logged-in user
-    // The req.user._id is the ID of the user who is currently logged in,
-    await newList.save();
-    req.flash("Success","New Location Added");
-    res.redirect("/listing");
-}));
+
+
+// Create Route
+router.get("/new",isLoggedIn, newList);
+
 
 // Edit Route
-route.get("/:id/edit", isLoggedIn, isAdmin , wrapAsync(async (req, res, next) => {
-    let { id } = req.params;
-    let List = await list.findById(id);
-    if (!List) {
-        req.flash("error","Listing Not Found!");
-        return res.redirect("/listing");
-    }
-    res.render("./Lists/edit.ejs", { List });
-}));
-
-// Update Route
-route.patch("/:id", isLoggedIn, isAdmin ,validateListing, wrapAsync(async (req, res, next) => { // Paasing this Function to Validate the Data Before Updating
-    if(!req.body.listing){ // This Can Check that the Listing Consists Data or not ..
-        throw new CusErrHandle(400, "Please Enter the valid info")
-    }
-    let { id } = req.params;
-    await list.findByIdAndUpdate(id, { ...req.body.listing }, { runValidators: true, new: true });
-// ✅ The spread operator (...) in { ...req.body.listing } is like an:
-// 🔄 Object unpacker or object expander, not exactly a parser — but yes,
-//  it helps convert or expand an object into individual key-value pairs inside a new object.
-    req.flash("Success","Updated Successful");
-    res.redirect(`/listing/${id}`);
-}));
-
-route.delete("/:id",isLoggedIn, isAdmin, wrapAsync(async (req, res, next) => {
-    let { id } = req.params;
-    await list.findByIdAndDelete(id);
-    req.flash("Success","Location Deleted!");
-    res.redirect("/listing");
-}));
-
-// Show Route
-route.get("/:id", wrapAsync(async (req, res, next) => {
-    let { id } = req.params;
-    let List = await list.findById(id).populate({ path: 'Reviews', populate: { path: 'author' } }).populate("owner");
-    if (!List) {
-        req.flash("error","Listing Not Found!");
-        return res.redirect("/listing");
-    }
-    res.render("./Lists/show.ejs", { List });
-}));
+router.get("/:id/edit", isLoggedIn, isAdmin , wrapAsync(Edit));
 
 
-module.exports = route;
+router
+    .route("/:id")
+    .patch(isLoggedIn, isAdmin ,validateListing, wrapAsync(Update)) // Update Route ---> router.patch("/:id", isLoggedIn, isAdmin ,validateListing, wrapAsync(Update));
+    .delete(isLoggedIn, isAdmin, wrapAsync(Delete)) // Delete Route ---> router.delete("/:id",isLoggedIn, isAdmin, wrapAsync(Delete));
+    .get(wrapAsync(Show)); // Show Route --> router.get("/:id", wrapAsync(Show));
+
+module.exports = router;

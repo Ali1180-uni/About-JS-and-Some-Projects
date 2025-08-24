@@ -79,3 +79,16 @@ const route = Express.Router({mergeParams: true}); -> mergeParams is used to mer
 
 -> /listing/:id/Review -> PARENT Route
 -> /listing/:id/Review/:reviwID -> Child Route -> We use here /:reviwID -> bcz due to this line (app.use("/listing/:id/Review", ReviewCRUD);) -> It will Connected
+
+--> So here is one more way to Combine all the Routes having same path
+
+So the Express Router Having Route object which helps to define the Same Route For all the Requests
+
+router
+    .route("/:id")
+    .patch(isLoggedIn, isAdmin ,validateListing, wrapAsync(Update)) // Update Route ---> router.patch("/:id", isLoggedIn, isAdmin ,validateListing, wrapAsync(Update));
+    .delete(isLoggedIn, isAdmin, wrapAsync(Delete)) // Delete Route ---> router.delete("/:id",isLoggedIn, isAdmin, wrapAsync(Delete));
+    .get(wrapAsync(Show)); // Show Route --> router.get("/:id", wrapAsync(Show));
+
+-> This is How we setup with Router.route to that paths who have same Path
+

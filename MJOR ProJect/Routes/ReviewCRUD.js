@@ -1,10 +1,11 @@
 const Express = require('express');
-const Review = require('../model/Review.js');
-const list = require('../model/list.js');
+// const Review = require('../model/Review.js');
+// const list = require('../model/list.js');
 const wrapAsync = require('../utils/WrapAsync.js');
 const CusErrHandle = require('../utils/CustomErrorHandler.js');
 const { ReviewSchema } = require('../joiSchema.js');
 const { isLoggedIn, isAuther } = require('../Middleware/isAuthenticate.js');
+const {NewReview, Delete} = require('../Controller/ReviewController.js');
 
 const route = Express.Router({ mergeParams: true }); //mergeParams is used to merge and Connect the Routes From parent to Child
 // >> It means its check the child route with the reference if parent route eg: /listing/:id/review/:id
@@ -20,26 +21,11 @@ const validateReview = (req, res, next) => { // Same as listing to Validate the 
     }
 }
 
-route.post("/", isLoggedIn, validateReview, wrapAsync(async (req, res, next) => {
-    let listing = await list.findById(req.params.id);
-    let newReview = new Review(req.body.Review);
-    newReview.author = req.user._id; // Assign the auther of the review to the currently logged-in user (schema uses 'auther')
-    listing.Reviews.push(newReview);
-    await newReview.populate('author');
-    await newReview.save();
-    await listing.save();
-    req.flash("Success", "Review Submitted");
-    res.redirect(`/listing/${listing._id}`);
+// New Review
+route.post("/", isLoggedIn, validateReview, wrapAsync(NewReview));
 
-}));
-
-route.delete("/:reviewId", isLoggedIn, isAuther, wrapAsync(async (req, res) => {
-    let { id, reviewId } = req.params;
-    await list.findByIdAndUpdate(id, { $pull: { Reviews: reviewId } }); // Delete the Specific Review From Listing
-    await Review.findByIdAndDelete(reviewId);
-    req.flash("Success", "Review Deleted");
-    res.redirect(`/listing/${id}`);
-}));
+// Delete Review
+route.delete("/:reviewId", isLoggedIn, isAuther, wrapAsync(Delete));
 
 module.exports = route;
 
