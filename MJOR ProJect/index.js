@@ -1,7 +1,7 @@
-if(process.env.NODE_ENV !== "production"){
+if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
-console.log(process.env);
+// console.log(process.env);
 
 const Express = require('express');
 const path = require('path');
@@ -35,11 +35,11 @@ const SessionOptions = {
     resave: false, // to avoid Warnings
     saveUninitialized: true,
     cookie:
-        {
-            expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // It is the Time of Expire the Cookies
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-            httpOnly: true, // Security Purpose
-        }
+    {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // It is the Time of Expire the Cookies
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true, // Security Purpose
+    }
 
 };
 
@@ -53,7 +53,7 @@ passport.use(new passportLocal(userNew.authenticate()));
 passport.serializeUser(userNew.serializeUser());
 passport.deserializeUser(userNew.deserializeUser());
 
-app.use((req,res,next)=>{
+app.use((req, res, next) => {
     res.locals.Success = req.flash("Success");
     res.locals.error = req.flash("error");
     res.locals.currUser = req.user; // This is used to get the Current User in the Navbar
@@ -75,17 +75,17 @@ app.use("/listing", ListingCRUD); // Jese Isme /listing sabme use ho raha tha
 app.use("/listing/:id/Review", ReviewCRUD); // Jo Path Common Hoga isko Yaha likhna hn
 app.use("/", UserCRUD); // Same for Users
 
-app.all("/listng/:any",(req,res,next)=>{  // This is the Route which Access if All other were deny and also be written at the end of the Code.
-    next(new CusErrHandle(404,"Not Found !"));
+app.all("/listng/:any", (req, res, next) => {  // This is the Route which Access if All other were deny and also be written at the end of the Code.
+    next(new CusErrHandle(404, "Not Found !"));
 });
 
-app.all("/:any",(req,res,next)=>{  // This is the Route which Access if All other were deny and also be written at the end of the Code.
-    next(new CusErrHandle(404,"Not Found !"));
+app.all("/:any", (req, res, next) => {  // This is the Route which Access if All other were deny and also be written at the end of the Code.
+    next(new CusErrHandle(404, "Not Found !"));
 });
 
-app.use((err,req,res,next)=>{
-    let {statusCode = 500, message = "Somthing went Wrong"} = err;
-    res.status(statusCode).render("./Lists/error.ejs",{statusCode,message});
+app.use((err, req, res, next) => {
+    let { statusCode = 500, message = "Somthing went Wrong" } = err;
+    res.status(statusCode).render("./Lists/error.ejs", { statusCode, message });
 });
 
 app.listen(3000, () => {

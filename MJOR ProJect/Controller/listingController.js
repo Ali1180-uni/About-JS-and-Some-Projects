@@ -21,12 +21,15 @@ module.exports.add = async (req, res, next) => { // This is the Route to Add New
     // if(!req.body.listing){ // This Can Check that the Listing Consists Data or not ..
     //     throw new CusErrHandle(400, "Please Enter the valid info")
     // }
+    let url = req.file.path;
+    let filename = req.file.filename;
     let result = listingSchema.validate(req.body); // Validate the incoming data against the Joi schema
     if (result.error) {
         throw new CusErrHandle(400,result.error);
     }
     let newList = new list(req.body.listing); //  Affective way to Avoid The Bulky Code
     newList.owner = req.user._id; // Assign the owner of the listing to the currently logged-in user
+    newList.image = {url, filename};
     // The req.user._id is the ID of the user who is currently logged in,
     await newList.save();
     req.flash("Success","New Location Added");

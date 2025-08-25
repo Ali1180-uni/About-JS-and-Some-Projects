@@ -6,7 +6,7 @@
     <div class="col-8 offset-2">
       <h1><%= List.title %></h1>
       <div class="card">
-        <img src="<%= List.image %>" class="card-img-top show-img" alt="Image Listings" style="height: 20rem;">
+        <img src="<%= List.image.url %>" class="card-img-top show-img" alt="Image Listings" style="height: 20rem;">
         <div class="card-body">
           <i>Owned by: <%= List.owner.username %></i>
           <p class="card-text"><b>Description: </b><%= List.description %></p>

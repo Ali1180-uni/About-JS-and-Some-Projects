@@ -22,8 +22,3 @@ Use Method:
 eg:-
    process.env.CLOUD_NAME = dvxvnu3pk --> This can print this on console
 
--> Ok here we are using the Cloudinary (loggedin by github)
-for the Cloud data save and i got my API_KEYS & CLOUD_API_SECRET form there now for its use we must use 2 new packages which helps us a lot
-
--> npm i cloudinary
--> npm i multer-storage-cloudinary

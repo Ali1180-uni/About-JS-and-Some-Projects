@@ -15,12 +15,15 @@ const NewList = new Schema(
             required: true
         },
         image: {
-            type: String,
-            default: "https://unsplash.com/photos/red-canoes-are-stacked-near-a-mountain-lake-yHc2gPFqJek",
-            set: (v) => v === ""
-            ? "https://unsplash.com/photos/red-canoes-are-stacked-near-a-mountain-lake-yHc2gPFqJek"
-            : v,
-            required: true
+            url: String,
+            filename: String,
+
+            // type: String,
+            // default: "https://unsplash.com/photos/red-canoes-are-stacked-near-a-mountain-lake-yHc2gPFqJek",
+            // set: (v) => v === ""
+            // ? "https://unsplash.com/photos/red-canoes-are-stacked-near-a-mountain-lake-yHc2gPFqJek"
+            // : v,
+            // required: true
         },
         price: {
             type: Number,

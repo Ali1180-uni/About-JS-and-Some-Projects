@@ -56,3 +56,95 @@ we Got this type of response after it ->
   "size": 259399
 }
 
+-> Ok here we are using the Cloudinary (loggedin by github)
+for the Cloud data save and i got my API_KEYS & CLOUD_API_SECRET form there now for its use we must use 2 new packages which helps us a lot
+
+-> npm i cloudinary
+-> npm i multer-storage-cloudinary
+
+// Ok cloudinary ka version 1 install hoa hn ku ke version 2 sahi nai tha 
+// ok first create a file named CloudConfig.js
+
+-> Code
+
+const cloudinary = require('cloudinary').v2;   // V2 required
+const { CloudinaryStorage } = require('multer-storage-cloudinary'); // Multer storage required
+
+if (!process.env.CLOUD_NAME || !process.env.CLOUD_API_KEY || !process.env.CLOUD_API_SECRET) {  // For Error Tracking
+    console.error('Missing required Cloudinary environment variables');
+    process.exit(1);
+}
+
+// configure cloudinary v2
+cloudinary.config({ 
+    cloud_name: process.env.CLOUD_NAME,  // initializing Data
+    api_key: process.env.CLOUD_API_KEY, 
+    api_secret: process.env.CLOUD_API_SECRET 
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'Hi_Tour', // The name of the folder in cloudinary
+        allowedFormats: ['png', 'jpg', 'jpeg'], // restricted to common image formats
+        format: 'jpg' // optional: convert all images to jpg format
+    },
+});
+
+module.exports = { storage, cloudinary };
+
+Now We can use it in our listingCRUD --->
+
+const { storage } = require('../CloudConfig.js');
+const upload = multer({ storage }); // For Image Uploading Using Cloudinary ab is se Cludinary me jayega
+// const upload = multer({ dest: 'uploads/' }); // ye save krwata tha local
+
+-> Now we got this data if we upload on Cloudinary
+
+{
+  "fieldname": "listing[image]",
+  "originalname": "Aggrigate Func() DB.png",
+  "encoding": "7bit",
+  "mimetype": "image/png",
+  "path": "https://res.cloudinary.com/dvxvnu3pk/image/upload/v1756116802/Hi_Tour/hdtwyyjvifpyxvvmplmn.jpg", // At this link we find our pic
+  "size": 34802,
+  "filename": "Hi_Tour/hdtwyyjvifpyxvvmplmn"
+}
+
+-> Now we just pass multer Middleware in post  ->  upload.single('listing[image]')
+
+-->  .post(isLoggedIn, validateListing, upload.single('listing[image]'), wrapAsync(add));
+
+Now i setup my Listing Model image part according to it -->
+
+module.exports.add = async (req, res, next) => { // Post request
+    let url = req.file.path;  // path from cloudinary saved in req.file
+    let filename = req.file.filename; // filename from cloudinary saved in req.file
+    let result = listingSchema.validate(req.body); // Validate the incoming data against the Joi schema
+    if (result.error) {
+        throw new CusErrHandle(400,result.error);
+    }
+    let newList = new list(req.body.listing); //  Affective way to Avoid The Bulky Code
+    newList.owner = req.user._id; // Assign the owner of the listing to the currently logged-in user
+    newList.image = {url, filename}; // --------------------> Here i setup the both of them as image properties
+    // The req.user._id is the ID of the user who is currently logged in,
+    await newList.save();
+    req.flash("Success","New Location Added");
+    res.redirect("/listing");
+}
+
+// I also modify my Model of listing
+
+        image: {
+            url: String,
+            filename: String,
+
+            // type: String,
+            // default: "https://unsplash.com/photos/red-canoes-are-stacked-near-a-mountain-lake-yHc2gPFqJek",
+            // set: (v) => v === ""
+            // ? "https://unsplash.com/photos/red-canoes-are-stacked-near-a-mountain-lake-yHc2gPFqJek"
+            // : v,
+            // required: true
+        },
+
+// Also in EJS pages i wrote (Lists.image.url) instead of (Lists.image)
