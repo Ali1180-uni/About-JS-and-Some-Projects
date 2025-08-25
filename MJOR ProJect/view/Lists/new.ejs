@@ -1,7 +1,7 @@
 <% layout('/Layout/boilerplate') %>
 
 <body>
-  <form method="post" action="/listing" novalidate class="needs-validation">
+  <form method="post" action="/listing" novalidate class="needs-validation" enctype="multipart/form-data">
     <!-- This listing[title] is the way to make all them a part of an object name listing and Access it Easily -->
     <div class="row">
       <div class="col-8 offset-2">
@@ -23,8 +23,8 @@
           <div class="invalid-feedback">Please Enter the Price</div>
         </div>
         <div class="mb-3">
-          <label for="image" class="form-label">Image URL</label>
-          <input name="listing[image]" placeholder="Paste Image/URL" type="text" class="form-control" required>
+          <label for="image" class="form-label">Upload Image</label>
+          <input name="listing[image]" type="file" class="form-control" required>
           <div class="invalid-feedback">Please Enter the URL of Image</div>
         </div>
         <div class="row">

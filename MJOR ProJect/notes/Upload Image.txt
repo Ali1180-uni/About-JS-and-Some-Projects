@@ -1,0 +1,58 @@
+-> Ok there are two conflicts to Upload image
+1. Create Frontend to upload image
+2. Backend to Accept image
+
+-> BSON format have limits to save the Data
+-> Now MongoDB never Accepts the Image Directly so What we do, We Setup a Cloud system like(AWS) to upload the images or Files then we 
+-> Take the links of these files and save them in MongoDB to use it
+
+-> Now one more issue that the Current Middleware is just for URL --> app.use(Express.urlencoded({ extended: true }));
+// Thats why we Got empty string if we upload the image bcz  it never reads the data we post
+
+
+-> So for this issue we use another item in the form which data we want to post in Specific Formats like images
+-> enctype = "multipart/form-data" -> The form having this type will able to post the files 
+
+<form action="/profile" method="post" enctype="multipart/form-data">
+  <input type="file" name="avatar" />
+</form>
+
+-> Now parse this data for backend so we must install a package
+-> npm i multer
+-> it is used to parse the specific image into the specific format accessable to use in backend
+
+NOTE: Multer will not process any form which is not multipart (multipart/form-data).
+
+const express = require('express')
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' }) // For Image Uploading temporarily in futuire we will use cloudinary or some other service
+
+// This line represent the destination of the image
+->  According to this line File is saved in ulpoads folder in specific format which is automatically created by multer
+
+app.post('/profile', upload.single('avatar'), function (req, res, next) {  --> passing Middleware
+
+  // req.file is the `avatar` file --> in our case we upload image instead of avatar
+  // req.body will hold the text fields, if there were any
+
+})
+
+--> Using request.file bcz it stores all the data about file
+
+.post( upload.single('listing[image]'), (req,res)=>{  --> Using listing[image]
+        res.send(req.file);
+});
+
+we Got this type of response after it ->
+
+{
+  "fieldname": "listing[image]",
+  "originalname": "Aggrigate Func() DB.png",
+  "encoding": "7bit",
+  "mimetype": "image/png",
+  "destination": "uploads/",
+  "filename": "1ad39d305616a7991fe3adc096ddea36",
+  "path": "uploads\\1ad39d305616a7991fe3adc096ddea36",
+  "size": 259399
+}
+

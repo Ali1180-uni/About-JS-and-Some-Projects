@@ -6,6 +6,9 @@ const {listingSchema} = require('../joiSchema.js');
 const {isLoggedIn , isAdmin} = require('../Middleware/isAuthenticate.js');
 const {index, newList, add, Edit, Update, Delete, Show} = require('../Controller/listingController.js'); // For Listing
 
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' }) // For Image Uploading temporarily in futuire we will use cloudinary or some other service
+
 const router = Express.Router();
 
 
@@ -29,7 +32,10 @@ const validateListing = (req, res, next) => {
 router
     .route("/")
     .get(wrapAsync(index))  // Index Route ---> router.get("/", wrapAsync(index));
-    .post(validateListing, wrapAsync(add)); // Add Route ----> router.post("/", validateListing, wrapAsync(add));
+    // .post(validateListing, wrapAsync(add)); // Add Route ----> router.post("/", validateListing, wrapAsync(add));
+    .post( upload.single('listing[image]'), (req,res)=>{
+        res.send(req.file);
+    });
 
 
 

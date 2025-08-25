@@ -1,0 +1,29 @@
+ok env file is always named as the .env So this File is used to Store the private data of our projects
+which is not be shown publically on github or any publich platform 
+
+-> it consists Data like Paid API_KEYS
+
+SYNTAX:
+CLOUD_NAME=dvxvnu3pk
+CLOUD_API_KEY=249729455848687
+CLOUD_API_SECRET=FyywyWdkeNvELTYw9CHjfGlXL7E
+
+-> Write the .env file as it is don't add spaces and also don't add the double qoutes "" 
+-> Write like a Key Value Pair and write Key Uppercase Suggested eg: CLOUD_NAME
+
+-> To use these .env variables we must be use the Npm Package -> Helps to integrate the env file with Backend
+-> npm i dotenv
+
+Use Method: 
+1. Require --> require('dotenv').config();
+2. console.log(process.env);
+
+--> process.env file consists the all data of .env file we can access it by adding the values of Key
+eg:-
+   process.env.CLOUD_NAME = dvxvnu3pk --> This can print this on console
+
+-> Ok here we are using the Cloudinary (loggedin by github)
+for the Cloud data save and i got my API_KEYS & CLOUD_API_SECRET form there now for its use we must use 2 new packages which helps us a lot
+
+-> npm i cloudinary
+-> npm i multer-storage-cloudinary
