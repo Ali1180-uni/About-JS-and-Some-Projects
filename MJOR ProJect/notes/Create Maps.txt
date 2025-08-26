@@ -54,3 +54,9 @@ Reverse Geocoding
 -> Example: 31.4273, 73.1166 → "Faisalabad, Punjab, Pakistan".
 
 --> We are never adding GeoCoding Now
+
+-> But to save the coordinates mongodb having a way to store the data in GeoJSOn form which is helpful in mapping
+
+geomatery: { type: { type: String, enum: ['Point'], required: true }, // GeoJSON coordinates: [longitude, latitude] coordinates: { type: [Number], required: true } }
+
+Something like this added in model
