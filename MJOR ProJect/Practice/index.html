@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShareLink Mobile — Fast P2P</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg1:#5a60ea; --bg2:#7a49a3; --panel:rgba(255,255,255,.12);
+      --panel2:rgba(255,255,255,.18); --border:rgba(255,255,255,.25);
+      --ok:#16a34a; --warn:#f59e0b; --bad:#ef4444;
+    }
+    body {
+      min-height: 100vh; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: linear-gradient(135deg,var(--bg1),var(--bg2)); color: #fff;
+      display: flex; align-items: stretch; justify-content: center;
+    }
+    .container { width: 100%; max-width: 480px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 16px; backdrop-filter: blur(10px); }
+    h1 { font-size: 28px; font-weight: 800; text-align: center; text-shadow: 0 2px 6px rgba(0,0,0,.25); }
+    .subtitle { text-align: center; opacity:.9; margin-top: 4px; }
+    .row { display: flex; gap: 10px; }
+    .btn { flex: 1; padding: 14px; border: 0; border-radius: 14px; font-weight: 700; color: #fff; cursor: pointer;
+      background: linear-gradient(45deg,#4facfe,#00f2fe); box-shadow: 0 6px 16px rgba(0,0,0,.25); }
+    .btn.secondary { background: rgba(255,255,255,.2); box-shadow: none; }
+    .btn[disabled] { opacity:.6; cursor:not-allowed; }
+    .tabs { display:flex; gap:10px; }
+    .tab { flex:1; padding: 12px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel2); text-align:center; cursor:pointer; }
+    .tab.active { background: rgba(255,255,255,.28); transform: scale(1.02); box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+    .status { padding: 12px; border-radius: 12px; border:1px solid var(--border); text-align:center; font-weight:700; }
+    .status.ok { background: color-mix(in oklab, var(--ok) 20%, transparent); border-color: color-mix(in oklab, var(--ok) 60%, transparent); }
+    .status.warn { background: color-mix(in oklab, var(--warn) 20%, transparent); border-color: color-mix(in oklab, var(--warn) 60%, transparent); }
+    .status.bad { background: color-mix(in oklab, var(--bad) 20%, transparent); border-color: color-mix(in oklab, var(--bad) 60%, transparent); }
+    .hidden { display:none !important; }
+    .pill { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background: rgba(255,255,255,.18); border:1px solid var(--border); font-size: 14px; }
+    .idbox { word-break: break-all; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: rgba(255,255,255,.12);
+      padding: 10px; border-radius: 10px; border: 1px solid var(--border); }
+    .grid { display:grid; gap:10px; }
+    .drop { border: 2px dashed rgba(255,255,255,.55); border-radius: 14px; padding: 22px; text-align: center; cursor: pointer; }
+    .drop.dragover { background: rgba(79,172,254,.12); border-color: #4facfe; }
+    .list { max-height: 220px; overflow:auto; display:flex; flex-direction:column; gap:8px; }
+    .item { display:flex; gap:10px; align-items:center; justify-content:space-between; background: rgba(255,255,255,.12); border:1px solid var(--border); padding:10px; border-radius:12px; }
+    .name { font-weight:700; word-break: break-word; }
+    .size { opacity:.85; font-size: 12px; }
+    .bar { height: 8px; background: rgba(255,255,255,.25); border-radius: 999px; overflow:hidden; margin-top: 6px; }
+    .fill { height: 100%; width: 0%; background: linear-gradient(45deg,#4facfe,#00f2fe); transition: width .2s linear; }
+    .qr { display:flex; align-items:center; justify-content:center; padding: 8px; background: rgba(255,255,255,.12); border:1px solid var(--border); border-radius: 12px; }
+    .tips { font-size: 13px; opacity: .9; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>📱 ShareLink Mobile</h1>
+      <div class="subtitle">Ultra-fast P2P sharing (same Wi‑Fi best)</div>
+    </div>
+
+    <div class="card">
+      <div class="tabs" role="tablist">
+        <button class="tab active" id="tab-host" role="tab" aria-selected="true">Host</button>
+        <button class="tab" id="tab-join" role="tab" aria-selected="false">Join</button>
+      </div>
+
+      <div id="panel-host" class="grid" role="tabpanel" aria-labelledby="tab-host">
+        <div class="grid">
+          <div class="pill">Device: <span id="deviceName"></span></div>
+          <div class="idbox">Peer ID: <span id="myPeerId">—</span></div>
+          <div class="qr"><canvas id="qrCanvas" aria-label="QR for Peer ID"></canvas></div>
+          <div class="row">
+            <button class="btn" id="btnInit">Create ID</button>
+            <button class="btn secondary" id="btnCopy">Copy</button>
+          </div>
+          <div id="hostStatus" class="status warn hidden">Waiting…</div>
+        </div>
+      </div>
+
+      <div id="panel-join" class="grid hidden" role="tabpanel" aria-labelledby="tab-join">
+        <input id="peerIdInput" class="idbox" placeholder="Enter Peer ID" />
+        <div class="row">
+          <button class="btn" id="btnConnect">Connect</button>
+          <button class="btn secondary" id="btnScan">Scan QR</button>
+        </div>
+        <video id="scanner" class="hidden" playsinline style="width:100%;border-radius:12px;border:1px solid var(--border);"></video>
+        <div id="clientStatus" class="status warn hidden">Connecting…</div>
+      </div>
+    </div>
+
+    <div id="fileCard" class="card hidden">
+      <h2 style="font-size:20px;margin-bottom:8px;">📁 Share Files</h2>
+      <div id="drop" class="drop">Tap to choose or drag files here</div>
+      <input type="file" id="fileInput" multiple hidden />
+      <div id="fileList" class="list"></div>
+      <button id="sendBtn" class="btn" disabled>Send Selected Files</button>
+    </div>
+
+    <div id="recvCard" class="card hidden">
+      <h2 style="font-size:20px;margin-bottom:8px;">📥 Received Files</h2>
+      <div id="receivedList" class="list"></div>
+    </div>
+
+    <div class="card tips">
+      ⚡ Best speed on the same Wi‑Fi. Mobile data often needs a TURN server.
+      Keep both screens on. If it fails, create a new ID and retry.
+    </div>
+  </div>
+
+  <!-- PeerJS from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.2/peerjs.min.js" integrity="sha512-+mlK5B1lBS0HXP6s8dP9LQy17bGkZ1Zf8g5U+286K4zL6b6u2mQkqijwGf7q4GmJpE9nZkC3hQmzxg2p5Rr5mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- Minimal QR generator (QRious) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" integrity="sha512-6oQ8X5l0/1P0ZV7qVbXcQ7u5R2v6kV6f9WZ2g7m4/ds9m2qv6p7xHq3fX4q3k9q8hX2m1z5h5m3v4b2l5b0JvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script>
+    // ====== State ======
+    let peer = null;
+    let conn = null;
+    let keepAwake = null;
+    const connections = [];
+    const selectedFiles = new Map(); // id -> File
+    const receiving = new Map(); // id -> {name,size,type,received,parts:[]}
+
+    // ====== Helpers ======
+    const $ = (id) => document.getElementById(id);
+    const fmt = (n)=>{
+      const u=['B','KB','MB','GB','TB']; let i=0; let v=n; while(v>=1024 && i<u.length-1){v/=1024;i++;}
+      return `${v.toFixed(v<10&&i?1:0)} ${u[i]}`;
+    };
+    const shortCode = ()=> Math.random().toString(36).slice(2,3) + (Date.now().toString(36).slice(-5)); // ~6–7 chars
+
+    function setStatus(el, text, kind){
+      el.textContent = text; el.classList.remove('hidden','ok','warn','bad');
+      el.classList.add(kind||'warn');
+    }
+
+    // Wake Lock (keep screen on)
+    async function enableWakeLock(){
+      try { keepAwake = await navigator.wakeLock?.request('screen'); } catch {}
+    }
+
+    // QR
+    let qri = null;
+    function updateQR(text){
+      if(!qri){ qri = new QRious({ element: $('qrCanvas'), size: 180, value: text }); }
+      qri.value = text;
+    }
+
+    // Tabs
+    $('tab-host').addEventListener('click',()=>switchTab('host'));
+    $('tab-join').addEventListener('click',()=>switchTab('join'));
+    function switchTab(which){
+      const host = which==='host';
+      $('tab-host').classList.toggle('active',host);
+      $('tab-join').classList.toggle('active',!host);
+      $('panel-host').classList.toggle('hidden',!host);
+      $('panel-join').classList.toggle('hidden',host);
+    }
+
+    // Device label
+    $('deviceName').textContent = 'Device-' + Math.random().toString(36).slice(2,6);
+
+    // File UI
+    const drop = $('drop');
+    drop.addEventListener('click',()=> $('fileInput').click());
+    drop.addEventListener('dragover',(e)=>{ e.preventDefault(); drop.classList.add('dragover'); });
+    drop.addEventListener('dragleave',()=> drop.classList.remove('dragover'));
+    drop.addEventListener('drop',(e)=>{ e.preventDefault(); drop.classList.remove('dragover'); addFiles(e.dataTransfer.files); });
+    $('fileInput').addEventListener('change',(e)=> addFiles(e.target.files));
+
+    function addFiles(fileList){
+      for(const f of fileList){ const id = crypto.randomUUID(); selectedFiles.set(id,f); renderSendList(); }
+      $('sendBtn').disabled = selectedFiles.size===0;
+    }
+
+    function renderSendList(){
+      const box = $('fileList'); box.innerHTML='';
+      for(const [id,f] of selectedFiles){
+        const el = document.createElement('div'); el.className='item';
+        el.innerHTML = `<div style="flex:1"><div class="name">${f.name}</div><div class="size">${fmt(f.size)}</div><div class="bar"><div class="fill" id="pf_${id}"></div></div></div>`+
+          `<button class="btn secondary" style="flex:0 0 auto" data-id="${id}">Remove</button>`;
+        el.querySelector('button').onclick = ()=>{ selectedFiles.delete(id); renderSendList(); $('sendBtn').disabled = selectedFiles.size===0; };
+        box.appendChild(el);
+      }
+    }
+
+    function addRecvItem(id, info){
+      const box = $('receivedList');
+      const el = document.createElement('div'); el.className='item'; el.id = 'rx_'+id;
+      el.innerHTML = `<div style="flex:1"><div class="name">${info.name}</div><div class="size">0 / ${fmt(info.size)}</div>`+
+        `<div class="bar"><div class="fill" id="rf_${id}"></div></div></div>`+
+        `<button class="btn secondary" style="flex:0 0 auto" id="dl_${id}" disabled>Save</button>`;
+      box.appendChild(el);
+    }
+
+    function updateRecvProgress(id){
+      const info = receiving.get(id); if(!info) return;
+      const pct = Math.min(100, (info.received/info.size)*100);
+      const bar = $('rf_'+id); if(bar) bar.style.width = pct+'%';
+      const box = $('rx_'+id); if(box){ const sizeEl = box.querySelector('.size'); sizeEl.textContent = `${fmt(info.received)} / ${fmt(info.size)}`; }
+    }
+
+    // ====== Peer / Connection ======
+    const peerServer = { host: '0.peerjs.com', port: 443, path: '/', secure: true };
+    const rtcConfig = { iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' },
+      { urls: 'stun:stun.cloudflare.com:3478' },
+      // For mobile-data NATs you need a TURN server. Example (replace with your TURN):
+      // { urls: 'turn:YOUR_TURN_HOST:3478', username: 'user', credential: 'pass' }
+    ]};
+
+    $('btnInit').addEventListener('click', createPeer);
+    $('btnCopy').addEventListener('click', ()=>{
+      const id = $('myPeerId').textContent.trim(); if(!id || id==='—') return;
+      navigator.clipboard?.writeText(id);
+    });
+
+    async function createPeer(){
+      await enableWakeLock();
+      if(peer) try { peer.destroy(); } catch {}
+      const id = shortCode();
+      setStatus($('hostStatus'),'Connecting…','warn'); $('hostStatus').classList.remove('hidden');
+      $('btnInit').disabled = true;
+      peer = new Peer(id, { ...peerServer, debug: 1, config: rtcConfig });
+      const timeout = setTimeout(()=>{ try { peer.destroy(); } catch {}; setStatus($('hostStatus'),'Server timeout. Try again.','bad'); $('btnInit').disabled=false; }, 9000);
+      peer.on('open', pid => { clearTimeout(timeout); $('myPeerId').textContent = pid; updateQR(pid); setStatus($('hostStatus'),'✅ Ready. Share this ID or QR.','ok'); $('btnInit').disabled=false; });
+      peer.on('connection', c => { attachConn(c); showTransfersUI(); setStatus($('hostStatus'),'✅ Connected!','ok'); });
+      peer.on('error', e => { clearTimeout(timeout); setStatus($('hostStatus'),'Error: '+e.type,'bad'); $('btnInit').disabled=false; });
+      peer.on('disconnected', ()=> setStatus($('hostStatus'),'Disconnected. Tap Create ID.','bad'));
+    }
+
+    $('btnConnect').addEventListener('click', connectToPeer);
+    function connectToPeer(){
+      const rid = $('peerIdInput').value.trim(); if(!rid){ setStatus($('clientStatus'),'Enter a Peer ID','bad'); $('clientStatus').classList.remove('hidden'); return; }
+      $('clientStatus').classList.remove('hidden'); setStatus($('clientStatus'),'Connecting…','warn');
+      if(!peer){ const my = shortCode(); peer = new Peer(my, { ...peerServer, config: rtcConfig });
+        const t = setTimeout(()=>{ try{peer.destroy();}catch{}; setStatus($('clientStatus'),'Server timeout. Try again.','bad'); }, 9000);
+        peer.on('open', ()=>{ clearTimeout(t); doConnect(rid); });
+        peer.on('error', e=>{ clearTimeout(t); setStatus($('clientStatus'),'Error: '+e.type,'bad'); });
+      } else doConnect(rid);
+    }
+
+    function doConnect(rid){
+      try { if(conn) conn.close(); } catch {}
+      conn = peer.connect(rid, { reliable: true, serialization: 'binary' });
+      const timer = setTimeout(()=>{ try{conn.close();}catch{}; setStatus($('clientStatus'),'Timeout. Check ID.','bad'); }, 10000);
+      conn.on('open', ()=>{ clearTimeout(timer); attachConn(conn); showTransfersUI(); setStatus($('clientStatus'),'✅ Connected!','ok'); });
+      conn.on('error', e=>{ clearTimeout(timer); setStatus($('clientStatus'),'Conn error: '+e.type,'bad'); });
+    }
+
+    function attachConn(c){
+      conn = c; connections.push(c);
+      c.on('data', onData);
+      c.on('close', ()=>{ if(connections.includes(c)){ connections.splice(connections.indexOf(c),1); } if(connections.length===0){ hideTransfersUI(); }});
+    }
+
+    function showTransfersUI(){ $('fileCard').classList.remove('hidden'); $('recvCard').classList.remove('hidden'); }
+    function hideTransfersUI(){ $('fileCard').classList.add('hidden'); $('recvCard').classList.add('hidden'); }
+
+    // ====== Sending ======
+    $('sendBtn').addEventListener('click', sendSelected);
+    async function sendSelected(){
+      if(!conn || conn.open!==true) return;
+      for(const [id,f] of selectedFiles){ await sendOne(id,f); }
+    }
+
+    async function sendOne(id, file){
+      // announce
+      conn.send({type:'file-start', fileId:id, name:file.name, size:file.size, fileType:file.type});
+      const chunkSize = 64 * 1024; // 64KB (mobile-friendly)
+      const reader = file.stream().getReader();
+      let sent = 0; let partIndex = 0;
+      while(true){
+        const {value, done} = await reader.read();
+        if(done) break; // last
+        // value is a Uint8Array
+        // If payload too big bursts can congest—slice into smaller steps
+        for(let off=0; off<value.byteLength; off+=chunkSize){
+          const piece = value.subarray(off, off+chunkSize);
+          conn.send({type:'file-chunk', fileId:id, idx:partIndex++, chunk: piece});
+        }
+        sent += value.byteLength;
+        updateSendProgress(id, sent, file.size);
+        // Yield to event loop to keep UI fluid
+        await new Promise(r=>setTimeout(r,0));
+      }
+      conn.send({type:'file-end', fileId:id});
+    }
+
+    function updateSendProgress(id, sent, total){
+      const pct = Math.min(100, (sent/total)*100);
+      const el = $('pf_'+id); if(el) el.style.width = pct+'%';
+    }
+
+    // ====== Receiving ======
+    function onData(data){
+      if(!data || typeof data !== 'object') return;
+      if(data.type==='file-start'){
+        const meta = { name:data.name, size:data.size, type:data.fileType||'application/octet-stream', received:0, parts:[] };
+        receiving.set(data.fileId, meta);
+        addRecvItem(data.fileId, meta);
+      } else if(data.type==='file-chunk'){
+        const meta = receiving.get(data.fileId); if(!meta) return;
+        meta.parts.push(data.chunk); meta.received += data.chunk.length || data.chunk.byteLength || 0; updateRecvProgress(data.fileId);
+      } else if(data.type==='file-end'){
+        const meta = receiving.get(data.fileId); if(!meta) return;
+        const blob = new Blob(meta.parts, { type: meta.type });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href=url; a.download = meta.name; a.click();
+        const btn = $('dl_'+data.fileId); if(btn){ btn.disabled=false; btn.onclick = ()=>{ const a2=document.createElement('a'); a2.href=url; a2.download=meta.name; a2.click(); } }
+      }
+    }
+
+    // ====== QR Scan (simple camera preview + manual typing still recommended) ======
+    // For full QR decoding you'd normally add a decoder lib (e.g., jsQR) — we keep it simple here.
+    $('btnScan').addEventListener('click', async ()=>{
+      const vid = $('scanner');
+      if(vid.classList.contains('hidden')){
+        try {
+          const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+          vid.srcObject = s; await vid.play(); vid.classList.remove('hidden');
+          alert('Point camera at QR, then manually type the ID (auto-decode not included).');
+        } catch(e){ alert('Camera not available: '+e.message); }
+      } else {
+        const s = vid.srcObject; if(s) s.getTracks().forEach(t=>t.stop()); vid.classList.add('hidden');
+      }
+    });
+
+    // Show file sections only when connected
+  </script>
+</body>
+</html>

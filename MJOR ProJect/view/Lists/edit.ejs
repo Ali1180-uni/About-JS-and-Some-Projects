@@ -2,7 +2,7 @@
 
 <body>
 
-  <form method="post" action="/listing/<%= List.id %>?_method=PATCH" novalidate class="needs-validation">
+  <form method="post" action="/listing/<%= List.id %>?_method=PATCH" novalidate class="needs-validation" enctype="multipart/form-data">
     <!-- This listing[title] is the way to make all them a part of an object name listing and Access it Easily -->
     <div class="row">
       <div class="col-8 offset-2">
@@ -24,9 +24,16 @@
           <div class="invalid-feedback">Please Enter the Price First</div>
         </div>
         <div class="mb-3">
-          <label for="image" class="form-label">Image URL</label>
-          <input name="listing[image]" value="<%= List.image %>" class="form-control" type="text" required>
-          <div class="invalid-feedback">Please Enter the URL of Image</div>
+          <label class="form-label">Orignal Image</label>
+          <br>
+          <img src="<%= List.image.url %>" 
+          class="card-img-top show-img" 
+          alt="Image Listings"
+          style="height: 250px; width: 300px;">
+        </div>
+        <div class="mb-3">
+          <label for="image" class="form-label">Select Image to Update</label>
+          <input name="listing[image]" class="form-control" type="file">
         </div>
         <div class="row">
           <div class="mb-3 col-md-4">

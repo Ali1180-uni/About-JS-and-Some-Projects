@@ -34,7 +34,7 @@ const validateListing = (req, res, next) => {
 router
     .route("/")
     .get(wrapAsync(index))  // Index Route ---> router.get("/", wrapAsync(index));
-    .post(isLoggedIn, validateListing, upload.single('listing[image]'), wrapAsync(add)); // Add Route ----> router.post("/", validateListing, wrapAsync(add));
+    .post(isLoggedIn, upload.single('listing[image]'), validateListing, wrapAsync(add)); // Add Route ----> router.post("/", validateListing, wrapAsync(add));
 
 
 // Create Route
@@ -47,7 +47,7 @@ router.get("/:id/edit", isLoggedIn, isAdmin, wrapAsync(Edit));
 
 router
     .route("/:id")
-    .patch(isLoggedIn, isAdmin, validateListing, wrapAsync(Update)) // Update Route ---> router.patch("/:id", isLoggedIn, isAdmin ,validateListing, wrapAsync(Update));
+    .patch(isLoggedIn, isAdmin, upload.single('listing[image]'), validateListing, wrapAsync(Update)) // Update Route ---> router.patch("/:id", isLoggedIn, isAdmin ,validateListing, wrapAsync(Update));
     .delete(isLoggedIn, isAdmin, wrapAsync(Delete)) // Delete Route ---> router.delete("/:id",isLoggedIn, isAdmin, wrapAsync(Delete));
     .get(wrapAsync(Show)); // Show Route --> router.get("/:id", wrapAsync(Show));
 

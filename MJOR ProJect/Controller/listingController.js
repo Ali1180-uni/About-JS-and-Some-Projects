@@ -44,7 +44,8 @@ module.exports.Edit = async (req, res, next) => {
         req.flash("error","Listing Not Found!");
         return res.redirect("/listing");
     }
-    res.render("./Lists/edit.ejs", { List });
+
+    res.render("./Lists/edit.ejs", { List, });
 }
 
 // Update Route
@@ -53,10 +54,16 @@ module.exports.Update = async (req, res, next) => { // Paasing this Function to 
         throw new CusErrHandle(400, "Please Enter the valid info")
     }
     let { id } = req.params;
-    await list.findByIdAndUpdate(id, { ...req.body.listing }, { runValidators: true, new: true });
-// ✅ The spread operator (...) in { ...req.body.listing } is like an:
-// 🔄 Object unpacker or object expander, not exactly a parser — but yes,
-//  it helps convert or expand an object into individual key-value pairs inside a new object.
+    let lists = await list.findByIdAndUpdate(id, { ...req.body.listing }, { runValidators: true, new: true });
+    // ✅ The spread operator (...) in { ...req.body.listing } is like an:
+    // 🔄 Object unpacker or object expander, not exactly a parser — but yes,
+    //  it helps convert or expand an object into individual key-value pairs inside a new object.
+    if(typeof req.file !== "undefined"){
+    let url = req.file.path;
+    let filename = req.file.filename;
+    lists.image = {url, filename};
+    await lists.save();
+    }
     req.flash("Success","Updated Successful");
     res.redirect(`/listing/${id}`);
 }

@@ -17,6 +17,9 @@
   <input type="file" name="avatar" />
 </form>
 
+make sure the input type is file:-
+<input name="listing[image]" type="file" class="form-control" required>
+
 -> Now parse this data for backend so we must install a package
 -> npm i multer
 -> it is used to parse the specific image into the specific format accessable to use in backend
@@ -147,4 +150,46 @@ module.exports.add = async (req, res, next) => { // Post request
             // required: true
         },
 
-// Also in EJS pages i wrote (Lists.image.url) instead of (Lists.image)
+// Also in EJS pages i wrote (Lists.image.url) instead of (Lists.image);
+
+
+-> ab update ke time bhi same procedure hn bus kuch changes hn ke jab hamne patch route me image save krwani hn to catch likhna hn ke agr 
+image exists in req.file then save otherwise not bcz otherwise it consists the undefined
+
+module.exports.Update = async (req, res, next) => {
+    let { id } = req.params;
+    let lists = await list.findByIdAndUpdate(id, { ...req.body.listing }, { runValidators: true, new: true });
+    
+    if(typeof req.file !== "undefined"){  // Here we are checking the req.file consists the image or not
+    let url = req.file.path;
+    let filename = req.file.filename;
+    lists.image = {url, filename};
+    await lists.save();
+    }
+
+    req.flash("Success","Updated Successful");
+    res.redirect(`/listing/${id}`);
+}
+
+
+if we want to edit the form of image and now user want to see actually which image he is editing 
+just add the image tag in the form
+
+        <div class="mb-3">
+          <label class="form-label">Orignal Image</label>
+          <br>
+          <img src="<%= List.image.url %>" 
+          class="card-img-top show-img" 
+          alt="Image Listings"
+          style="height: 250px; width: 300px;">
+        </div>
+
+so in routes we extract the link of image from url and change it with cloudinary image transform
+
+    let orgimage = List.image.url;
+   orgimage = orgimage.replace('/upload', '/upload/c_fill,h_250,w_300');
+// Resize the image for editing view
+
+somthing like that but i just chaneg it by css due to some issues
+
+

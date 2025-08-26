@@ -1,0 +1,56 @@
+First Add the links of CDN in head tag:-
+
+<!-- Add inside <head> of show.ejs -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+Then Create a div in the File where you want to show the map
+
+  <div class="col-8 offset-2 mb-3">
+    <h3>Where you'll be</h3>
+    <div id="map" style="height: 400px; width: 100vh;">
+    </div>
+  </div>
+
+Now just add the Script file Below this div on the Show.ejs page:-
+
+<script>
+    // --- Step 1: Set latitude and longitude ---
+    // These are your fixed coordinates: 31.4273° N, 73.1166° E // Faislabad
+    const lat = 31.4273;
+    const lng = 73.1166;
+
+    // --- Step 2: Initialize the map ---
+    // 'map' refers to the <div id="map"> in your HTML.
+    // setView([lat, lng], zoomLevel) centers the map and sets zoom level to 13.
+    const map = L.map('map').setView([lat, lng], 13);
+
+    // --- Step 3: Add the base tile layer ---
+    // This pulls map tiles from OpenStreetMap and credits them properly.
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // --- Step 4: Add a marker ---
+    // Places a pin on the map at your coordinates.
+    // bindPopup() adds a popup with text, and openPopup() makes it visible immediately.
+    L.marker([lat, lng]).addTo(map)
+        .bindPopup('<b>My Location</b><br>31.4273, 73.1166')
+        .openPopup();
+</script>
+
+
+-> Geocoding is converting a human-readable address (e.g., "Faisalabad, Pakistan")
+into geographic coordinates (latitude and longitude) that can be plotted on a map.
+
+types:-
+
+Forward Geocoding:-
+-> Converts address → coordinates.
+-> Example: "1600 Amphitheatre Pkwy, Mountain View, CA" → 37.4220, -122.0841.
+
+Reverse Geocoding
+-> Converts coordinates → address.
+-> Example: 31.4273, 73.1166 → "Faisalabad, Punjab, Pakistan".
+
+--> We are never adding GeoCoding Now
