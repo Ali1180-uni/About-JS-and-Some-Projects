@@ -1,3 +1,31 @@
+<style>
+  .btn-search {
+    background-color: red;
+    color: white;
+    border-radius: 25px;
+    border: 1px solid red;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+  }
+
+  .btn-search:hover {
+    background-color: white;
+    color: red;
+    border-radius: 25px;
+    border: 1px solid red;
+  }
+
+  .btn-search i {
+    display: inline;
+    margin-right: 5px;
+  }
+
+  .search-inp {
+    border-radius: 30px;
+    padding: 0.5rem 3rem 0.5rem 3rem;
+  }
+
+</style>
+
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="/listing"><i class="fa-solid fa-umbrella-beach"></i> Hi Tour!</a>
@@ -8,6 +36,12 @@
       <div class="navbar-nav">
         <a class="nav-link" href="/listing">All Spots</a>
         <a class="nav-link" href="/listing/new">Create</a>
+      </div>
+      <div class="navbar-nav ms-auto">
+        <form class="d-flex" role="search">
+          <input class="form-control me-2 search-inp" type="search" placeholder="Search Destinantion" aria-label="Search" />
+          <button class="btn-search" type="submit"><i class="fas fa-search"></i>Search</button>
+        </form>
       </div>
       <div class="navbar-nav ms-auto">
         <% if(!currUser){ %>

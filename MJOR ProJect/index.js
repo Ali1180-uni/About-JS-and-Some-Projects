@@ -10,6 +10,7 @@ const MethodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const CusErrHandle = require('./utils/CustomErrorHandler.js');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const passport = require('passport');
 const passportLocal = require('passport-local');
@@ -30,7 +31,23 @@ app.use(Express.urlencoded({ extended: true }));
 app.use(MethodOverride("_method"));
 app.engine('ejs', ejsMate);
 
+// const MongoURL = "mongodb://127.0.0.1:27017/Hotels";
+const AtlasUrl = process.env.ATLASDB_URL
+
+const store = MongoStore.create({
+    mongoUrl: AtlasUrl,
+    crypto: {
+        secret: "strong one"
+    },
+    touchAfter: 24 * 3600
+});
+
+store.on("error", ()=>{
+    console.log("Error is to Make the Store connection with the Session",err);
+});
+
 const SessionOptions = {
+    store,
     secret: "strong one",
     resave: false, // to avoid Warnings
     saveUninitialized: true,
@@ -60,6 +77,7 @@ app.use((req, res, next) => {
     next();
 });
 
+
 main().then(() => {
     console.log('Connected to MongoDB');
 }).catch((err) => {
@@ -67,7 +85,7 @@ main().then(() => {
 });
 
 async function main() {
-    await mongoose.connect("mongodb://127.0.0.1:27017/Hotels");
+    await mongoose.connect(AtlasUrl);
 }
 
 
