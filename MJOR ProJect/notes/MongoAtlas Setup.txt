@@ -1,0 +1,58 @@
+Mongo Atlas is the Cloud Space of Database for us of MongoDb
+First Sign up for mongo Atlas use free Version also give some Answers of Questions Then Use the
+Drivers for and now Copy the link form there and also The Password and Username You set
+
+Set This link To .env & Just use it in index.js file where we setup the MongoDb link code
+
+ATLASDB_URL=mongodb+srv://ali-1180:rx321e10@cluster0.qvohmzg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+index.js:- 
+
+npm i connect-mongo -> it is used to connect with cloud
+Require it: const MongoStore = require('connect-mongo');
+
+Now Just add the links:-
+// const MongoURL = "mongodb://127.0.0.1:27017/Hotels";  // This for Local
+const AtlasUrl = process.env.ATLASDB_URL // Write this for Cloud service
+
+Now we just set-up the Store For it and it is always use with Express.sessions and Its same as the Session data is stored 
+We just used it as a local space we use Connect-Mongo to connect with Mongo Atlas and used it as a cloud Database
+
+
+main().then(() => {
+    console.log('Connected to MongoDB');
+}).catch((err) => {
+    console.error('Connection error:', err);
+});
+
+async function main() {
+    await mongoose.connect(AtlasUrl); // Now the Database is setup with Cloud
+}
+
+Now we Setup Store Code Before the Session Options:-
+
+const store = MongoStore.create({
+    mongoUrl: AtlasUrl, // Cloude link
+    crypto: {
+        secret: "strong one" // Encrypted Password
+    },
+    touchAfter: 24 * 3600  // it stores the session for 24hrs & by default is 14 days
+});
+
+store.on("error", ()=>{
+    console.log("Error is to Make the Store connection with the Session",err);
+});
+
+const SessionOptions = {
+    store,
+    secret: "strong one",
+    resave: false, // to avoid Warnings
+    saveUninitialized: true,
+    cookie:
+    {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // It is the Time of Expire the Cookies
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true, // Security Purpose
+    }
+
+};

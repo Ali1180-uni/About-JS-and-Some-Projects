@@ -37,7 +37,7 @@ const AtlasUrl = process.env.ATLASDB_URL
 const store = MongoStore.create({
     mongoUrl: AtlasUrl,
     crypto: {
-        secret: "strong one"
+        secret: process.env.SECRET
     },
     touchAfter: 24 * 3600
 });
@@ -48,7 +48,7 @@ store.on("error", ()=>{
 
 const SessionOptions = {
     store,
-    secret: "strong one",
+    secret: process.env.SECRET,
     resave: false, // to avoid Warnings
     saveUninitialized: true,
     cookie:
