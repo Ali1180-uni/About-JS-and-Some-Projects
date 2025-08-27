@@ -1,5 +1,9 @@
 <% layout('/Layout/boilerplate') %>
 
+    <script>
+      let mapToken = "<%= process.env.MAP_TOKEN %>"; 
+      let listing = <%- JSON.stringify(List) %>;
+    </script>
 
 <div class="row">
   <div class="col-8 offset-2">
@@ -79,5 +83,8 @@
   </div>
 </div>
 
+
+
 <script src="/js/map.js"></script>
+
 

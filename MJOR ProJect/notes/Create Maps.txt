@@ -53,10 +53,101 @@ Reverse Geocoding
 -> Converts coordinates → address.
 -> Example: 31.4273, 73.1166 → "Faisalabad, Punjab, Pakistan".
 
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
 --> We are never adding GeoCoding Now
+
+-> npm install @mapbox/mapbox-sdk // Use this for GeoCoding
+
+  <!-- Map Box links added in boilerplate in head section -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.js"></script>
 
 -> But to save the coordinates mongodb having a way to store the data in GeoJSOn form which is helpful in mapping
 
-geomatery: { type: { type: String, enum: ['Point'], required: true }, // GeoJSON coordinates: [longitude, latitude] coordinates: { type: [Number], required: true } }
+        geomatery: { // GeoJSON coordinates: [longitude, latitude]
+            type: {
+                type: String,
+                enum: ['Point'],
+                required: true
+            },
+            coordinates: {
+                type: [Number],
+                required: true
+            }
+        }
 
-Something like this added in model
+Add this in list.Model and then now we must use it JS file & also add the token of Mapbox in .env
+
+MAP_TOKEN=pk.eyJ1IjoiYWxpLTExODAiLCJhIjoiY21ldGxzdWl0MDBqdDJxb25scHNtbmM5eSJ9.XjUBdxOGgnOmNXooN5v5JA
+
+Adding this in the Controller file where we create a new route .post :-
+
+Require:- 
+
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');  // Using GeoCoding services
+const mapBoxToken = process.env.MAP_TOKEN; // Extracting Token form .env
+const geocodingClient = mbxGeocoding({ accessToken: mapBoxToken }); // Setting it to geocodingClient
+
+
+    let response = await geocodingClient.forwardGeocode({ // For Forward GeoCoding
+        query: req.body.listing.location,  // getting location from db
+        limit: 1  // It just give only one coordinates 
+    })
+        .send()
+
+Also Add this:- 
+
+    let newList = new list(req.body.listing); 
+    newList.owner = req.user._id;
+    newList.image = { url, filename };
+    newList.geomatery = response.body.features[0].geometry ----------> Here we save the Coordinates in the Db and use them in map.js file
+    await newList.save();
+    req.flash("Success", "New Location Added");
+    res.redirect("/listing"); 
+
+Now use it in show.ejs file
+
+<script>
+  let mapToken = "<%= process.env.MAP_TOKEN %>"; // It is bcz the public js file never use the .env items directly so write this in ejs
+  let listing = <%- JSON.stringify(List) %>; // Also sent the data of list to use the coordinates
+</script>
+
+write this too show the map
+
+  <div class="col-8 offset-2 mb-3">
+    <h3>Where you'll be</h3>
+    <div id="map" style="height: 400px; width: 150vh;">
+    </div>
+  </div>
+
+with styling :-
+
+/* map */
+#map {
+  width: 80vh;
+  height: 400px;
+}
+
+Also write the JS file at the end of Show.ejs also use script.src for it
+
+<script src="/js/map.js"></script>
+
+mapboxgl.accessToken = mapToken;  // get the env maptoken from the file
+const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    center: listing.geomatery.coordinates, // starting position [lng, lat]. Note that lat must be set between -90 and 90
+    zoom: 9 // starting zoom
+});
+
+// console.log(coordinates);
+
+const marker = new mapboxgl.Marker({color: "red"}) // Added a Red marker
+    .setLngLat(listing.geomatery.coordinates)
+    .setPopup(new mapboxgl.Popup({offset: 25})
+    .setHTML(`<h4>${listing.location}</h4></br><h3>Current Location</h3>`)) // Marker popup value
+    .addTo(map);
+
+Now this is How we configure the Map Box Also GeoCoding
+
+

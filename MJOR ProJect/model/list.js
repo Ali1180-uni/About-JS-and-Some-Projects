@@ -46,16 +46,27 @@ const NewList = new Schema(
         owner: {
             type: Schema.Types.ObjectId,
             ref: "User",
+        },
+        geomatery: { // GeoJSON coordinates: [longitude, latitude]
+            type: {
+                type: String,
+                enum: ['Point'],
+                required: true
+            },
+            coordinates: {
+                type: [Number],
+                required: true
+            }
         }
     }
 );
 
-NewList.post("findOneAndDelete", async(list)=>{
-    if(list.Reviews.length){
-        await Review.deleteMany({_id: {$in: list.Reviews}});
+NewList.post("findOneAndDelete", async (list) => {
+    if (list.Reviews.length) {
+        await Review.deleteMany({ _id: { $in: list.Reviews } });
     }
 });
 
-const List = mongoose.model("List",NewList);
+const List = mongoose.model("List", NewList);
 
 module.exports = List;

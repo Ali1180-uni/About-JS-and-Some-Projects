@@ -1,7 +1,78 @@
 <% layout('/Layout/boilerplate') %>
 
-<body>
-  <h1>List Of Hotels</h1>
+<style>
+
+
+</style>
+
+<div id="filters">
+  <div class="filter">
+    <div><i class="fa-solid fa-fire"></i></div>
+    <p>Trending</p>
+  </div>
+</div>
+<div id="filters">
+  <div class="filter">
+    <div><i class="fa-solid fa-tent"></i></div>
+    <p>Tent</p>
+  </div>
+</div>
+<div id="filters">
+  <div class="filter">
+   <div> <i class="fa-solid fa-cow"></i></div>
+    <p>Farm</p>
+  </div>
+</div>
+<div id="filters">
+  <div class="filter">
+    <div><i class="fa-solid fa-person-hiking"></i></div>
+    <p>Hiking</p>
+  </div>
+</div>
+<div id="filters">
+  <div class="filter">
+    <div><i class="fa-solid fa-mountain"></i></div>
+    <p>Mountains</p>
+  </div>
+</div>
+<div id="filters">
+  <div class="filter">
+    <div><i class="fa-solid fa-bed"></i></div>
+    <p>Rooms</p>
+  </div>
+</div>
+<div id="filters">
+  <div class="filter">
+    <div><i class="fa-solid fa-mountain-city"></i></div>
+    <p>Cozy Places</p>
+  </div>
+</div>
+<div id="filters">
+  <div class="filter">
+    <div><i class="fa-solid fa-person-swimming"></i></div>
+    <p>Pools</p>
+  </div>
+</div>
+<div id="filters">
+  <div class="filter">
+    <div><i class="fa-solid fa-campground"></i></div>
+    <p>Camping</p>
+  </div>
+</div>
+<div id="filters">
+  <div class="filter">
+    <div><i class="fa-solid fa-tree"></i></div>
+    <p>Jungle</p>
+  </div>
+</div>
+
+<div class="toogle">
+  <div class="form-check-reverse form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+    <label class="form-check-label" for="flexSwitchCheckDefault">Tax Switch to Display Tax</label>
+  </div>
+</div>
+
   <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 ">
     <% for(let AllList of List){ %>
     <a href="/listing/<%= AllList._id %>" class="Img-links">
@@ -10,10 +81,11 @@
         <div class="card-img-overlay">Click To View Details</div>
         <div class="card-body">
           <p class="card-text"><b><%= AllList.title %></b></p>
-          <p class="card-text">RS.<%= AllList.price.toLocaleString('en-IN') %> / night </p>
+          <p class="card-text">RS.<%= AllList.price.toLocaleString('en-IN') %> / night <i class="Tax-info">&nbsp; +20 PKR Tax</i> </p>
         </div>
       </div>
     </a>
     <% } %>
   </div>
-</body>
+
+  <script src="/JS/taxSwitch.js"></script>

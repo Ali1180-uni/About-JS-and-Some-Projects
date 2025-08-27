@@ -1,14 +1,14 @@
-    const lat = 31.4273;
-    const lng = 73.1166;
+mapboxgl.accessToken = mapToken;
+const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    center: listing.geomatery.coordinates, // starting position [lng, lat]. Note that lat must be set between -90 and 90
+    zoom: 9 // starting zoom
+});
 
-    const map = L.map('map').setView([lat, lng], 13);
+// console.log(coordinates);
 
-    // Add tile layer (OpenStreetMap)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // Add marker
-    L.marker([lat, lng]).addTo(map)
-        .bindPopup('<b>My Location</b><br>31.4273, 73.1166')
-        .openPopup();
+const marker = new mapboxgl.Marker({color: "red"})
+    .setLngLat(listing.geomatery.coordinates)
+    .setPopup(new mapboxgl.Popup({offset: 25})
+    .setHTML(`<h4>${listing.location}</h4></br><h3>Current Location</h3>`))
+    .addTo(map);
