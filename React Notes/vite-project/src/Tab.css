@@ -1,0 +1,12 @@
+.Tab{
+    border: 2px solid white;
+    border-radius: 14px;
+    padding: 10px 20px 10px 20px;
+    margin-top: 2rem;
+    margin-left: 2rem;
+    display: inline-block;
+}
+
+.Tab:hover {
+  filter: drop-shadow(10px 10px 2rem #646cffaa);
+}
