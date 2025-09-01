@@ -1,0 +1,98 @@
+OBJECT & STATE:- 
+
+Ok We can also pass the object ok different variables having different initial values
+
+let [count, setCount] = useState({blue: 0,red: 0,green: 0,yellow: 0}); // Like this we can initialize the multiple values with the help of objects
+
+-> Lets see how can we use it in functions to chnage the value on click:-
+
+    function blueChnage() {
+        setCount((nextState)=>{ // Passing Callback
+            console.log("Blue" + nextState.blue); 
+            return {...nextState, blue: nextState.blue + 1}; // Using Spread operater first, Increment value with specific object Key
+        });
+    }
+
+Use of Spread Operator:-
+1. We use spread Operator bcz Arrays And Objects Having no mean from the data inside them.
+they just checked the increment adn decrement in its indexes
+
+2. So if the values chnage in the objects and arrays its just change in value like: [1,2,3] = [3,2,1] bcz no change in indexes
+in this way the state is not change and form doesn't re-render the page
+
+3. Thats why we use the Spread operater ...nextState Every time the value is changed its passes the copy of Array or object which having
+Different Memory Address than previous and which make change the state So in this way the page is re-render
+
+-> So in this way we use the Spread operater instead of single variable 
+
+Also when we are using the Objects Must use the key value first to change its value
+return {...nextState, blue: nextState.blue + 1};  // blue: nextState.blue + 1 like this  
+
+-> And use it in Function like this
+
+<div>
+    <p>Blue Count: {count.blue}x</p> // Here use the Key with variable
+    <button style={{backgroundColor: "blue"}} onClick={blueChnage}>1x</button>
+</div>
+
+Here is the Complete Code:-
+
+function Count(){
+    let [count, setCount] = useState({blue: 0,red: 0,green: 0,yellow: 0});
+    function blueChnage() {
+        setCount((nextState)=>{
+            console.log("Blue" + nextState.blue); 
+            return {...nextState, blue: nextState.blue + 1};
+        });
+    }
+    function redChnage() {
+        setCount((nextState)=>{
+            console.log("Red" + nextState.red);
+            return {...nextState, red: nextState.red + 1}; 
+        });
+    }
+    function yellowChnage() {
+        setCount((nextState)=>{
+            console.log("Yellow" + nextState.yellow);
+            return {...nextState, yellow: nextState.yellow + 1}; 
+        });
+    }
+    function greenChnage() {
+        setCount((nextState)=>{
+            console.log("Green " + nextState.green);
+            return {...nextState, green: nextState.green + 1}; 
+        });
+    }
+    return (
+        <div>
+            <h1>Ludo Game !</h1>
+            <div>
+                <p>Blue Count: {count.blue}x</p>
+                <button style={{backgroundColor: "blue"}} onClick={blueChnage}>1x</button>
+            </div>
+            <div>
+                <p>Red Count: {count.red}x</p>
+                <button style={{backgroundColor: "red"}} onClick={redChnage}>1x</button>
+            </div>
+            <div>
+                <p>Yellow Count: {count.yellow}x</p>
+                <button style={{backgroundColor: "yellow", color: "black"}} onClick={yellowChnage}>1x</button>
+            </div>
+            <div>
+                <p>Green Count: {count.green}x</p>
+                <button style={{backgroundColor: "green"}} onClick={greenChnage}>1x</button>
+            </div>
+        </div>
+    );
+}
+
+
+ARRAY & STATE:- 
+
+Same like the Objects we Use the Spread Operator inthe Arrays to Re-Render the Page:-
+
+    let [arr, setArr] = useState(["No Move"]);
+
+        setArr((next)=>{
+            return [...next, "Blue move"]; // Like this we also pass the value which will be pushed on re-render
+        });

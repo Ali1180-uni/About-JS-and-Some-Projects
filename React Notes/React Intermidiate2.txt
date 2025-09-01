@@ -83,3 +83,28 @@ function App() {
   );
 }
 
+Ok now are just creating a cards and the array index make them easy to use
+
+function Products() {
+  return (
+    <div>
+      <Tab title="Ali" idx = {0} /> // Gave each of the line a new index
+      <Tab title="ABid" idx = {1} />
+      <Tab title="Aliyar" idx = {2} />
+      <Tab title="Aliyan" idx = {3} />
+    </div>
+  );
+}
+
+function Tab({title,idx}) {
+  let oldP = ["999","990","889","654"]; // Array 1
+  let newP = ["789","690","589","23S4"]; // Array 1
+  let description = ["8000 DPI","Intutive Touch","Programable Keys","Bold Style"]
+  return (
+    <div className="Tab">
+      <h2>{title}</h2>
+      <p>{description[idx]}</p>
+      <Price oldP={oldP[idx]} newP={newP[idx]} /> // Yaha pr har array ka indivisual index show hoga jese above function me given hn
+    </div>
+  );
+}

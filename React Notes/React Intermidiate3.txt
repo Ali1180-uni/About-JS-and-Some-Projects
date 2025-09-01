@@ -1,0 +1,187 @@
+Also we handle events in React
+
+function App() {
+  function one(){
+    console.log("Button Clicked");
+  }
+  return (
+    <div>
+      <button onClick={one}>Click me!</button>
+      <button onClick={one}>Click me!</button>
+    </div>
+  );
+}
+
+by using the onClick --->
+
+ok We also add the (onMouseOver) & (onDoubleClick) ---> For Additional Functions
+
+function App() {
+  function one(){
+    console.log("Button Clicked");
+  }
+  function one1(){
+    console.log("Button Hover");
+  }
+  function one2(){
+    console.log("button double");
+  }
+  return (
+    <div>
+      <button onClick={one}>Click me!</button>
+      <button onMouseOver={one1}>Hover me!</button>
+      <button onDoubleClick={one2}>Double me!</button>
+    </div>
+  );
+}
+
+ok there is also a event object in every Event which consist the info about the DOM events
+->   function one2(event){
+    console.log("button double");
+    event.preventDefault(); ------> works just for only those tags having the Default behaviours like: Forms
+  }
+
+So we can write a simple function of Count but it doesn't work for the UI to re-render it
+
+function Count(){
+    let count = 0;
+    function c(){
+        console.log("Clicked");
+        return count++;
+    }
+    return (
+        <div>
+            <button onClick={c}>Count: {count}</button>
+        </div>
+    );
+}
+
+We must use the states to make the changes in component to re-render it\
+
+Hooks:-
+// sab se pele React me functions ki jagah classes use hotii thii but jab Update ai too Functions
+// Use hoyee but the Function are limited in front of classes but the Limitation is covered with the help of Hooks
+// They Allow us to use State in the Functions to cover up the limitations of the classes 
+
+->>>> Now Hook is a Function which helps us to deal with States
+They allow to use the state variables which helps to re-render the page when change occurs
+
+useState() :-
+ >> It is used to re-render the UI and this method always output the array having only 2 elements
+ >> Use --> 
+ import { useState } from "react"; // Always import it first
+
+const [count,setCount] = useState(0); // ALways let the array 
+first count -> inital element
+Second setCount -> Function Triggers the value
+
+Complete Function:-
+
+function Count(){
+    const [count,setCount] = useState(0); .. Passing the inital state to useState(initial state)
+    function Trigger(){
+        setCount(count + 1); // inrement
+    }
+    return (
+        <div>
+            <h1>Using State</h1>
+            <p>Count: {count}</p>
+            <button onClick={Trigger}>Count</button>
+        </div>
+    );
+}
+
+--> Now this code can easily re-render the UI
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+Closure:- 
+1. This is defined as the concept in whcih the their is a nested function and in  which the inner function have complete access to the variables of 
+outer functions.
+2. In this way we can also use the inner function seperately & in this way it have the complete access of outer variables
+
+Example:-
+function outer (){
+  let one = 10;
+  function inner (){
+    let two = 20;
+    console.log(one+two); // Now we must need outer variable if we seperately wants to run the inner function in this way Closure helps it to keep them in memeory for later use
+  }
+  return inner;
+}
+
+inner():
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Re-rendering:-
+
+Due to the State the changes are only occur when the page is re-render and during the re-rendering
+line: let [count, setCount] = useState(0); // is not be re-render bcz its the statring point of re-rendering after it the whole 
+Document is re-render it
+in-short form is only re-render when he value of state is changed
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+function Count(){
+    const [count,setCount] = useState(0); .. Passing the inital state to useState(initial state)
+    function Trigger(){
+        setCount(count + 1); // This function is Asynchronous so If we use it multiple it doesn't work
+        setCount(count + 1);
+        setCount(count + 1); // Yaha 3 times runa hoa hn to value 3 ani chaiye but asa nai hoga ku ke ye ik async func() hn Synchronously work nai krta
+    }
+    return (
+        <div>
+            <h1>Using State</h1>
+            <p>Count: {count}</p>
+            <button onClick={Trigger}>Count</button>
+        </div>
+    );
+}
+
+
+But Now if we pass it a callback it can work Synchronously as we expect:-
+
+function Count(){
+    const [count,setCount] = useState(0);
+    function Trigger(){
+        setCount((currVal)=>{
+            return currVal + 1;
+        });
+        setCount((currVal)=>{
+            return currVal + 1;
+        });
+    }
+    return (
+        <div>
+            <h1>Using State</h1>
+            <p>Count: {count}</p>
+            <button onClick={Trigger}>Count</button>
+        </div>
+    );
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+ok Jab hamay kisi initialization function ko pass krna hota hn too kam kabhi bhi isko call nahi krte bus as a reference pass kr dete hn
+
+    function init() {
+        return Math.floor(Math.random() * 5) + 1;
+    }
+    const [count,setCount] = useState(init());  Here don't use init() bad practice function is called every times
+    function Trigger(){
+        setCount((currVal)=>{
+            return currVal + 1;
+        });
+    }
+
+Just simpley pass it as a reference    
+
+const [count,setCount] = useState(init);
+
+And also the page is only re-render when the change state is changes
+like: useState(count + 1); if the value is fixed it never re-render the page useState(25);
+
