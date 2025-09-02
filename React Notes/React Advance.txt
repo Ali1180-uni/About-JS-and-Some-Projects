@@ -91,8 +91,12 @@ ARRAY & STATE:-
 
 Same like the Objects we Use the Spread Operator inthe Arrays to Re-Render the Page:-
 
-    let [arr, setArr] = useState(["No Move"]);
+let [arr, setArr] = useState(["No Move"]);
 
-        setArr((next)=>{
-            return [...next, "Blue move"]; // Like this we also pass the value which will be pushed on re-render
-        });
+setArr((next)=>{
+    return [...next, "Blue move"]; // Like this we also pass the value which will be pushed on re-render
+});
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+

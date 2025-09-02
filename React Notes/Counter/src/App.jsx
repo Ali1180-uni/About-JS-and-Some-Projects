@@ -1,10 +1,11 @@
 import './App.css'
-import Count from './counter';
+// import Count from './counter';
+import ToDo from './To-do';
 
 function App(){
   return (
     <div>
-      <Count />
+      <ToDo />
     </div>
   );
 }

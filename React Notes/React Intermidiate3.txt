@@ -36,10 +36,15 @@ function App() {
 }
 
 ok there is also a event object in every Event which consist the info about the DOM events
-->   function one2(event){
+->   function preventDefault(event){
     console.log("button double");
     event.preventDefault(); ------> works just for only those tags having the Default behaviours like: Forms
   }
+
+we must use this function in forms in the event listener known as onSubmit{}
+
+<form onSubmit={preventDefault}> // like this we use this function in forms
+</form>
 
 So we can write a simple function of Count but it doesn't work for the UI to re-render it
 
@@ -56,7 +61,7 @@ function Count(){
     );
 }
 
-We must use the states to make the changes in component to re-render it\
+We must use the states to make the changes in component to re-render it
 
 Hooks:-
 // sab se pele React me functions ki jagah classes use hotii thii but jab Update ai too Functions
