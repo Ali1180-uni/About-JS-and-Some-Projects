@@ -2,9 +2,10 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 function ToDo() {
-  let [Task, setTask] = useState([{ Task: "Tasks Left", id: uuidv4() }]);
+  let [Task, setTask] = useState([
+    { Task: "Tasks Left", id: uuidv4(), isDone: false },
+  ]);
   let [newTask, setNewTask] = useState([""]);
-  let [isFav, setIsFav] = useState(false);
   function updateList() {
     setTask([...Task, { Task: newTask, id: uuidv4() }]);
   }
@@ -51,10 +52,23 @@ function ToDo() {
     });
   }
 
-  function toggleFav() {
-    setIsFav(!isFav);
+  function Done(id) {
+    setTask((style) => {
+     return style.map((change) => {
+        if (change.id == id) {
+          return {
+            ...change, isDone: !change.isDone
+          }
+        }else{
+          return change;
+        }
+      });
+    });
   }
 
+  let style = {
+    textDecoration: "line-through"
+  }
   return (
     <div>
       <h1>To-Do List</h1>
@@ -75,7 +89,7 @@ function ToDo() {
         <ul>
           {Task.map((tasks) => (
             <li key={tasks.id}>
-              <span>{tasks.Task}</span>
+              {tasks.isDone ? <span style={style}>{tasks.Task}</span> : <span>{tasks.Task}</span>}
               &nbsp;&nbsp;&nbsp;
               <button
                 onClick={() => {
@@ -91,15 +105,13 @@ function ToDo() {
               >
                 Update to Uppercase
               </button>
-              <span>
-                <p onClick={toggleFav}>
-                  {isFav ? (
-                    <i className="fa-solid fa-heart"></i>
-                  ) : (
-                    <i className="fa-regular fa-heart"></i>
-                  )}
-                </p>
-              </span>
+              <button
+                onClick={() => {
+                  Done(tasks.id);
+                }}
+              >
+                Mark as Done
+              </button>
             </li>
           ))}
         </ul>

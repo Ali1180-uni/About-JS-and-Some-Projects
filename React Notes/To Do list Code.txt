@@ -146,3 +146,45 @@ Differnet but same like delete update by id
 Button is also:-
 <button onClick={() => {UpdateOneUpper(tasks.id);}}>Update to Uppercase</button>
 
+ok a the end i add the mark as done feature in my to-do List
+
+  let [Task, setTask] = useState([
+    { Task: "Tasks Left", id: uuidv4(), isDone: false },
+  ]);
+
+-> First Extend the size of the object and add an object isdone and make it false
+-> So the logic is that a function can make this value true and if it is true
+-> it creates a custon styling of line-through and mark as done is shown to us
+
+  function Done(id) {
+    setTask((style) => {
+     return style.map((change) => {
+        if (change.id == id) {
+          return {
+            ...change, isDone: !change.isDone
+          }
+        }else{
+          return change;
+        }
+      });
+    });
+  }
+
+  let style = {
+    textDecoration: "line-through"
+  }
+
+Some thing like this->>>>>>>
+
+{tasks.isDone ? <span style={style}>{tasks.Task}</span> : <span>{tasks.Task}</span>} // Setting Condition for styling
+
+Button Added -->
+
+<button
+  onClick={() => {
+    Done(tasks.id);
+  }}
+>
+  Mark as Done
+</button>
+
