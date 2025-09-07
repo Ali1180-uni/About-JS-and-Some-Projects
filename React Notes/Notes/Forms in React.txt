@@ -1,0 +1,101 @@
+Ok basically the State is completely works differently in the Forms 
+-> They Use Events in the argument to manage it 
+-> They have their own state and they never obeys the State of React
+-> We Must gave the Specific state to every element
+-> onChange = {} --> Triggers the State in form like inputs
+
+import { useState } from "react"
+
+export function Form () {
+    let [name,setName] = useState("Ali"); // Here we set the value Basically the "name" is the variable which changes its state and used as value
+    let changeName = (event) =>{ // using event for forms to get thier value
+        setName(event.target.value); // Extracting value
+    }
+    return (
+        <form>
+            <input type="text" placeholder="Enter Your name" onChange={changeName} value={name} /> // Setting Value and State Change 
+            <button>Submit</button>
+        </form>
+    )
+}
+
+-> This is How we Create the Labels in React
+
+<label htmlFor="Name">Your Name Plz</label> 
+// Using "htmlFor" instead of for in labels bcz for is the keyword we never use it Here
+
+<input type="text" id="Name" placeholder="Enter Your name" onChange={changeName} value={name} />
+
+-> For Trigger changes in form we always use the onSubmit event for it 
+-> We must Create everytime a new state for each input thats why we create the object of State
+-> We also set the name of input for its data and use it in State
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+  let [name, setName] = useState({ name: "", username: "", password: "" });  // Creating the object of Variables to prevent more code
+
+  let changeValues = (event) => {
+    let field = event.target.name; // Feild ka name get kree gayy isme see
+    let val = event.target.value;  // Iski Value get kree gayy 
+    setName((currVal)=>{
+        currVal[field] = val // ab isko change krne kee liye iske field ke equal iski value kr de gay field ko hamne [] in braces me is liye lika hn ku ke inki value ka hamay nai pata ke name kia hnn ye event object me stored and thats why this is the way to extract the value of name
+        return{...currVal} // Ab iski object ki ik copy ham send kr de gay
+
+        // is sab ki is tarah bhi likha ja sakta hn
+
+        return {
+            ...currVal, [field]: val // something this also a valid syntax
+        }
+    });
+  };
+  let submitFunc = (events) => {
+    events.preventDefault(); // This can stop the form to behave normally
+    setName({  // Submit honay ke bad phr iski values ko bhi manually hamay waha se gaib krna hoga bcz we use defaultPrevent()
+        name: "",
+        username: "",
+        password: "",
+    });
+  }
+  return (
+    <form onSubmit={submitFunc}>
+      <label htmlFor="Name">Your Name Plz</label>
+      <br />
+      <input
+        type="text"
+        id="Name"
+        placeholder="Enter Your name"
+        onChange={changeValues}
+        name="name"      // Ye jo name ki value hogi ye state ke objects variable ke sath match kree gii always 
+        value={name.name} // Using object variables to set the value
+        />
+      <br />
+      <br />
+      <label htmlFor="Username">Your Username Plz</label>
+      <br />
+      <input
+        type="text"
+        id="Username"
+        placeholder="Enter Your Username"
+        onChange={changeValues}
+        name="username"
+        value={name.username}
+        />
+      <br />
+      <br />
+      <label htmlFor="Password">Your Password Plz</label>
+      <br />
+      <input
+        type="password"
+        id="Password"
+        placeholder="Enter Your nPassword"
+        onChange={changeValues}
+        name="password"
+        value={name.password}
+      />
+      <br />
+      <br />
+      <button>Submit</button>
+    </form>
+
+--------------------------------------------------------------------------------------------------------------------------------------------

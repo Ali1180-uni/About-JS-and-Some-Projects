@@ -1,0 +1,137 @@
+import { useState } from "react";
+import "./Lottary.css";
+
+function Lottary() {
+  let [Num, setNum] = useState([{ a: 0, b: 0, c: 0 }]);
+  function Spin() {
+    let newLuck1 = Math.floor(Math.random() * 8) + 1; // Using Random Function which Can generates the random value in Lottary
+    let newLuck2 = Math.floor(Math.random() * 9) + 1;
+    let newLuck3 = Math.floor(Math.random() * 7) + 1;
+
+    setNum([
+      {
+        a: newLuck1, // Setting Value to the specific Random Value
+        b: newLuck2,
+        c: newLuck3,
+      },
+    ]);
+  }
+
+  return (
+    <div className="cover">
+      {Num[0].a + Num[0].b + Num[0].c !== 15 ? ( // Check the Condition if the Sum of all the 3 Numbers is 15
+        <>
+          <div className="con">
+            <span>{Num[0].a}</span>&nbsp;&nbsp;&nbsp;
+            <span>{Num[0].b}</span>&nbsp;&nbsp;&nbsp; // Array index = 0 having object of Lottary
+            <span>{Num[0].c}</span>
+          </div>
+          <br />
+          <br />
+          <div className="Button">
+            <button onClick={Spin}>Spin & Win</button>
+          </div>
+        </>
+      ) : (
+        <p style={{ color: "black", fontSize: "30px" }}> // Showing Message & also the Numbers of winning Person
+          Congrats You Win ! Winner is: {Num[0].a}
+          {Num[0].b}
+          {Num[0].c}{" "}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export default Lottary;
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+Now Writing the COde in Flaxible way in which everything is re-usable
+
+First Create the Random Generate Function and Calculating Sum Function in another file
+
+function generateRandom(n){
+    let arr = new Array(n); // Creating a new Array & Passing it a size as an argument
+    for(let i = 0;i < n;i++){
+        arr[i] = Math.floor(Math.random() * 10); // Setting Random Value in Each index
+    }
+    return arr;
+}
+
+function sum(arr){
+    return arr.reduce((sum, val)=> sum + val, 0); // It can sum up all the Values
+}
+
+export {generateRandom, sum};
+
+Now Create Components of Different UI 
+Generate Ticket Number 
+
+import './Component.css'
+export function TicketNum({ Num }) { // Passing a Number 
+  return <span className="ticketNum">{Num}</span>;
+}
+
+Use this in Another Component & also pass its Prop
+
+import { TicketNum } from "./TicketNum";
+import './Component.css'
+
+export function Ticket({Ticket}){ // It gets the Array
+    return (
+        <div className="Ticket">
+            <h1>Lottary Game</h1>
+            <br />
+            {Ticket.map((num,idx)=> ( // Here we use Map Method which always Display the all numbers which we want (array ka size jina bhi higa ye display krwa de ga)
+                <TicketNum key={idx} Num={num}/> // Also passing key
+            ))}
+        </div>       
+    )
+}
+
+Now using this is Lottary.jsx which is the logical Component
+
+function Lottary({n = 3,win = 15}) { // Here we use these Props to pass by in app.jsx code
+  let [Num, setNum] = useState(generateRandom(n)); // Setting Random value
+  let winner = sum(Num) === win; // Setting winning value 
+  function Spin() {
+    setNum(generateRandom(n));
+  }
+
+  return (
+    <div>
+      <div className="cover">
+        <Ticket Ticket={Num} />
+      </div>
+      <br />
+      <div>
+        {winner ? (<h1>You are Winner</h1>) : <button className="button" onClick = {Spin}>Spin & Win</button> }        
+      </div>
+    </div>
+  );
+}
+
+and then we use it in app.jsx and make it more reliable & Flaxible
+
+function App(){
+  return (
+    <div>
+      <Lottary n={3} win={15}/>
+    </div>
+  );
+}
+
+Like this we can also pass the function as a prop to another Component
+
+function App(){
+  let WinningFunc = (arr) => {
+    // return sum(arr) === 15; --> Checking Sum only
+    return arr.every((num)=> num === arr[0]); --> Checking that every number is Same
+  }
+  return (
+    <div>
+      <Lottary n={3} winFunc={WinningFunc}/> // Passing Function as a Prop
+    </div>
+  );
+}

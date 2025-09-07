@@ -1,0 +1,66 @@
+Basic Knowledge:-
+-> React is defined as the collection of the Components which are same like the Functions reusable many time
+-> These are Used on Page By a Specific JSX Syntax which is like the embed of HTML in JS 
+-> These Components are defind once and Used many times 
+
+About JSX:-
+-> Basic Code Which embed the HTML in JS which is not Actually JS but converted into JS with Bable in backend automatically
+
+Using Vite:-
+-> Vite is the way to Use the React So First Use npm to create the Vite Project it is bit faster then React-App
+-> npm create vite@latest
+-> Enter about Project Details and then it give us a link to open the Project in Browser
+
+now Just Simply run these commands:-
+  cd vite-project
+  npm install // install all the dependencies
+  npm run dev // to start the server for Frontend/React
+
+http://localhost:5173/ -> Now this link is shown to me to run the command 
+
+// Ab ye ik Heirarchy Hoti hn jisme hamaray pass kuch imp files hotii hn
+-> app.jsx
+-> main.jsx
+-> index.html
+
+// ok ab ye files ik heiraracy ki tarah kam krte hn ke jo hamrii index.html hn isme ik div hota hn #root sara jo code hn isme likha hota hn
+// ye connected hota hn app.jsx ke sath or hamarii index.html connect hotii hn main.jsx ke sath ab main.jsx isko batati hn ke app.jsx ke sath
+// connect kroo or iske code ko use karoo #root div me
+
+-> index.html
+
+    <div id="root"></div> // All app.jsx shown with this div
+    <script type="module" src="/src/main.jsx"></script>  // connected with main.jsx which render the app.jsx at here
+
+// Overall the App.jsx is the main file top of heirarcy 
+
+-> Ok now this is the Basic app.jsx code:-
+
+import './App.css'
+
+function App() { // This is the Basic Component -> App function
+  return <h1>Hi Ali!</H1> // it returns this h1 tag
+}
+
+export default App // it export this app used in main and them index used it from main
+
+Writing First Component:- 
+
+function Title (){  // is tarah is function ki tarah ham apne Component ko likhty hn
+    return ( // lazmi isko return krte hn but ham ik cheez ko hi return kr sakte hn means ik tag ko is liye ham div ko kr lete hn or baki sara code isme likhtay hn
+        <div>
+            <h1>Ali Here</h1>
+            <button>Avoid to Click!</button>
+        </div>
+    ); // in brackets ko for code structure ke liye likhty hn
+}
+
+function App() {
+
+  return (
+    <div>
+      <Title /> // ab jo hamne component ko banaya tha ham isko ik HTML tag ki tarah yaha use kr sakty hn but thora diff way me <like /> this way
+    </div>
+  );
+}
+ ->  <like/ > in this way we use our tag

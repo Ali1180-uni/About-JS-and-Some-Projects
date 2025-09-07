@@ -1,0 +1,10 @@
+.ticketNum{
+    font-size: 3rem;
+}
+.Ticket{
+    border: 2px solid pink;
+    padding: 10px;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 20px;
+}
