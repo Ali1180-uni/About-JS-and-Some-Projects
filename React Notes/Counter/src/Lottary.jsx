@@ -1,39 +1,26 @@
 import { useState } from "react";
-import './Lottary.css'
+import { generateRandom} from "./helper";
+import { Ticket } from "./Ticket";
+import './Component.css'
 
-function Lottary() {
-    let [Num, setNum] = useState([{a: 0, b: 0, c: 0}]);
-    function Spin(){
-        let newLuck1 = Math.floor(Math.random() * 8) + 1;
-        let newLuck2 = Math.floor(Math.random() * 9) + 1;
-        let newLuck3 = Math.floor(Math.random() * 7) + 1;
-        
-        setNum([{
-            a: newLuck1,
-            b: newLuck2,
-            c: newLuck3
-        }]);
-    }
+function Lottary({n = 3, winFunc}) {
+  let [Num, setNum] = useState(generateRandom(n));
+  let winner = winFunc(Num);
+  function Spin() {
+    setNum(generateRandom(n));
+  }
 
-    return (
-        <div className="cover">
-            {(Num[0].a + Num[0].b + Num[0].c !== 15) ? (
-                <>
-                    <div className="con">
-                        <span>{Num[0].a}</span>&nbsp;&nbsp;&nbsp;
-                        <span>{Num[0].b}</span>&nbsp;&nbsp;&nbsp;
-                        <span>{Num[0].c}</span>
-                    </div>
-                    <br /><br />
-                    <div className="Button">
-                        <button onClick={Spin}>Spin & Win</button>
-                    </div>
-                </>
-            ) : (
-                <p style={{color: "black", fontSize: "30px"}}>Congrats You Win ! Winner is: {Num[0].a}{Num[0].b}{Num[0].c} </p>
-            )}
-        </div>
-    );
+  return (
+    <div>
+      <div className="cover">
+        <Ticket Ticket={Num} />
+      </div>
+      <br />
+      <div>
+        {winner ? (<h1>You are Winner</h1>) : <button className="button" onClick = {Spin}>Spin & Win</button> }        
+      </div>
+    </div>
+  );
 }
 
-export default Lottary
+export default Lottary;

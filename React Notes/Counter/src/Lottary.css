@@ -1,7 +1,7 @@
 .con {
     border: 2px solid white;
     width: 150px;
-    height: 100px;
+    height: 200px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,11 +9,11 @@
 }
 span{
     font-size: 30px;
-    color: white;
+    color: black;
     margin-left: 10px;
 }
 .button{
-    margin-top: 80px;
+    margin-top: 30px;
     padding: 10px 20px;
     font-size: 20px;
     border-radius: 5px;
@@ -23,7 +23,7 @@ span{
     cursor: pointer;
 }
 .cover{
-    height: 240px;
+    height: 200px;
     width: 300px;
     background: radial-gradient(circle, rgb(63, 251, 238) 0%, rgb(87, 58, 64) 100%);
     display: flex;
