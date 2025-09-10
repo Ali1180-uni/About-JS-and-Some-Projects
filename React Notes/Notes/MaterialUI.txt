@@ -1,0 +1,42 @@
+-> Material UI is a Framework like the Bootstrap in React which is used to use the pre-build component which are purely build in React
+
+USE of Material UI:-
+Install Material UI, the world's most popular React UI framework.
+-> npm install @mui/material @emotion/react @emotion/styled
+
+Also it has dependencies like if we want to use the buttons and icons and also the fonts we must install them first and must
+expand the documentation and imports its comonent from there
+-> Basically it use the emotion framework which works better with React
+
+-> Also its use the Roboto Font by default and also we must install them also and icons for use
+
+Roboto Font: npm install @fontsource/roboto
+imports them like this:-
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
+imports for simple Buttons with icons:-
+
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SendIcon from '@mui/icons-material/Send';
+import Stack from '@mui/material/Stack';
+
+export default function IconLabelButtons() {
+  return (
+    <Stack direction="row" spacing={2}>
+      <Button variant="outlined" startIcon={<DeleteIcon />}>
+        Delete
+      </Button>
+      <Button variant="contained" endIcon={<SendIcon />}>
+        Send
+      </Button>
+    </Stack>
+  );
+}
+
+This is How we can Add the icons and Button Component in the React from the MaterialUI Framework
+
+Also checkout Website for more details and Components

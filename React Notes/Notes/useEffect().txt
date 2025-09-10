@@ -1,0 +1,75 @@
+Use Case:-
+-> useEffect() is another Hook in the React which is used --> When we perform some Functionality at first time when our Form is Render
+
+-> we can simply Create a useEffect() and pass the Function parameter in it.
+-> Just Create a Simple Function 
+
+useEffect(function printName(){ // Now this Function is always run when the form is re-render or render
+    console.log("UseEffect Used");
+});
+
+export default function Counter(){
+    let [countx, setCountx] = useState(0);
+    let [county, setCounty] = useState(0);
+    function incx (){
+        setCountx(countx = countx + 1);
+    }
+    function incy (){
+        setCounty(county = county + 1);
+    }
+
+    useEffect(function show(){
+        console.log("This is Use-Effect");
+    },[countx]);   // Passing the Dependency
+
+    return(
+        <div>
+            <h1>Counter X</h1>
+            <h4>Countx: {countx}</h4>
+            <button onClick={incx}>+1</button>
+            <h1>Counter Y</h1>
+            <h4>Count: {county}</h4>
+            <button onClick={incy}>+1</button>
+        </div>
+    )
+}
+
+Dependency Cases:-
+
+useEffect(function show(){
+    console.log("This is Use-Effect");
+},[countx]);  // This only run when countx state is changed
+
+useEffect(function show(){
+    console.log("This is Use-Effect");
+},[county]);  // This only run when county state is changed
+
+useEffect(function show(){
+    console.log("This is Use-Effect");
+},[]); // This only run on first time render
+
+First we can pass a function and second time a Dependency
+
+-> Using useEffect() with API key for its proper use Case
+
+  let URL = "https://official-joke-api.appspot.com/random_joke"; //api Key
+  let [joke, setJoke] = useState({ setup: "", punchline: "" }); // Setting State
+  const ranJoke = async () => { // Making async for await
+    let response = await fetch(URL); // Fetching URL
+    let jsonResponse = await response.json(); // Getting JSON response
+    setJoke({ // Setting Joke to their Values
+      setup: jsonResponse.setup,
+      punchline: jsonResponse.punchline,
+    });
+  };
+  useEffect(() => { // Useunf useEffect and always write the async function in an arrow function in it
+    async function firstJoke() {
+      let response = await fetch(URL);
+      let jsonResponse = await response.json();
+      setJoke({
+        setup: jsonResponse.setup,
+        punchline: jsonResponse.punchline,
+      });
+    }
+    firstJoke(); // And call it here outside of the function
+  }, []); // this can done that the Joke will be shown on the page when for render first time

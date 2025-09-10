@@ -51,7 +51,7 @@ export function Form () {
   };
   let submitFunc = (events) => {
     events.preventDefault(); // This can stop the form to behave normally
-    setName({  // Submit honay ke bad phr iski values ko bhi manually hamay waha se gaib krna hoga bcz we use defaultPrevent()
+    setName({  // Submit honay ke bad phr iski values ko bhi manually hamay waha se gaib krna hoga bcz we use defaultPrevent() this name is same as state change variable
         name: "",
         username: "",
         password: "",

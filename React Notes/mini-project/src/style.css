@@ -1,0 +1,132 @@
+/* Modern gradient background for weather feeling */
+body {
+    background: linear-gradient(-45deg, #87ceeb, #f9d423, #a1c4fd, #ffffff);
+    background-size: 400% 400%;
+    animation: gradient 20s ease infinite;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Smooth sky-like gradient movement */
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    text-align: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    padding: 20px;
+    gap: 2rem;
+}
+
+/* Search section styling */
+.search {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    margin-bottom: 40px;
+}
+
+/* Fix for MUI TextField label */
+.MuiFormLabel-root {
+    color: #555 !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.MuiInputBase-root {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 8px !important;
+    padding: 5px 10px !important;
+}
+
+.MuiInputBase-input {
+    padding: 12px !important;
+    font-size: 1rem !important;
+}
+
+/* When label floats */
+.MuiFormLabel-root.Mui-focused {
+    color: #23a6d5 !important;
+    font-size: 18px;
+}
+
+/* Card styling */
+.card {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.01);
+}
+
+/* Material-UI Card custom styling */
+.MuiCard-root {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(8px) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Typography */
+.MuiTypography-root {
+    color: #222 !important;
+}
+
+/* Button styling */
+.MuiButton-root {
+    background: linear-gradient(45deg, #23a6d5, #f9d423) !important;
+    border: none !important;
+    color: white !important;
+    padding: 12px 24px !important;
+    border-radius: 25px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.MuiButton-root:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Weather card content */
+.MuiCardContent-root {
+    padding: 20px !important;
+}
+
+.MuiCardContent-root p {
+    margin: 8px 0 !important;
+    font-size: 1rem !important;
+    color: #333;
+}
+
+/* Weather image */
+.MuiCardMedia-root {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}

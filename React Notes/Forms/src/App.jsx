@@ -1,12 +1,13 @@
-import './App.css'
-import { Form } from './Form';
+import "./App.css";
+import { Form } from "./Form";
+import Comment from "./Comment";
 
-function App(){
+function App() {
   return (
     <div>
-      <Form />
+      <Comment />
     </div>
   );
 }
 
-export default App
+export default App;
