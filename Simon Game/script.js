@@ -9,7 +9,7 @@ let Allbtn = document.querySelectorAll(".box");
 let body = document.querySelector("body");
 let p = document.querySelector("p");
 let h1 = document.querySelector(".h1");
-body.addEventListener("keydown",function(){
+body.addEventListener("click",function(){
     if(started == false){
         started = true;
         setTimeout(levelUp,1000);

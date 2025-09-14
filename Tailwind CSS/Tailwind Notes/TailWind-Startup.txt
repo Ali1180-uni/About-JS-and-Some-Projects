@@ -1,0 +1,24 @@
+We can Start with Tailwind CSS just with CDN link but not preferable for the production Level
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> // CDN linf for the Tailwind CSS
+  </head>
+  <body>
+    <h1 class="text-3xl font-bold underline"> // Adding Classes for the Tailwind CSS
+      Hello world!
+    </h1>
+  </body>
+</html>
+
+-> Refresh all the Styling and if we want new styling we just gave it with pre-build class 
+
+Now The preferable way to install the Tailwind CSS and for Poduction Level use is :-
+Use Tailwind CLI (USING POSTCSS):-
+
+1. npm install -D tailwindcss postcss autoprefixer
+2. npm i vite --> To Show Refresh Changes quickly
+3.  
